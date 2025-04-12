@@ -1,5 +1,6 @@
 import re
 from dataclasses import dataclass
+from typing import Tuple
 
 class Kleur:
     
@@ -9,7 +10,8 @@ class Kleur:
             groen   : int   =   0,
             blauw   : int   =   0,
             alfa    : float =   1.0,
-    ):
+    ) -> "Kleur":
+        
         self.rood   =   rood
         self.groen  =   groen
         self.blauw  =   blauw
@@ -19,7 +21,7 @@ class Kleur:
     def van_hex(
         cls,
         hex: str,
-    ):
+    ) -> "Kleur":
         
         patroon_kleur   =   re.compile(r"^#(?P<rood>[0-9a-fA-F]{2})(?P<groen>[0-9a-fA-F]{2})(?P<blauw>[0-9a-fA-F]{2})(?P<alfa>[0-9a-fA-F]{2})?$")
         resultaat       =   patroon_kleur.match(hex).groupdict("ff")
@@ -46,7 +48,7 @@ class Kleur:
     @rood.setter
     def rood(
         self,
-        rood: int
+        rood: int,
     ):
         if 0 <= rood <= 255:
             self._rood  =   int(rood)
@@ -60,7 +62,7 @@ class Kleur:
     @groen.setter
     def groen(
         self,
-        groen: int
+        groen: int,
     ):
         if 0 <= groen <= 255:
             self._groen  =   int(groen)
@@ -74,7 +76,7 @@ class Kleur:
     @blauw.setter
     def blauw(
         self,
-        blauw: int
+        blauw: int,
     ):
         if 0 <= blauw <= 255:
             self._blauw  =   int(blauw)
@@ -96,19 +98,19 @@ class Kleur:
             raise ValueError(f"Waarde moet tussen 0 en 1 zitten")
     
     @property
-    def rgb(self):
+    def rgb(self) -> Tuple[float, float, float]:
         return (self.rood/255, self.groen/255, self.blauw/255)
     
     @property
-    def rgba(self):
+    def rgba(self) -> Tuple[float, float, float, float]:
         return (self.rood/255, self.groen/255, self.blauw/255, self.alfa)
     
     @property
-    def hex(self):
+    def hex(self) -> str:
         return f"#{self.rood:02x}{self.groen:02x}{self.blauw:02x}{int(self.alfa*255):02x}"
     
     @property
-    def grijswaarden(self):
+    def grijswaarden(self) -> float:
         return (0.2126*self.rood + 0.7152*self.groen + 0.0722*self.blauw) / 255
 
 @dataclass
@@ -120,19 +122,19 @@ class RGBCMY:
     magenta: Kleur
     geel: Kleur
 
-wit_gebroken = Kleur.van_hex("#e9e8d3")
+wit_gebroken        =   Kleur.van_hex("#e9e8d3")
 
-grijs_donkerder = Kleur.van_hex("#231f20")
-grijs_donker = Kleur.van_hex("#564b4f")
-grijs = Kleur.van_hex("#231f20")
-grijs_licht = Kleur.van_hex("#bfbfbf")
-grijs_lichter = Kleur.van_hex("#d9d9d9")
+grijs_donkerder     =   Kleur.van_hex("#231f20")
+grijs_donker        =   Kleur.van_hex("#564b4f")
+grijs               =   Kleur.van_hex("#231f20")
+grijs_licht         =   Kleur.van_hex("#bfbfbf")
+grijs_lichter       =   Kleur.van_hex("#d9d9d9")
 
-groen_donkerst = Kleur.van_hex("#18563f")
-groen_donkerder = Kleur.van_hex("#217455")
-groen_donker = Kleur.van_hex("#29926a")
-groen = Kleur.van_hex("#2eab7b")
-groen_licht = Kleur.van_hex("#44cc99")
+groen_donkerst      =   Kleur.van_hex("#18563f")
+groen_donkerder     =   Kleur.van_hex("#217455")
+groen_donker        =   Kleur.van_hex("#29926a")
+groen               =   Kleur.van_hex("#2eab7b")
+groen_licht         =   Kleur.van_hex("#44cc99")
 
 standaard   =   RGBCMY(
     Kleur.van_hex("#ae2020"),
