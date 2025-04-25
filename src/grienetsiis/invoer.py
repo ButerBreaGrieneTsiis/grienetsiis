@@ -96,6 +96,24 @@ def invoer_validatie(
             
             return invoer
         
+        elif type == float:
+            
+            try:
+                invoer  =   float(invoer)
+            except ValueError:
+                print(f"invoer \"{invoer}\" incorrect, enkel type \"{type.__name__}\" toegestaan")
+                continue
+            else:
+                
+                if not invoer in kwargs.get("waardes", [invoer]):
+                    print(f"invoer \"{invoer}\" incorrect, niet binnen ")
+                    continue
+                if not kwargs.get("bereik", [invoer, invoer])[0] <= invoer <= kwargs.get("bereik", [invoer, invoer])[1]:
+                    print(f"invoer \"{invoer}\" incorrect, moet tussen {kwargs.get("bereik", [invoer, invoer])[0]} en {kwargs.get("bereik", [invoer, invoer])[1]} liggen")
+                    continue
+                
+                return invoer
+        
         else:
             raise NotImplementedError 
     
