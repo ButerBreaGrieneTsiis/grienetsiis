@@ -1,37 +1,60 @@
 import json
 from typing import Tuple, FrozenSet,  Dict
 
-def open_json(map : str, bestandsnaam : str, extensie : str = None, class_mapper: Tuple[object, FrozenSet, str] = None, encoding : str= "utf-8") -> dict:
+def open_json(
+    map             :   str,
+    bestandsnaam    :   str,
+    extensie        :   str                             =   None,
+    class_mapper    :   Tuple[object, FrozenSet, str]   =   None,
+    encoding        :   str                             =   "utf-8",
+    ) -> dict | list | object:
     
-    def decoder(dictionary, class_mapper: Tuple[object, FrozenSet, str] = None):
+    def decoder(
+        object,
+        class_mapper:   Tuple[object, FrozenSet, str]   =   None,
+        ) -> dict | list | object:
+        
         if class_mapper is not None:
-            if class_mapper[1].issuperset(dictionary.keys()):
-                return getattr(class_mapper[0], class_mapper[2])(**dictionary)
+            
+            if class_mapper[1].issuperset(object.keys()):
+                return getattr(class_mapper[0], class_mapper[2])(**object)
             else:
-                return dictionary
+                return object
+        
         else:
-            return dictionary
+            return object
         
     bestandsnaam    =   bestandsnaam if extensie is None else f"{bestandsnaam}.{extensie}"
+    
     with open(f"{map}\\{bestandsnaam}", "r", encoding = encoding) as bestand:
         if class_mapper is None:
             return json.load(bestand)
         else:
-            return json.load(bestand, object_hook = lambda x: decoder(x, class_mapper))
+            return json.load(bestand, object_hook = lambda object: decoder(object, class_mapper))
     
-def opslaan_json(object : object, map : str, bestandsnaam : str, extensie : str = None, encoder_dict: Dict[str, str] = None, encoding : str = "utf-8"):
+def opslaan_json(
+    object          :   object,
+    map             :   str,
+    bestandsnaam    :   str,
+    extensie        :   str             =   None,
+    encoder_dict    :   Dict[str, str]  =   None,
+    encoding        :   str             =   "utf-8",
+    ) -> None:
     
     class Encoder(json.JSONEncoder):
-        def default(self, obj):
+        
+        def default(self, object):
+            
             if isinstance(encoder_dict, dict):
-                if obj.__class__.__name__ in encoder_dict.keys():
-                    return getattr(obj, encoder_dict[obj.__class__.__name__])()
+                if object.__class__.__name__ in encoder_dict.keys():
+                    return getattr(object, encoder_dict[object.__class__.__name__])()
+            
             try:
-                obj.__dict__
+                object.__dict__
             except:
-                return json.JSONEncoder.default(self, obj)
+                return json.JSONEncoder.default(self, object)
             else:
-                return obj.__dict__
+                return object.__dict__
     
     bestandsnaam    =   bestandsnaam if extensie is None else f"{bestandsnaam}.{extensie}"
     
