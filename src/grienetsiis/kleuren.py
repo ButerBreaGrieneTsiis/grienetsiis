@@ -10,7 +10,7 @@ class Kleur:
             groen   : int   =   0,
             blauw   : int   =   0,
             alfa    : float =   1.0,
-    ) -> "Kleur":
+        ) -> "Kleur":
         
         self.rood   =   rood
         self.groen  =   groen
@@ -21,7 +21,7 @@ class Kleur:
     def van_hex(
         cls,
         hex: str,
-    ) -> "Kleur":
+        ) -> "Kleur":
         
         patroon_kleur   =   re.compile(r"^#(?P<rood>[0-9a-fA-F]{2})(?P<groen>[0-9a-fA-F]{2})(?P<blauw>[0-9a-fA-F]{2})(?P<alfa>[0-9a-fA-F]{2})?$")
         resultaat       =   patroon_kleur.match(hex).groupdict("ff")
@@ -39,7 +39,7 @@ class Kleur:
             groen,
             blauw,
             alfa,
-        )
+            )
     
     @property
     def rood(self):
@@ -49,7 +49,8 @@ class Kleur:
     def rood(
         self,
         rood: int,
-    ):
+        ):
+        
         if 0 <= rood <= 255:
             self._rood  =   int(rood)
         else:
@@ -63,7 +64,8 @@ class Kleur:
     def groen(
         self,
         groen: int,
-    ):
+        ):
+        
         if 0 <= groen <= 255:
             self._groen  =   int(groen)
         else:
@@ -77,7 +79,8 @@ class Kleur:
     def blauw(
         self,
         blauw: int,
-    ):
+        ):
+        
         if 0 <= blauw <= 255:
             self._blauw  =   int(blauw)
         else:
@@ -91,7 +94,8 @@ class Kleur:
     def alfa(
         self,
         alfa: float,
-    ):
+        ):
+        
         if 0 <= alfa <= 1:
             self._alfa  =   alfa
         else:
@@ -143,4 +147,4 @@ standaard   =   RGBCMY(
     Kleur.van_hex("#20aeae"),
     Kleur.van_hex("#ae20ae"),
     Kleur.van_hex("#aeae20"),
-)
+    )
