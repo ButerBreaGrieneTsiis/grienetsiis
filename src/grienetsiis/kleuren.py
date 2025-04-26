@@ -5,11 +5,11 @@ from typing import Tuple
 class Kleur:
     
     def __init__(
-            self,
-            rood    : int   =   0,
-            groen   : int   =   0,
-            blauw   : int   =   0,
-            alfa    : float =   1.0,
+        self,
+        rood    : int   =   0,
+        groen   : int   =   0,
+        blauw   : int   =   0,
+        alfa    : float =   1.0,
         ) -> "Kleur":
         
         self.rood   =   rood
