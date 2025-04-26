@@ -1,13 +1,13 @@
 import re
-from typing import Any
+from typing import Any, Dict, List
 
 
 def invoer_kiezen(
         beschrijving: str,
-        keuzes: list | dict,
+        keuzes: List[Any] | Dict[Any, Any],
         kies_een: bool =  True,
         **kwargs,
-    ) -> Any:
+        ) -> Any:
     
     if kies_een:
         print(f"\nkies een {beschrijving}\n")
@@ -51,7 +51,7 @@ def invoer_validatie(
         beschrijving: int,
         type: type,
         **kwargs,
-    ) -> int | str:
+        ) -> int | str:
     
     while True:
         
