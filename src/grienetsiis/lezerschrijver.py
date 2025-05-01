@@ -7,12 +7,12 @@ def open_json(
     extensie        :   str                             =   None,
     class_mapper    :   Tuple[object, FrozenSet, str]   =   None,
     encoding        :   str                             =   "utf-8",
-    ) -> dict | list | object:
+    ) -> object:
     
     def decoder(
         object,
         class_mapper:   Tuple[object, FrozenSet, str]   =   None,
-        ) -> dict | list | object:
+        ) -> object:
         
         if class_mapper is not None:
             
