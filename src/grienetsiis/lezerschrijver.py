@@ -1,6 +1,7 @@
 import json
 from typing import Tuple, FrozenSet,  Dict
 
+
 def open_json(
     map             :   str,
     bestandsnaam    :   str,
