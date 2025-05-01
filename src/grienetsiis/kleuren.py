@@ -1,6 +1,6 @@
 import re
 from dataclasses import dataclass
-from typing import Tuple
+from typing import Tuple, List
 
 class Kleur:
     
@@ -16,6 +16,10 @@ class Kleur:
         self.groen  =   groen
         self.blauw  =   blauw
         self.alfa   =   alfa
+    
+    def __repr__(self):
+        
+        return f"Kleur {self.hex}"
     
     @classmethod
     def van_hex(
@@ -116,6 +120,54 @@ class Kleur:
     @property
     def grijswaarden(self) -> float:
         return (0.2126*self.rood + 0.7152*self.groen + 0.0722*self.blauw) / 255
+
+class KleurSchaal:
+    
+    def __init__(
+        self,
+        kleur_begin: Kleur,
+        kleur_eind: Kleur,
+        ) -> "KleurSchaal":
+        
+        self.kleur_begin    =   kleur_begin
+        self.kleur_eind     =   kleur_eind
+    
+    @property
+    def aantal_kleuren(self):
+        return self._aantal_kleuren
+    
+    @aantal_kleuren.setter
+    def aantal_kleuren(
+        self,
+        aantal_kleuren: int,
+        ) -> int:
+        
+        if isinstance(aantal_kleuren, int):
+            if aantal_kleuren > 1:
+                self._aantal_kleuren = aantal_kleuren
+            else:
+                raise ValueError
+        else:
+            raise TypeError
+    
+    @property
+    def kleuren(self) -> List[Kleur]:
+        
+        kleuren = []
+        
+        for kleur_nummer in range(self.aantal_kleuren):
+            
+            ratio = kleur_nummer / (self.aantal_kleuren - 1)
+            kleur = Kleur(
+                rood    =   self.kleur_begin.rood * (1-ratio) + self.kleur_eind.rood * ratio,
+                groen   =   self.kleur_begin.groen * (1-ratio) + self.kleur_eind.groen * ratio,
+                blauw   =   self.kleur_begin.blauw * (1-ratio) + self.kleur_eind.blauw * ratio,
+                alfa    =   self.kleur_begin.alfa * (1-ratio) + self.kleur_eind.alfa * ratio,
+                )
+            
+            kleuren.append(kleur)
+        
+        return kleuren
 
 @dataclass
 class RGBCMY:
