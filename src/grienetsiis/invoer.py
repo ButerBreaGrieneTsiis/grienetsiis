@@ -115,5 +115,4 @@ def invoer_validatie(
                 return invoer
         
         else:
-            raise NotImplementedError 
-    
+            raise NotImplementedError

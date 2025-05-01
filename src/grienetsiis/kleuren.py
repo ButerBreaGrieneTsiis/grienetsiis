@@ -193,7 +193,7 @@ groen_donker        =   Kleur.van_hex("#29926a")
 groen               =   Kleur.van_hex("#2eab7b")
 groen_licht         =   Kleur.van_hex("#44cc99")
 
-standaard   =   RGBCMY(
+standaard = RGBCMY(
     Kleur.van_hex("#ae2020"),
     Kleur.van_hex("#20ae20"),
     Kleur.van_hex("#2020ae"),

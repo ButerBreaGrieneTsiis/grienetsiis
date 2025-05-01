@@ -24,7 +24,7 @@ def open_json(
         
         else:
             return object
-        
+    
     bestandsnaam    =   bestandsnaam if extensie is None else f"{bestandsnaam}.{extensie}"
     
     with open(f"{map}\\{bestandsnaam}", "r", encoding = encoding) as bestand:
