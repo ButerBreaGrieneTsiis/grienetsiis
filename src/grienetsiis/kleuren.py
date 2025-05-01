@@ -1,6 +1,7 @@
-import re
 from dataclasses import dataclass
+import re
 from typing import Tuple, List
+
 
 class Kleur:
     
