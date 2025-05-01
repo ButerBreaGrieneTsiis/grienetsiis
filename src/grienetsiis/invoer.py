@@ -3,11 +3,11 @@ from typing import Any, Dict, List
 
 
 def invoer_kiezen(
-        beschrijving: str,
-        keuzes: List[Any] | Dict[Any, Any],
-        kies_een: bool =  True,
-        **kwargs,
-        ) -> Any:
+    beschrijving: str,
+    keuzes: List[Any] | Dict[Any, Any],
+    kies_een: bool =  True,
+    **kwargs,
+    ) -> Any:
     
     if kies_een:
         print(f"\nkies een {beschrijving}\n")
@@ -48,10 +48,10 @@ def invoer_kiezen(
         raise TypeError
 
 def invoer_validatie(
-        beschrijving: int,
-        type: type,
-        **kwargs,
-        ) -> int | str:
+    beschrijving: int,
+    type: type,
+    **kwargs,
+    ) -> int | str | float:
     
     while True:
         
@@ -115,5 +115,4 @@ def invoer_validatie(
                 return invoer
         
         else:
-            raise NotImplementedError 
-    
+            raise NotImplementedError

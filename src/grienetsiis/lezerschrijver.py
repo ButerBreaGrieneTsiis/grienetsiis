@@ -1,18 +1,19 @@
 import json
 from typing import Tuple, FrozenSet,  Dict
 
+
 def open_json(
     map             :   str,
     bestandsnaam    :   str,
     extensie        :   str                             =   None,
     class_mapper    :   Tuple[object, FrozenSet, str]   =   None,
     encoding        :   str                             =   "utf-8",
-    ) -> dict | list | object:
+    ) -> object:
     
     def decoder(
         object,
         class_mapper:   Tuple[object, FrozenSet, str]   =   None,
-        ) -> dict | list | object:
+        ) -> object:
         
         if class_mapper is not None:
             
@@ -23,7 +24,7 @@ def open_json(
         
         else:
             return object
-        
+    
     bestandsnaam    =   bestandsnaam if extensie is None else f"{bestandsnaam}.{extensie}"
     
     with open(f"{map}\\{bestandsnaam}", "r", encoding = encoding) as bestand:
