@@ -1,3 +1,3 @@
 # grienetsiis
 
-Persoonlijke bibliotheek met handige functions die ik in verscheidene projecten gebruik.
+Persoonlijke bibliotheek met handige functies en classes die ik in verscheidene projecten gebruik.
