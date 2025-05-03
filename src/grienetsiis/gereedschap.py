@@ -6,7 +6,7 @@ def jaar_maand_iterator(
     maand_start: int,
     jaar_eind: int,
     maand_eind: int,
-    ) -> Iterator[int, int]:
+    ) -> Iterator[int]:
     
     jaar_maand_start    =   12*jaar_start + maand_start-1
     jaar_maand_eind     =   12*jaar_eind + maand_eind-1
