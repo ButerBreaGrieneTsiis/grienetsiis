@@ -16,12 +16,13 @@ def jaar_maand_iterator(
         yield jaar, maand+1
 
 def decimaal_getal(
-    getal           :   float,
-    groeperen_per   :   int = 3,
-    absolute        :   bool = False,
+    getal               :   float,
+    decimalen_precisie  :   int = 2,
+    groeperen_per       :   int = 3,
+    absolute            :   bool = False,
     ) -> str:
     
-    getal_tekst = str(abs(getal))
+    getal_tekst = f"{abs(getal):.{decimalen_precisie}f}"
     
     integer = getal_tekst.split(".")[0]
     decimalen = getal_tekst.split(".")[1]
