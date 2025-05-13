@@ -1,37 +1,31 @@
 import json
-from typing import Tuple, FrozenSet,  Dict
+from typing import Dict, FrozenSet, List, Tuple
 
 
-def open_json(
+def openen_json(
     map             :   str,
     bestandsnaam    :   str,
-    extensie        :   str                             =   None,
-    class_mapper    :   Tuple[object, FrozenSet, str]   =   None,
-    encoding        :   str                             =   "utf-8",
+    extensie        :   str                                 =   None,
+    class_mappers   :   List[Tuple[object, FrozenSet, str]] =   None,
+    encoding        :   str                                 =   "utf-8",
     ) -> object:
+    
+    bestandsnaam    =   bestandsnaam if extensie is None else f"{bestandsnaam}.{extensie}"
+    class_mappers   =   List() if class_mappers is None else class_mappers
     
     def decoder(
         object,
-        class_mapper:   Tuple[object, FrozenSet, str]   =   None,
+        class_mappers:  List[Tuple[object, FrozenSet, str]],
         ) -> object:
         
-        if class_mapper is not None:
-            
+        for class_mapper in class_mappers:
             if class_mapper[1].issuperset(object.keys()):
                 return getattr(class_mapper[0], class_mapper[2])(**object)
-            else:
-                return object
-        
         else:
             return object
     
-    bestandsnaam    =   bestandsnaam if extensie is None else f"{bestandsnaam}.{extensie}"
-    
     with open(f"{map}\\{bestandsnaam}", "r", encoding = encoding) as bestand:
-        if class_mapper is None:
-            return json.load(bestand)
-        else:
-            return json.load(bestand, object_hook = lambda object: decoder(object, class_mapper))
+        return json.load(bestand, object_hook = lambda object: decoder(object, class_mappers))
     
 def opslaan_json(
     object          :   object,
