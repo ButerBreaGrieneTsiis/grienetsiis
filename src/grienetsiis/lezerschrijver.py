@@ -1,13 +1,13 @@
 import json
-from typing import Dict, FrozenSet, List, Tuple
+from typing import Callable, Dict, FrozenSet, List, NamedTuple
 
 
 def openen_json(
     map             :   str,
     bestandsnaam    :   str,
-    extensie        :   str                                 =   None,
-    class_mappers   :   List[Tuple[object, FrozenSet, str]] =   None,
-    encoding        :   str                                 =   "utf-8",
+    extensie        :   str                 =   None,
+    class_mappers   :   List[NamedTuple]    =   None,
+    encoding        :   str                 =   "utf-8",
     ) -> object:
     
     bestandsnaam    =   bestandsnaam if extensie is None else f"{bestandsnaam}.{extensie}"
@@ -15,12 +15,12 @@ def openen_json(
     
     def decoder(
         object,
-        class_mappers:  List[Tuple[object, FrozenSet, str]],
+        class_mappers: List[NamedTuple],
         ) -> object:
         
         for class_mapper in class_mappers:
-            if class_mapper[1].issuperset(object.keys()):
-                return getattr(class_mapper[0], class_mapper[2])(**object)
+            if class_mapper.velden.issuperset(object.keys()):
+                return class_mapper.van_json(**object)
         else:
             return object
     
