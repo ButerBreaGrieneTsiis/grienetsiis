@@ -1,36 +1,45 @@
 import json
+from pathlib import Path
 from typing import Callable, Dict, FrozenSet, List, NamedTuple
 
 
+class ObjectWijzer(NamedTuple):
+    van_json: Callable
+    velden: FrozenSet
+
 def openen_json(
-    map             :   str,
-    bestandsnaam    :   str,
+    bestandspad     :   Path,
+    bestandsnaam    :   str                 =   None,
     extensie        :   str                 =   None,
-    class_mappers   :   List[NamedTuple]    =   None,
+    object_wijzers  :   List[ObjectWijzer]  =   None,
     encoding        :   str                 =   "utf-8",
     ) -> object:
     
-    bestandsnaam    =   bestandsnaam if extensie is None else f"{bestandsnaam}.{extensie}"
-    class_mappers   =   List() if class_mappers is None else class_mappers
+    if extensie is None and bestandsnaam is not None:
+        bestandspad /= f"{bestandsnaam}"
+    elif extensie is not None and bestandsnaam is not None:
+        bestandspad /= f"{bestandsnaam}.{extensie}"
+    
+    object_wijzers   =   list() if object_wijzers is None else object_wijzers
     
     def decoder(
         object,
-        class_mappers: List[NamedTuple],
+        object_wijzers: List[ObjectWijzer],
         ) -> object:
         
-        for class_mapper in class_mappers:
-            if class_mapper.velden.issuperset(object.keys()):
-                return class_mapper.van_json(**object)
+        for object_wijzer in object_wijzers:
+            if object_wijzer.velden.issuperset(object.keys()):
+                return object_wijzer.van_json(**object)
         else:
             return object
     
-    with open(f"{map}\\{bestandsnaam}", "r", encoding = encoding) as bestand:
-        return json.load(bestand, object_hook = lambda object: decoder(object, class_mappers))
+    with open(bestandspad, "r", encoding = encoding) as bestand:
+        return json.load(bestand, object_hook = lambda object: decoder(object, object_wijzers))
     
 def opslaan_json(
     object          :   object,
-    map             :   str,
-    bestandsnaam    :   str,
+    bestandspad     :   Path,
+    bestandsnaam    :   str             =   None,
     extensie        :   str             =   None,
     encoder_dict    :   Dict[str, str]  =   None,
     encoding        :   str             =   "utf-8",
@@ -51,7 +60,10 @@ def opslaan_json(
             else:
                 return object.__dict__
     
-    bestandsnaam    =   bestandsnaam if extensie is None else f"{bestandsnaam}.{extensie}"
+    if extensie is None and bestandsnaam is not None:
+        bestandspad /= f"{bestandsnaam}"
+    elif extensie is not None and bestandsnaam is not None:
+        bestandspad /= f"{bestandsnaam}.{extensie}"
     
-    with open(f"{map}\\{bestandsnaam}", "w", encoding = encoding) as bestand:
+    with open(bestandspad, "w", encoding = encoding) as bestand:
         bestand.write(json.dumps(object, indent = 4, ensure_ascii = False, sort_keys = False, cls = Encoder))
