@@ -2,6 +2,16 @@ import re
 from typing import Any, Dict, List
 
 
+class Stop:
+    
+    def __repr__(self):
+        return "Stop"
+    
+    def __bool__(self):
+        return False
+
+STOP = Stop()
+
 def invoer_kiezen(
     beschrijving: str,
     keuzes: List[Any] | Dict[Any, Any],
@@ -27,7 +37,7 @@ def invoer_kiezen(
         else:
             ikeuze  =   invoer_validatie("keuze", int, waardes = range(1, len(keuzes)+1))
         
-        return keuzes[ikeuze-1] if bool(ikeuze) else ikeuze
+        return keuzes[ikeuze-1] if bool(ikeuze) else STOP
     
     elif isinstance(keuzes, dict):
         
@@ -42,7 +52,7 @@ def invoer_kiezen(
         else:
             ikeuze  =   invoer_validatie("keuze", int, waardes = range(1, len(keuzes)+1))
         
-        return list(keuzes.values())[ikeuze-1] if bool(ikeuze) else ikeuze
+        return list(keuzes.values())[ikeuze-1] if bool(ikeuze) else STOP
     
     else:
         raise TypeError
