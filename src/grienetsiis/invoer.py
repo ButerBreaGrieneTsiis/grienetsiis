@@ -67,6 +67,10 @@ def invoer_validatie(
         
         invoer  =   input(f"{beschrijving}: ")
         
+        if invoer == "" and kwargs.get("uitsluiten_leeg", False):
+                print(f"invoer mag niet leeg zijn")
+                continue
+        
         if kwargs.get("valideren", False):
             invoer_kiezen(f"bevestig {beschrijving} \"{invoer}\"", ["ja", "nee"], kies_een = False)
         
@@ -91,8 +95,8 @@ def invoer_validatie(
         elif type == str:
             
             if not invoer in kwargs.get("waardes", [invoer]):
-                    print(f"invoer \"{invoer}\" incorrect, niet binnen ")
-                    continue
+                print(f"invoer \"{invoer}\" incorrect, niet binnen {kwargs.get("waardes")}")
+                continue
             
             if "regex" in kwargs.keys():
                 patroon     =   re.compile(kwargs.get("regex"))
