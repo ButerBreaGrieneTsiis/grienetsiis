@@ -27,7 +27,7 @@ def invoer_kiezen(
     if isinstance(keuzes, list):
         
         if kwargs.get("stoppen", False):
-            print(f" [0] TERUG")
+            print(f" [0] {kwargs.get("terug_naar", "TERUG")}")
         
         [print(f" [{ikeuze}] {keuze}") for ikeuze, keuze in enumerate(keuzes, 1)]
         print()
