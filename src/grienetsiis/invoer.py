@@ -2,7 +2,13 @@ import re
 from typing import Any, Dict, List
 
 
-class Stop:
+class Singleton:
+    def __new__(cls):
+        if not hasattr(cls, "instantie"):
+            cls.instantie = super(Singleton, cls).__new__(cls)
+        return cls.instantie
+
+class Stop(Singleton):
     
     def __repr__(self):
         return "Stop"
