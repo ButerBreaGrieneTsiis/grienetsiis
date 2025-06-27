@@ -32,10 +32,12 @@ def invoer_kiezen(
     
     if isinstance(keuzes, list):
         
-        if kwargs.get("stoppen", False):
-            print(f" [0] {kwargs.get("terug_naar", "TERUG")}")
+        aantal_tekens = len(f"{len(keuzes)}") + 2
         
-        [print(f" [{ikeuze}] {keuze}") for ikeuze, keuze in enumerate(keuzes, 1)]
+        if kwargs.get("stoppen", False):
+            print(f" {f"[0]":>{aantal_tekens}} {kwargs.get("terug_naar", "TERUG")}")
+        
+        [print(f" {f"[{ikeuze}]":>{aantal_tekens}} {keuze}") for ikeuze, keuze in enumerate(keuzes, 1)]
         print()
         
         if kwargs.get("stoppen", False):
@@ -47,10 +49,12 @@ def invoer_kiezen(
     
     elif isinstance(keuzes, dict):
         
-        if kwargs.get("stoppen", False):
-            print(f" [0] {kwargs.get("terug_naar", "TERUG")}")
+        aantal_tekens = len(f"{len(keuzes)}") + 2
         
-        [print(f" [{ikeuze}] {keuze}") for ikeuze, keuze in enumerate(keuzes.keys(), 1)]
+        if kwargs.get("stoppen", False):
+            print(f" {f"[0]":>{aantal_tekens}} {kwargs.get("terug_naar", "TERUG")}")
+        
+        [print(f" {f"[{ikeuze}]":>{aantal_tekens}} {keuze}") for ikeuze, keuze in enumerate(keuzes.keys(), 1)]
         print()
         
         if kwargs.get("stoppen", False):
