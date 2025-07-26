@@ -82,7 +82,8 @@ def invoer_validatie(
                 continue
         
         if kwargs.get("valideren", False):
-            invoer_kiezen(f"bevestig {beschrijving} \"{invoer}\"", ["ja", "nee"], kies_een = False)
+            if not invoer_kiezen(f"bevestig {beschrijving} \"{invoer}\"", {"ja":  True, "nee": False}, kies_een = False):
+                continue
         
         if type == int:
             
