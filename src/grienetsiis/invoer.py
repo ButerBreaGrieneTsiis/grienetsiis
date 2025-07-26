@@ -22,7 +22,9 @@ def invoer_kiezen(
     beschrijving: str,
     keuzes: List[Any] | Dict[Any, Any],
     kies_een: bool =  True,
-    **kwargs,
+    stoppen: bool = False,
+    meerdere_keuzes: bool = False,
+    terug_naar: str = "TERUG",
     ) -> Any:
     
     if kies_een:
@@ -34,35 +36,91 @@ def invoer_kiezen(
         
         aantal_tekens = len(f"{len(keuzes)}") + 2
         
-        if kwargs.get("stoppen", False):
-            print(f" {f"[0]":>{aantal_tekens}} {kwargs.get("terug_naar", "TERUG")}")
+        if stoppen:
+            print(f" {f"[0]":>{aantal_tekens}} {terug_naar}")
         
         [print(f" {f"[{ikeuze}]":>{aantal_tekens}} {keuze}") for ikeuze, keuze in enumerate(keuzes, 1)]
         print()
         
-        if kwargs.get("stoppen", False):
-            ikeuze  =   invoer_validatie("keuze", int, waardes = range(len(keuzes)+1))
+        if meerdere_keuzes:
+            
+            while True:
+            
+                invoer_keuzes = invoer_validatie("keuze", str, uitsluiten_leeg = True)
+                print(invoer_keuzes)
+                if invoer_keuzes == "0":
+                    return STOP
+                
+                ikeuzes = []
+                
+                invoer_keuzes = invoer_keuzes.split(",")
+                print(invoer_keuzes)
+                for invoer_keuze in invoer_keuzes:
+                    print(invoer_keuze)
+                    if invoer_keuze.count("-") == 1:
+                        if invoer_keuze.split("-")[0].isnumeric() and invoer_keuze.split("-")[1].isnumeric():
+                            if int(invoer_keuze.split("-")[0]) < int(invoer_keuze.split("-")[1]):
+                                [ikeuzes.append(index) for index in range(int(invoer_keuze.split("-")[0]), int(invoer_keuze.split("-")[1]) + 1)]
+                        else:
+                            continue
+                    
+                    elif invoer_keuze.isnumeric():
+                        ikeuzes.append(int(invoer_keuze))
+                
+                return [keuzes[ikeuze-1] for ikeuze in set(ikeuzes)]
         else:
-            ikeuze  =   invoer_validatie("keuze", int, waardes = range(1, len(keuzes)+1))
-        
-        return keuzes[ikeuze-1] if bool(ikeuze) else STOP
+            
+            if stoppen:
+                ikeuze  =   invoer_validatie("keuze", int, waardes = range(len(keuzes)+1))
+            else:
+                ikeuze  =   invoer_validatie("keuze", int, waardes = range(1, len(keuzes)+1))
+            
+            return keuzes[ikeuze-1] if bool(ikeuze) else STOP
     
     elif isinstance(keuzes, dict):
         
         aantal_tekens = len(f"{len(keuzes)}") + 2
         
-        if kwargs.get("stoppen", False):
-            print(f" {f"[0]":>{aantal_tekens}} {kwargs.get("terug_naar", "TERUG")}")
+        if stoppen:
+            print(f" {f"[0]":>{aantal_tekens}} {terug_naar}")
         
         [print(f" {f"[{ikeuze}]":>{aantal_tekens}} {keuze}") for ikeuze, keuze in enumerate(keuzes.keys(), 1)]
         print()
         
-        if kwargs.get("stoppen", False):
-            ikeuze  =   invoer_validatie("keuze", int, waardes = range(len(keuzes)+1))
-        else:
-            ikeuze  =   invoer_validatie("keuze", int, waardes = range(1, len(keuzes)+1))
+        if meerdere_keuzes:
+            
+            while True:
+            
+                invoer_keuzes = invoer_validatie("keuze", str, uitsluiten_leeg = True)
+                
+                if invoer_keuzes == "0":
+                    return STOP
+                
+                ikeuzes = []
+                
+                invoer_keuzes = invoer_keuzes.split(",")
+                
+                for invoer_keuze in invoer_keuzes:
+                    if invoer_keuze.count("-") == 1:
+                        if invoer_keuze.split("-")[0].isnumeric() and invoer_keuze.split("-")[1].isnumeric():
+                            if int(invoer_keuze.split("-")[0]) < int(invoer_keuze.split("-")[1]):
+                                [ikeuzes.append(index) for index in range(int(invoer_keuze.split("-")[0]), int(invoer_keuze.split("-")[1]) + 1)]
+                        else:
+                            continue
+                    
+                    elif invoer_keuze.isnumeric():
+                        ikeuzes.append(int(invoer_keuze))
+                
+                return [list(keuzes.values())[ikeuze-1] for ikeuze in set(ikeuzes)]
         
-        return list(keuzes.values())[ikeuze-1] if bool(ikeuze) else STOP
+        else:
+        
+            if stoppen:
+                ikeuze  =   invoer_validatie("keuze", int, waardes = range(len(keuzes)+1))
+            else:
+                ikeuze  =   invoer_validatie("keuze", int, waardes = range(1, len(keuzes)+1))
+        
+            return list(keuzes.values())[ikeuze-1] if bool(ikeuze) else STOP
     
     else:
         raise TypeError
@@ -70,6 +128,8 @@ def invoer_kiezen(
 def invoer_validatie(
     beschrijving: int,
     type: type,
+    uitsluiten_leeg: bool = False,
+    valideren: bool = False,
     **kwargs,
     ) -> int | str | float:
     
@@ -77,11 +137,11 @@ def invoer_validatie(
         
         invoer  =   input(f"{beschrijving}: ")
         
-        if invoer == "" and kwargs.get("uitsluiten_leeg", False):
-                print(f"invoer mag niet leeg zijn")
-                continue
+        if invoer == "" and uitsluiten_leeg:
+            print(f"invoer mag niet leeg zijn")
+            continue
         
-        if kwargs.get("valideren", False):
+        if valideren:
             if not invoer_kiezen(f"bevestig {beschrijving} \"{invoer}\"", {"ja":  True, "nee": False}, kies_een = False):
                 continue
         
