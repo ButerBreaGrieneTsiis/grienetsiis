@@ -1,3 +1,4 @@
+from enum import Enum
 import json
 from pathlib import Path
 from typing import Callable, Dict, FrozenSet, List, NamedTuple
@@ -13,6 +14,7 @@ def openen_json(
     extensie        :   str                 =   None,
     decoder_functie :   Callable            =   None,
     decoder_lijst   :   List[Decoder]       =   None,
+    enum_dict       :   Dict[str, Enum]     =   None,
     encoding        :   str                 =   "utf-8",
     ) -> object:
     
@@ -22,12 +24,18 @@ def openen_json(
         bestandspad /= f"{bestandsnaam}.{extensie}"
     
     decoder_lijst = list() if decoder_lijst is None else decoder_lijst
+    enum_dict = dict() if enum_dict is None else enum_dict
     
     def decoder(
         object,
         decoder_functie: Callable,
         decoder_lijst: List[Decoder],
+        enum_dict: Dict[str, Enum],
         ) -> object:
+        
+        if "__enum__" in object:
+            enum_veld, enum_waarde = object["__enum__"].split(".")
+            return getattr(enum_dict[enum_veld], enum_waarde)
         
         if decoder_functie:
             try:
@@ -47,6 +55,7 @@ def openen_json(
                 object,
                 decoder_functie,
                 decoder_lijst,
+                enum_dict,
                 )
             )
     
@@ -57,12 +66,18 @@ def opslaan_json(
     extensie        :   str             =   None,
     encoder_functie :   Callable        =   None,
     encoder_dict    :   Dict[str, str]  =   None,
+    enum_dict       :   Dict[str, Enum] =   None,
     encoding        :   str             =   "utf-8",
     ) -> None:
+    
+    enum_dict = dict() if enum_dict is None else enum_dict
     
     class Encoder(json.JSONEncoder):
         
         def default(self, object):
+            
+            if type(object) in enum_dict.values():
+                return {"__enum__": str(object)}
             
             if encoder_functie:
                 try:
