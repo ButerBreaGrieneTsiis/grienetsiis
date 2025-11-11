@@ -66,7 +66,7 @@ def opslaan_json(
             
             if encoder_functie:
                 try:
-                    return encoder_functie()
+                    return getattr(object, encoder_functie.__name__)()
                 except:
                     pass
             
