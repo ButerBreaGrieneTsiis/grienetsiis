@@ -1,3 +1,4 @@
+import datetime as dt
 from enum import Enum
 import json
 from pathlib import Path
@@ -6,45 +7,57 @@ from typing import Callable, Dict, FrozenSet, List, NamedTuple
 
 class Decoder(NamedTuple):
     decoder_functie: Callable
-    velden: FrozenSet
+    velden: FrozenSet[str]
+
+class Encoder(NamedTuple):
+    class_naam: str
+    encoder_functie: str
 
 def openen_json(
-    bestandspad     :   Path,
-    bestandsnaam    :   str                 =   None,
-    extensie        :   str                 =   None,
-    decoder_functie :   Callable            =   None,
-    decoder_lijst   :   List[Decoder]       =   None,
-    enum_dict       :   Dict[str, Enum]     =   None,
-    encoding        :   str                 =   "utf-8",
+    bestandspad: Path,
+    bestandsnaam: str | None = None,
+    extensie: str | None = None,
+    decoder_object: Callable | None = None,
+    decoder_subobjecten: List[Decoder] | None = None,
+    enum_dict: Dict[str, Enum] | None = None,
+    encoding: str = "utf-8",
     ) -> object:
+    
+    decoder_subobjecten = [] if decoder_subobjecten is None else decoder_subobjecten
+    enum_dict = {} if enum_dict is None else enum_dict
     
     if extensie is None and bestandsnaam is not None:
         bestandspad /= f"{bestandsnaam}"
     elif extensie is not None and bestandsnaam is not None:
         bestandspad /= f"{bestandsnaam}.{extensie}"
     
-    decoder_lijst = list() if decoder_lijst is None else decoder_lijst
-    enum_dict = dict() if enum_dict is None else enum_dict
-    
     def decoder(
         object,
-        decoder_functie: Callable,
-        decoder_lijst: List[Decoder],
+        decoder_object: Callable,
+        decoder_subobjecten: List[Decoder],
         enum_dict: Dict[str, Enum],
         ) -> object:
         
-        if "__enum__" in object:
-            enum_veld, enum_waarde = object["__enum__"].split(".")
-            return getattr(enum_dict[enum_veld], enum_waarde)
-        
-        if decoder_functie:
-            try:
-                return decoder_functie(**object)
-            except:
-                pass
-        for decoder in decoder_lijst:
-            if decoder.velden.issuperset(object.keys()):
-                return decoder.decoder_functie(**object)
+        if object:
+            
+            if "__enum__" in object:
+                enum_veld, enum_waarde = object["__enum__"].split(".")
+                return getattr(enum_dict[enum_veld], enum_waarde)
+            
+            if "__datum__" in object:
+                return dt.datetime.strptime(object["__datum__"], "%Y-%m-%d").date()
+            
+            if "__datumtijd__" in object:
+                return dt.datetime.strptime(object["__datumtijd__"], "%Y-%m-%d %H:%M:%S")
+            
+            if decoder_object:
+                try:
+                    return decoder_object(**object)
+                except:
+                    pass
+            for decoder_subobject in decoder_subobjecten:
+                if decoder_subobject.velden.issuperset(object.keys()):
+                    return decoder_subobject.decoder_functie(**object)
         
         return object
     
@@ -53,41 +66,48 @@ def openen_json(
             bestand,
             object_hook = lambda object: decoder(
                 object,
-                decoder_functie,
-                decoder_lijst,
+                decoder_object,
+                decoder_subobjecten,
                 enum_dict,
                 )
             )
     
 def opslaan_json(
-    object          :   object,
-    bestandspad     :   Path,
-    bestandsnaam    :   str             =   None,
-    extensie        :   str             =   None,
-    encoder_functie :   Callable        =   None,
-    encoder_dict    :   Dict[str, str]  =   None,
-    enum_dict       :   Dict[str, Enum] =   None,
-    encoding        :   str             =   "utf-8",
+    object: object,
+    bestandspad: Path,
+    bestandsnaam: str | None = None,
+    extensie: str | None = None,
+    encoder_object: Callable | None = None,
+    encoder_subobjecten: List[Encoder] | None = None,
+    enum_dict: Dict[str, Enum] | None = None,
+    encoding: str = "utf-8",
     ) -> None:
     
-    enum_dict = dict() if enum_dict is None else enum_dict
+    encoder_subobjecten = [] if encoder_subobjecten is None else encoder_subobjecten
+    enum_dict = {} if enum_dict is None else enum_dict
     
-    class Encoder(json.JSONEncoder):
+    class JSONEncoder(json.JSONEncoder):
         
         def default(self, object):
             
             if type(object) in enum_dict.values():
                 return {"__enum__": str(object)}
             
-            if encoder_functie:
+            if isinstance(object, dt.date):
+                return {"__datum__": object.strftime("%Y-%m-%d")}
+            
+            if isinstance(object, dt.datetime):
+                return {"__datumtijd__": object.strftime("%Y-%m-%d %H:%M:%S")}
+            
+            if encoder_object:
                 try:
-                    return getattr(object, encoder_functie.__name__)()
+                    return getattr(object, encoder_object.__name__)()
                 except:
                     pass
             
-            if isinstance(encoder_dict, dict):
-                if object.__class__.__name__ in encoder_dict.keys():
-                    return getattr(object, encoder_dict[object.__class__.__name__])()
+            for encoder_subobject in encoder_subobjecten:
+                if object.__class__.__name__ == encoder_subobject.class_naam:
+                    return getattr(object, encoder_subobject.encoder_functie)()
             
             try:
                 return object.__dict__
@@ -105,5 +125,5 @@ def opslaan_json(
             indent = 4,
             ensure_ascii = False,
             sort_keys = False,
-            cls = Encoder,
+            cls = JSONEncoder,
             ))
