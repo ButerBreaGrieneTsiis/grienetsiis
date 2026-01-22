@@ -2,13 +2,16 @@ import re
 from typing import Dict, List, Literal, Tuple, TypeVar
 
 import grienetsiis.opdrachtprompt.commando as commando
+from grienetsiis.opdrachtprompt.constantes import TEKST_INDENTATIE
 
 
 def invoeren(
     tekst_beschrijving: str,
     invoer_type: Literal["int", "float", "str", "bool"],
+    invoer_annuleren: bool = True,
     tekst_annuleren: str = "stop",
-    tekst_indentatie: str = ">>> ",
+    uitvoer_annuleren: commando.Commando = commando.STOP,
+    tekst_indentatie: str = TEKST_INDENTATIE,
     uitsluiten_leeg: bool = False,
     valideren: bool = False,
     waardes_lijst: List[int | str | float] | None = None,
@@ -23,8 +26,8 @@ def invoeren(
         
         invoer = input(f"{tekst_beschrijving}: ")
         
-        if invoer == tekst_annuleren:
-            return commando.STOP
+        if invoer_annuleren and invoer == tekst_annuleren:
+            return uitvoer_annuleren
         
         if not invoer.strip() and uitsluiten_leeg:
             print(f"{tekst_indentatie}invoer mag niet leeg zijn")
@@ -115,19 +118,20 @@ def invoeren(
             
             print(f"{tekst_indentatie}invoer \"{invoer}\" incorrect, niet binnen de opties ({", ".join(f"\"{waarde}\"" for waarde in waardes_waar)}) of ({", ".join(f"\"{waarde}\"" for waarde in waardes_onwaar)})")
 
-KEUZE = TypeVar("keuze")
+OPTIE = TypeVar("optie")
 INDEX = TypeVar("index")
 
 def kiezen(
-    keuzes: Tuple[KEUZE] | List[KEUZE] | Dict[INDEX, KEUZE],
+    opties: Tuple[OPTIE] | List[OPTIE] | Dict[INDEX, OPTIE],
     tekst_beschrijving: str | None = None,
     tekst_kies_een: bool = True,
+    keuze_annuleren: bool = True,
     tekst_annuleren: str = "stop",
-    tekst_indentatie: str = ">>> ",
+    uitvoer_annuleren: commando.Commando = commando.STOP,
+    tekst_indentatie: str = TEKST_INDENTATIE,
     keuze_meerdere: bool = False,
-    keuze_annuleren: bool = False,
     keuze_terugkoppeling: bool = True,
-    ) -> KEUZE | List[KEUZE]:
+    ) -> OPTIE | List[OPTIE]:
     
     if tekst_beschrijving:
         if tekst_kies_een:
@@ -138,25 +142,25 @@ def kiezen(
         else:
             print(f"\n{tekst_beschrijving}\n")
     
-    if isinstance(keuzes, (list, tuple)):
+    if isinstance(opties, (list, tuple)):
         
-        keuzes_tonen = keuzes
-        keuzes_geven = keuzes
+        opties_tonen = opties
+        opties_geven = opties
     
-    elif isinstance(keuzes, dict):
+    elif isinstance(opties, dict):
         
-        keuzes_tonen = list(keuzes.keys())
-        keuzes_geven = list(keuzes.values())
+        opties_tonen = list(opties.keys())
+        opties_geven = list(opties.values())
     
     index_minimaal = 1
-    index_maximaal = len(keuzes)
+    index_maximaal = len(opties)
     
     aantal_tekens = len(f"{index_maximaal}") + 2
         
     if keuze_annuleren:
         print(f" {f"[0]":>{aantal_tekens}} {tekst_annuleren}")
 
-    [print(f" {f"[{ikeuze}]":>{aantal_tekens}} {keuze}") for ikeuze, keuze in enumerate(keuzes_tonen, 1)]
+    [print(f" {f"[{ikeuze}]":>{aantal_tekens}} {keuze}") for ikeuze, keuze in enumerate(opties_tonen, 1)]
     print()
     
     if keuze_meerdere:
@@ -171,7 +175,7 @@ def kiezen(
                 )
             
             if keuze_annuleren and invoer_keuzes == "0":
-                return commando.STOP
+                return uitvoer_annuleren
             
             index_keuzes = []
             
@@ -232,7 +236,7 @@ def kiezen(
             if not index_keuzes:
                 continue
             
-            keuze = [keuzes_geven[index_keuze-1] for index_keuze in set(index_keuzes)]
+            keuze = [opties_geven[index_keuze-1] for index_keuze in set(index_keuzes)]
             break
     
     else:
@@ -251,10 +255,10 @@ def kiezen(
                 waardes_lijst = range(index_minimaal, index_maximaal+1),
                 )
         
-        keuze =  keuzes_geven[index_keuze-1] if bool(index_keuze) else commando.STOP
+        keuze =  opties_geven[index_keuze-1] if bool(index_keuze) else uitvoer_annuleren
     
     if keuze_terugkoppeling:
-        if isinstance(keuzes, list):
+        if isinstance(keuze, list):
             print(f"{tekst_indentatie}gekozen: ({", ".join(_keuze for _keuze in keuze)})\n")
         else:
             print(f"{tekst_indentatie}gekozen: {keuze}\n")
