@@ -54,7 +54,7 @@ class Menu:
             if self.is_hoofdmenu:
                 raise RuntimeError("Menu bevat geen opties en is een hoofdmenu, kan niet uitgevoerd worden.")
             else:
-                print(f"{TEKST_INDENTATIE}menu bevat geen opties, terug naar menu erboven.\n")
+                print(f"{TEKST_INDENTATIE}menu {self.naam} bevat geen opties, terug naar menu erboven.\n")
                 self.super_menu()
     
     def __hash__(self) -> int:
