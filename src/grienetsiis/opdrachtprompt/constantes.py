@@ -1,0 +1,1 @@
+TEKST_INDENTATIE: str = ">>> "
