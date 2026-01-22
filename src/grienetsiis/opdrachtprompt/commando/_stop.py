@@ -1,7 +1,5 @@
-from grienetsiis.types import Singleton
+from ._commando import Commando
 
 
-class _Stop(metaclass = Singleton):
-    def __repr__(self) -> str: return "STOP"
-    def __str__(self) -> str: return "STOP"
+class _Stop(Commando):
     def __bool__(self) -> bool: return False

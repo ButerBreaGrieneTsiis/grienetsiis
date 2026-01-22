@@ -1,7 +1,5 @@
-from grienetsiis.types import Singleton
+from ._commando import Commando
 
 
-class _Terug(metaclass = Singleton):
-    def __repr__(self) -> str: return "TERUG"
-    def __str__(self) -> str: return "TERUG"
+class _Terug(Commando):
     def __bool__(self) -> bool: return False
