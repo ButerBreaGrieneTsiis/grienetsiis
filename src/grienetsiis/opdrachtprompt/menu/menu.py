@@ -60,6 +60,9 @@ class Menu:
     def __hash__(self) -> int:
         return hash(self.naam)
     
+    def __repr__(self) -> str:
+        return f"menu {self.naam}"
+    
     # INSTANCE METHODS
     
     def toevoegen_optie(
