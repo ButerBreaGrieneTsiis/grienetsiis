@@ -259,8 +259,8 @@ def kiezen(
     
     if keuze_terugkoppeling:
         if isinstance(keuze, list):
-            print(f"{tekst_indentatie}gekozen: ({", ".join(_keuze for _keuze in keuze)})\n")
+            print(f"{tekst_indentatie}gekozen: ({", ".join(_keuze for _keuze in keuze)})")
         else:
-            print(f"{tekst_indentatie}gekozen: {keuze}\n")
+            print(f"{tekst_indentatie}gekozen: {keuze}")
     
     return keuze

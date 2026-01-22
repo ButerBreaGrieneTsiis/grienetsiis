@@ -32,6 +32,8 @@ class Menu:
             if self.is_submenu:
                 keuze = kiezen(
                     opties = self.opties,
+                    tekst_beschrijving = f"{str(self).capitalize()}: kies een optie",
+                    tekst_kies_een = False,
                     keuze_annuleren = True,
                     tekst_annuleren = self.__TEKST_ANNULEREN + f" {self.super_menu.naam}",
                     uitvoer_annuleren = self.__UITVOER_ANNULEREN,
@@ -39,6 +41,8 @@ class Menu:
             else:
                 keuze = kiezen(
                     opties = self.opties,
+                    tekst_beschrijving = f"{str(self).capitalize()}: kies een optie",
+                    tekst_kies_een = False,
                     keuze_annuleren = False,
                     )
             
@@ -54,7 +58,7 @@ class Menu:
             if self.is_hoofdmenu:
                 raise RuntimeError("Menu bevat geen opties en is een hoofdmenu, kan niet uitgevoerd worden.")
             else:
-                print(f"{TEKST_INDENTATIE}menu {self.naam} bevat geen opties, terug naar menu erboven.\n")
+                print(f"{TEKST_INDENTATIE}menu {self.naam} bevat geen opties, terug naar menu erboven.")
                 self.super_menu()
     
     def __hash__(self) -> int:
