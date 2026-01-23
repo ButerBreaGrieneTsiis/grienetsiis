@@ -3,6 +3,7 @@ from typing import ClassVar, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .hex import HEX
+    from .hsv import HSV
     from .cmyk import CMYK
     from .rgb import RGB
 
@@ -27,7 +28,7 @@ class HSL:
         self.alfa = alfa
     
     def __repr__(self) -> str:
-        return f"({self.tint*360:.1f}\u00b0, {self.verzadiging:.1%}, {self.helderheid:.1%}, {self.alfa})" 
+        return f"HSL({self.tint*360:.1f}\u00b0, {self.verzadiging:.1%}, {self.helderheid:.1%}, {self.alfa:.1%})"
     
     # CLASS METHODS
     
@@ -37,6 +38,13 @@ class HSL:
         hex: HEX,
         ) -> HSL:
         return hex.naar_hsl()
+    
+    @classmethod
+    def van_hsv(
+        cls,
+        hsv: HSV,
+        ) -> HSL:
+        return hex.naar_hsv()
     
     @classmethod
     def van_cmyk(
@@ -57,6 +65,9 @@ class HSL:
     def naar_hex(self) -> HEX:
         return self._RGB.van_hsl(self).naar_hex()
     
+    def naar_hsv(self) -> HSV:
+        return self._RGB.van_hsl(self).naar_hsv()
+    
     def naar_cmyk(self) -> CMYK:
         return self._RGB.van_hsl(self).naar_cmyk()
     
@@ -68,6 +79,10 @@ class HSL:
     @property
     def hex(self) -> HEX:
         return self.naar_hex()
+    
+    @property
+    def hsv(self) -> HSV:
+        return self.naar_hsv()
     
     @property
     def cmyk(self) -> CMYK:

@@ -4,6 +4,7 @@ from typing import ClassVar, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .hsl import HSL
+    from .hsv import HSV
     from .cmyk import CMYK
     from .rgb import RGB
 
@@ -22,7 +23,7 @@ class HEX:
         self._code = code
     
     def __repr__(self) -> str:
-        return self.code
+        return f"HEX({self.code})"
     
     # CLASS METHODS
     
@@ -32,6 +33,13 @@ class HEX:
         hsl: HSL,
         ) -> HEX:
         return hsl.naar_hex()
+    
+    @classmethod
+    def van_hsv(
+        cls,
+        hsv: HSV,
+        ) -> HEX:
+        return hsv.naar_hex()
     
     @classmethod
     def van_cmyk(
@@ -58,6 +66,9 @@ class HEX:
     
     def naar_hsl(self) -> HSL:
         return self._RGB.van_hex(self).naar_hsl()
+    
+    def naar_hsv(self) -> HSV:
+        return self._RGB.van_hex(self).naar_hsv()
     
     def naar_cmyk(self) -> CMYK:
         return self._RGB.van_hex(self).naar_cmyk()
@@ -93,6 +104,10 @@ class HEX:
     @property
     def hsl(self) -> HSL:
         return self.naar_hsl()
+    
+    @property
+    def hsv(self) -> HSV:
+        return self.naar_hsv()
     
     @property
     def cmyk(self) -> CMYK:

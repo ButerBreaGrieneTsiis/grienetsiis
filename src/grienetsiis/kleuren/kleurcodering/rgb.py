@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from .hex import HEX
 from .hsl import HSL
+from .hsv import HSV
 from .cmyk import CMYK
 
 
@@ -26,7 +27,7 @@ class RGB:
         self.alfa = alfa
     
     def __repr__(self) -> str:
-        return f"({self.rood}, {self.groen}, {self.blauw}, {self.alfa})"
+        return f"RGB({self.rood}, {self.groen}, {self.blauw}, {self.alfa})"
     
     # CLASS METHODS
     
@@ -79,6 +80,40 @@ class RGB:
                 rood = LIMIT_8BIT*(rood + hsl.helderheid - chroma/2),
                 groen = LIMIT_8BIT*(groen + hsl.helderheid - chroma/2),
                 blauw = LIMIT_8BIT*(blauw + hsl.helderheid - chroma/2),
+                alfa = hsl.alfa,
+                )
+    
+    @classmethod
+    def van_hsv(
+        cls,
+        hsv: HSV,
+        ) -> RGB:
+        
+        if hsv.verzadiging == 0:
+            return cls()
+        else:
+            
+            chroma = hsv.waarde * hsv.verzadiging
+            waarde = chroma * (1 - abs(6*hsv.tint%2 - 1))
+            
+            if 0 <= hsv.tint < 1/6:
+                rood, groen, blauw = chroma, waarde, 0
+            elif 1/6 <= hsv.tint < 2/6:
+                rood, groen, blauw = waarde, chroma, 0
+            elif 2/6 <= hsv.tint < 3/6:
+                rood, groen, blauw = 0, chroma, waarde
+            elif 3/6 <= hsv.tint < 4/6:
+                rood, groen, blauw = 0, waarde, chroma
+            elif 4/6 <= hsv.tint < 5/6:
+                rood, groen, blauw = waarde, 0, chroma
+            elif 5/6 <= hsv.tint <= 6/6:
+                rood, groen, blauw = chroma, 0, waarde
+            
+            return cls(
+                rood = LIMIT_8BIT*(rood + hsv.waarde - chroma),
+                groen = LIMIT_8BIT*(groen + hsv.waarde - chroma),
+                blauw = LIMIT_8BIT*(blauw + hsv.waarde - chroma),
+                alfa = hsv.alfa,
                 )
     
     @classmethod
@@ -95,6 +130,7 @@ class RGB:
             rood = rood,
             groen = groen,
             blauw = blauw,
+            alfa = cmyk.alfa,
             )
     
     # INSTANCE METHODS
@@ -105,12 +141,12 @@ class RGB:
     def naar_hsl(self) -> HSL:
         
         # https://gist.github.com/ciembor/1494530
-        rood = self.rood / LIMIT_8BIT
-        groen = self.groen / LIMIT_8BIT
-        blauw = self.blauw / LIMIT_8BIT
+        rood_decimaal = self.rood / LIMIT_8BIT
+        groen_decimaal = self.groen / LIMIT_8BIT
+        blauw_decimaal = self.blauw / LIMIT_8BIT
         
-        waarde_min = min(rood, groen, blauw)
-        waarde_max = max(rood, groen, blauw)
+        waarde_min = min(rood_decimaal, groen_decimaal, blauw_decimaal)
+        waarde_max = max(rood_decimaal, groen_decimaal, blauw_decimaal)
         
         helderheid = (waarde_max + waarde_min) / 2
         
@@ -121,12 +157,12 @@ class RGB:
         else:
             verzadiging = (waarde_max - waarde_min) / (2 - waarde_max - waarde_min)  if helderheid > 0.5 else (waarde_max - waarde_min) / (waarde_max + waarde_min)
             
-            if waarde_max == rood:
-                tint = (groen - blauw)/(waarde_max - waarde_min) + 6 if groen < blauw else (groen - blauw)/(waarde_max - waarde_min)
-            elif waarde_max == groen:
-                tint = (blauw - rood)/(waarde_max - waarde_min) + 2
+            if waarde_max == rood_decimaal:
+                tint = (groen_decimaal - blauw_decimaal)/(waarde_max - waarde_min) + 6 if groen_decimaal < blauw_decimaal else (groen_decimaal - blauw_decimaal)/(waarde_max - waarde_min)
+            elif waarde_max == groen_decimaal:
+                tint = (blauw_decimaal - rood_decimaal)/(waarde_max - waarde_min) + 2
             else:
-                tint = (rood - groen)/(waarde_max - waarde_min) + 4
+                tint = (rood_decimaal - groen_decimaal)/(waarde_max - waarde_min) + 4
             
             tint /= 6
         
@@ -134,6 +170,42 @@ class RGB:
             tint = tint,
             verzadiging = verzadiging,
             helderheid = helderheid,
+            alfa = self.alfa,
+            )
+    
+    def naar_hsv(self) -> HSV:
+        
+        rood_decimaal = self.rood / LIMIT_8BIT
+        groen_decimaal = self.groen / LIMIT_8BIT
+        blauw_decimaal = self.blauw / LIMIT_8BIT
+        
+        waarde_min = min(rood_decimaal, groen_decimaal, blauw_decimaal)
+        waarde_max = max(rood_decimaal, groen_decimaal, blauw_decimaal)
+        
+        if waarde_max == 0.0:
+            verzadiging = 0.0
+        else:
+            verzadiging = (waarde_max - waarde_min)/waarde_max
+        
+        if waarde_min == waarde_max:
+            tint = 0.0
+        else:
+            
+            if waarde_max == rood_decimaal:
+                tint = (groen_decimaal - blauw_decimaal)/(waarde_max - waarde_min) + 6 if groen_decimaal < blauw_decimaal else (groen_decimaal - blauw_decimaal)/(waarde_max - waarde_min)
+            elif waarde_max == groen_decimaal:
+                tint = (blauw_decimaal - rood_decimaal)/(waarde_max - waarde_min) + 2
+            else:
+                tint = (rood_decimaal - groen_decimaal)/(waarde_max - waarde_min) + 4
+            
+            tint /= 6
+        
+        waarde = waarde_max
+        
+        return HSV(
+            tint = tint,
+            verzadiging = verzadiging,
+            waarde = waarde,
             alfa = self.alfa,
             )
     
@@ -150,6 +222,7 @@ class RGB:
             magenta = magenta,
             geel = geel,
             zwart = zwart,
+            alfa = self.alfa,
             )
     
     # PROPERTIES
@@ -223,6 +296,10 @@ class RGB:
         return self.naar_hsl()
     
     @property
+    def hsv(self) -> HSV:
+        return self.naar_hsv()
+    
+    @property
     def cmyk(self) -> CMYK:
         return self.naar_cmyk()
     
@@ -232,4 +309,5 @@ class RGB:
 
 HEX._RGB = RGB
 HSL._RGB = RGB
+HSV._RGB = RGB
 CMYK._RGB = RGB
