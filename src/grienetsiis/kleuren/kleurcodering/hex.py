@@ -102,6 +102,10 @@ class HEX:
         return self.code[7:]
     
     @property
+    def hex(self) -> HEX:
+        return self
+    
+    @property
     def hsl(self) -> HSL:
         return self.naar_hsl()
     
@@ -116,3 +120,7 @@ class HEX:
     @property
     def rgb(self) -> RGB:
         return self.naar_rgb()
+    
+    @property
+    def grijswaarde(self) -> float:
+        return self.rgb.grijswaarde

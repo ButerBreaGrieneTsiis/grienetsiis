@@ -85,9 +85,17 @@ class HSV:
         return self.naar_hsl()
     
     @property
+    def hsv(self) -> HSV:
+        return self
+    
+    @property
     def cmyk(self) -> CMYK:
         return self.naar_cmyk()
     
     @property
     def rgb(self) -> RGB:
         return self.naar_rgb()
+    
+    @property
+    def grijswaarde(self) -> float:
+        return self.rgb.grijswaarde

@@ -91,5 +91,13 @@ class CMYK:
         return self.naar_hsv()
     
     @property
+    def cmyk(self) -> CMYK:
+        return self
+    
+    @property
     def rgb(self) -> RGB:
         return self.naar_rgb()
+    
+    @property
+    def grijswaarde(self) -> float:
+        return self.rgb.grijswaarde

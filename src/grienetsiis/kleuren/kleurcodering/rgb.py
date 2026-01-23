@@ -304,7 +304,11 @@ class RGB:
         return self.naar_cmyk()
     
     @property
-    def grijswaarden(self) -> float:
+    def rgb(self) -> RGB:
+        return self
+    
+    @property
+    def grijswaarde(self) -> float:
         return (0.2126*self.rood + 0.7152*self.groen + 0.0722*self.blauw) / LIMIT_8BIT
 
 HEX._RGB = RGB
