@@ -16,13 +16,13 @@ class HEX:
     
     def __init__(
         self,
-        tekst: str,
+        code: str,
         ) -> HEX:
         
-        self._tekst = tekst
+        self._code = code
     
     def __repr__(self) -> str:
-        return self.hex_code
+        return self.code
     
     # CLASS METHODS
     
@@ -68,27 +68,27 @@ class HEX:
     # PROPERTIES
     
     @property
-    def hex_code(self) -> str:
+    def code(self) -> str:
         patroon = re.compile("^#[0-9a-fA-F]{6}$") 
-        if re.match(patroon, self._tekst):
-            return self._tekst + "ff"
-        return self._tekst
+        if re.match(patroon, self._code):
+            return self._code + "ff"
+        return self._code
     
     @property
     def hex_rood(self) -> str:
-        return self.hex_code[1:3]
+        return self.code[1:3]
     
     @property
     def hex_groen(self) -> str:
-        return self.hex_code[3:5]
+        return self.code[3:5]
     
     @property
     def hex_blauw(self) -> str:
-        return self.hex_code[5:7]
+        return self.code[5:7]
     
     @property
     def hex_alfa(self) -> str:
-        return self.hex_code[7:]
+        return self.code[7:]
     
     @property
     def hsl(self) -> HSL:
