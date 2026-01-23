@@ -8,6 +8,15 @@ from .rgb import (
     kleur_schaal_groen,
     kleur_schaal_blauw,
     )
+from .cmyk import (
+    kleur_schaal_cmyka,
+    kleur_schaal_cmyk,
+    kleur_schaal_cmy,
+    kleur_schaal_cyaan,
+    kleur_schaal_magenta,
+    kleur_schaal_geel,
+    kleur_schaal_zwart,
+    )
 
 if TYPE_CHECKING:
     from grienetsiis.kleuren.kleurcodering import HEX, HSL, HSV, CMYK, RGB
@@ -20,6 +29,13 @@ SCHAAL_FUNCTIES = {
     "rood": (kleur_schaal_rood, "rgb"),
     "groen": (kleur_schaal_groen, "rgb"),
     "blauw": (kleur_schaal_blauw, "rgb"),
+    "cmyka": (kleur_schaal_cmyka, "cmyk"),
+    "cmyk": (kleur_schaal_cmyk, "cmyk"),
+    "cmy": (kleur_schaal_cmy, "cmyk"),
+    "cyaan": (kleur_schaal_cyaan, "cmyk"),
+    "magenta": (kleur_schaal_magenta, "cmyk"),
+    "geel": (kleur_schaal_geel, "cmyk"),
+    "zwart": (kleur_schaal_zwart, "cmyk"),
     }
 
 def kleur_schaal(
@@ -33,8 +49,11 @@ def kleur_schaal(
         "groen",
         "alfa",
         "blauw",
+        "cmyka",
+        "cmyk",
+        "cmy",
         "cyaan",
-        "magneta",
+        "magenta",
         "geel",
         "zwart",
         "verzadiging",
