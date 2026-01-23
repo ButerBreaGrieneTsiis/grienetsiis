@@ -1,12 +1,12 @@
 """
 grienetsiis.kleuren
 """
-from .kleurcodering import RGB, RGBA, HEX, HSL
+from grienetsiis.kleuren.kleurcodering import HEX, HSL, CMYK, RGB
 
 
 __all__ = [
-    "RGB",
-    "RGBA",
     "HEX",
     "HSL",
+    "CMYK",
+    "RGB",
     ]
