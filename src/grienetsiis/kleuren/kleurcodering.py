@@ -21,11 +21,18 @@ class HEX:
     # CLASS METHODS
     
     @classmethod
-    def van_rgba(
+    def van_hsl(
         cls,
-        rgba: RGBA,
+        hsl: HSL,
         ) -> HEX:
-        return rgba.naar_hex()
+        return hsl.naar_hex()
+    
+    @classmethod
+    def van_cmyk(
+        cls,
+        cmyk: CMYK,
+        ) -> HEX:
+        return cmyk.naar_hex()
     
     @classmethod
     def van_rgb(
@@ -35,22 +42,25 @@ class HEX:
         return rgb.naar_hex()
     
     @classmethod
-    def van_hex(
+    def van_rgba(
         cls,
-        hsl: HSL,
+        rgba: RGBA,
         ) -> HEX:
-        return hsl.naar_hex()
+        return rgba.naar_hex()
     
     # INSTANCE METHODS
     
-    def naar_rgba(self) -> RGBA:
-        return RGBA.van_hex(self)
+    def naar_hsl(self) -> HSL:
+        return RGBA.van_hex(self).naar_hsl()
+    
+    def naar_cmyk(self) -> CMYK:
+        return RGBA.van_hex(self).naar_cmyk()
     
     def naar_rgb(self) -> RGB:
         return RGBA.van_hex(self).naar_rgb()
     
-    def naar_hsl(self) -> HSL:
-        return RGBA.van_hex(self).naar_hsl()
+    def naar_rgba(self) -> RGBA:
+        return RGBA.van_hex(self)
     
     # PROPERTIES
     
@@ -83,20 +93,24 @@ class HEX:
         return self.hexa[7:]
     
     @property
-    def RGBA(self) -> RGBA:
-        return self.naar_rgba()
-    
-    @property
-    def RGB(self) -> RGB:
-        return self.naar_rgb()
-    
-    @property
     def HEX(self) -> HEX:
         return self
     
     @property
     def HSL(self) -> HSL:
         return self.naar_hsl()
+    
+    @property
+    def CMYK(self) -> CMYK:
+        return self.naar_cmyk()
+    
+    @property
+    def RGB(self) -> RGB:
+        return self.naar_rgb()
+    
+    @property
+    def RGBA(self) -> RGBA:
+        return self.naar_rgba()
 
 class HSL:
     
@@ -121,11 +135,18 @@ class HSL:
     # CLASS METHODS
     
     @classmethod
-    def van_rgba(
+    def van_hex(
         cls,
-        rgba: RGBA,
+        hex: HEX,
         ) -> HSL:
-        return rgba.naar_hsl()
+        return hex.naar_hsl()
+    
+    @classmethod
+    def van_cmyk(
+        cls,
+        cmyk: CMYK,
+        ) -> HSL:
+        return cmyk.naar_hsl()
     
     @classmethod
     def van_rgb(
@@ -135,32 +156,27 @@ class HSL:
         return rgb.naar_hsl()
     
     @classmethod
-    def van_hex(
+    def van_rgba(
         cls,
-        hex: HEX,
+        rgba: RGBA,
         ) -> HSL:
-        return hex.naar_hsl()
+        return rgba.naar_hsl()
     
     # INSTANCE METHODS
-    
-    def naar_rgba(self) -> RGBA:
-        return RGBA.van_hsl(self)
-    
-    def naar_rgb(self) -> RGB:
-        return RGBA.van_hsl(self).naar_rgb()
     
     def naar_hex(self) -> HEX:
         return RGBA.van_hsl(self).naar_hex()
     
+    def naar_cmyk(self) -> CMYK:
+        return RGBA.van_hsl(self).naar_cmyk()
+    
+    def naar_rgb(self) -> RGB:
+        return RGBA.van_hsl(self).naar_rgb()
+    
+    def naar_rgba(self) -> RGBA:
+        return RGBA.van_hsl(self)
+    
     # PROPERTIES
-    
-    @property
-    def RGBA(self) -> RGBA:
-        return self.naar_rgba()
-    
-    @property
-    def RGB(self) -> RGB:
-        return self.naar_rgb()
     
     @property
     def HEX(self) -> HEX:
@@ -169,7 +185,105 @@ class HSL:
     @property
     def HSL(self) -> HSL:
         return self
+    
+    @property
+    def CMYK(self) -> CMYK:
+        return self.naar_cmyk()
+    
+    @property
+    def RGB(self) -> RGB:
+        return self.naar_rgb()
+    
+    @property
+    def RGBA(self) -> RGBA:
+        return self.naar_rgba()
 
+class CMYK:
+    
+    # DUNDER METHODS
+    
+    def __init__(
+        self,
+        cyaan: float = 0.0,
+        magenta: float = 0.0,
+        geel: float = 0.0,
+        zwart: float = 0.0,
+        ) -> HSL:
+        
+        self.cyaan = cyaan
+        self.magenta = magenta
+        self.geel = geel
+        self.zwart = zwart
+    
+    def __repr__(self) -> str:
+        return f"({self.cyaan}, {self.magenta}, {self.geel}, {self.zwart})" 
+    
+    # CLASS METHODS
+    
+    @classmethod
+    def van_hex(
+        cls,
+        hex: HEX,
+        ) -> CMYK:
+        return hex.naar_cmyk()
+    
+    @classmethod
+    def van_hsl(
+        cls,
+        hsl: HSL,
+        ) -> CMYK:
+        return hsl.naar_cmyk()
+    
+    @classmethod
+    def van_rgb(
+        cls,
+        rgb: RGB,
+        ) -> CMYK:
+        return rgb.naar_cmyk()
+    
+    @classmethod
+    def van_rgba(
+        cls,
+        rgba: RGBA,
+        ) -> CMYK:
+        return rgba.naar_cmyk()
+    
+    # INSTANCE METHODS
+    
+    def naar_hex(self) -> HEX:
+        return RGBA.van_cmyk(self).naar_hex()
+    
+    def naar_hsl(self) -> HSL:
+        return RGBA.van_cmyk(self).naar_hsl()
+    
+    def naar_rgb(self) -> RGB:
+        return RGBA.van_cmyk(self).naar_rgb()
+    
+    def naar_rgba(self) -> RGBA:
+        return RGBA.van_cmyk(self)
+    
+    # PROPERTIES
+    
+    @property
+    def HEX(self) -> HEX:
+        return self.naar_hex()
+    
+    @property
+    def HSL(self) -> HSL:
+        return self.naar_hsl()
+    
+    @property
+    def CMYK(self) -> CMYK:
+        return self
+    
+    @property
+    def RGB(self) -> RGB:
+        return self.naar_rgb()
+    
+    @property
+    def RGBA(self) -> RGBA:
+        return self.naar_rgba()
+    
 class RGB:
     
     # DUNDER METHODS
@@ -191,14 +305,6 @@ class RGB:
     # CLASS METHODS
     
     @classmethod
-    def van_rgba(
-        cls,
-        rgba: RGBA,
-        ) -> RGB:
-        return rgba.naar_rgb()
-        
-    
-    @classmethod
     def van_hex(
         cls,
         hex: HEX,
@@ -212,16 +318,33 @@ class RGB:
         ) -> RGB:
         return hsl.naar_rgb()
     
-    # INSTANCE METHODS
+    @classmethod
+    def van_cmyk(
+        cls,
+        cmyk: CMYK,
+        ) -> CMYK:
+        return cmyk.naar_rgb()
     
-    def naar_rgba(self) -> RGB:
-        return RGBA.van_rgb(self)
+    @classmethod
+    def van_rgba(
+        cls,
+        rgba: RGBA,
+        ) -> RGB:
+        return rgba.naar_rgb()
+    
+    # INSTANCE METHODS
     
     def naar_hex(self) -> HEX:
         return RGBA.van_rgb(self).naar_hex()
     
     def naar_hsl(self) -> HSL:
         return RGBA.van_rgb(self).naar_hsl()
+    
+    def naar_cmyk(self) -> CMYK:
+        return RGBA.van_rgb(self).naar_cmyk()
+    
+    def naar_rgba(self) -> RGB:
+        return RGBA.van_rgb(self)
     
     # PROPERTIES
     
@@ -271,20 +394,24 @@ class RGB:
             raise ValueError(f"Waarde moet tussen 0 en {LIMIT_8BIT} zitten, niet {blauw}")
     
     @property
-    def RGBA(self) -> RGBA:
-        return self.naar_rgba()
-    
-    @property
-    def RGB(self) -> RGB:
-        return self
-    
-    @property
     def HEX(self) -> HEX:
         return self.naar_hex()
     
     @property
     def HSL(self) -> HSL:
         return self.naar_hsl()
+    
+    @property
+    def CMYK(self) -> CMYK:
+        return self.naar_cmyk()
+    
+    @property
+    def RGB(self) -> RGB:
+        return self
+    
+    @property
+    def RGBA(self) -> RGBA:
+        return self.naar_rgba()
 
 class RGBA(RGB):
     
@@ -310,18 +437,6 @@ class RGBA(RGB):
         return f"({self.rood}, {self.groen}, {self.blauw}, {self.alfa})"
     
     # CLASS METHODS
-    
-    @classmethod
-    def van_rgb(
-        cls,
-        rgb: RGB,
-        ) -> RGBA:
-        
-        return cls(
-            rood = rgb.rood,
-            groen = rgb.groen,
-            blauw = rgb.blauw,
-            )
     
     @classmethod
     def van_hex(
@@ -374,14 +489,35 @@ class RGBA(RGB):
                 blauw = LIMIT_8BIT*(blauw + hsl.helderheid - chroma/2),
                 )
     
-    # INSTANCE METHODS
-    
-    def naar_rgb(self) -> RGB:
-        return RGB(
-            rood = self.rood,
-            groen = self.groen,
-            blauw = self.blauw,
+    @classmethod
+    def van_cmyk(
+        cls,
+        cmyk: CMYK,
+        ) -> RGBA:
+        
+        rood = LIMIT_8BIT * (1 - cmyk.cyaan) * (1 - cmyk.zwart)
+        groen = LIMIT_8BIT * (1 - cmyk.magenta) * (1 - cmyk.zwart)
+        blauw = LIMIT_8BIT * (1 - cmyk.geel) * (1 - cmyk.zwart)
+        
+        return cls(
+            rood = rood,
+            groen = groen,
+            blauw = blauw,
             )
+    
+    @classmethod
+    def van_rgb(
+        cls,
+        rgb: RGB,
+        ) -> RGBA:
+        
+        return cls(
+            rood = rgb.rood,
+            groen = rgb.groen,
+            blauw = rgb.blauw,
+            )
+    
+    # INSTANCE METHODS
     
     def naar_hex(self) -> HEX:
         return HEX(f"#{self.rood:02x}{self.groen:02x}{self.blauw:02x}{int(self.alfa*LIMIT_8BIT):02x}")
@@ -421,6 +557,28 @@ class RGBA(RGB):
             alfa = self.alfa,
             )
     
+    def naar_cmyk(self) -> CMYK:
+        
+        zwart = 1 - max((self.rood/LIMIT_8BIT, self.groen/LIMIT_8BIT, self.blauw/LIMIT_8BIT))
+        
+        cyaan = (1 - self.rood/LIMIT_8BIT - zwart) / (1 - zwart)
+        magenta = (1 - self.groen/LIMIT_8BIT - zwart) / (1 - zwart)
+        geel = (1 - self.blauw/LIMIT_8BIT - zwart) / (1 - zwart)
+        
+        return CMYK(
+            cyaan = cyaan,
+            magenta = magenta,
+            geel = geel,
+            zwart = zwart,
+            )
+    
+    def naar_rgb(self) -> RGB:
+        return RGB(
+            rood = self.rood,
+            groen = self.groen,
+            blauw = self.blauw,
+            )
+    
     # PROPERTIES
     
     @property
@@ -439,20 +597,24 @@ class RGBA(RGB):
             raise ValueError(f"Waarde moet tussen 0.0 en 1.0 zitten, niet {alfa}")
     
     @property
-    def RGBA(self) -> RGBA:
-        return self
-    
-    @property
-    def RGB(self) -> RGB:
-        return self.naar_rgb()
-    
-    @property
     def HEX(self) -> HEX:
         return self.naar_hex()
     
     @property
     def HSL(self) -> HSL:
         return self.naar_hsl()
+    
+    @property
+    def CMYK(self) -> CMYK:
+        return self.naar_cmyk()
+    
+    @property
+    def RGB(self) -> RGB:
+        return self.naar_rgb()
+    
+    @property
+    def RGBA(self) -> RGBA:
+        return self
     
     @property
     def grijswaarden(self) -> float:
@@ -462,26 +624,38 @@ if __name__ == "__main__":
     
     hex = HEX("#2eab7b")
     
+    hsl = HSL.van_hex(hex)
+    cmyk = CMYK.van_hex(hex)
     rgb = RGB.van_hex(hex)
     rgba = RGBA.van_hex(hex)
-    hsl = HSL.van_hex(hex)
+    
     
     print(hex.HEX)
+    print(hsl.HEX)
+    print(cmyk.HEX)
     print(rgb.HEX)
     print(rgba.HEX)
-    print(hsl.HEX)
-    
-    print(hex.RGB)
-    print(rgb.RGB)
-    print(rgba.RGB)
-    print(hsl.RGB)
-    
-    print(hex.RGBA)
-    print(rgb.RGBA)
-    print(rgba.RGBA)
-    print(hsl.RGBA)
     
     print(hex.HSL)
+    print(hsl.HSL)
+    print(cmyk.HSL)
     print(rgb.HSL)
     print(rgba.HSL)
-    print(hsl.HSL)
+    
+    print(hex.CMYK)
+    print(hsl.CMYK)
+    print(cmyk.CMYK)
+    print(rgb.CMYK)
+    print(rgba.CMYK)
+    
+    print(hex.RGB)
+    print(hsl.RGB)
+    print(cmyk.RGB)
+    print(rgb.RGB)
+    print(rgba.RGB)
+    
+    print(hex.RGBA)
+    print(hsl.RGBA)
+    print(cmyk.RGBA)
+    print(rgb.RGBA)
+    print(rgba.RGBA)
