@@ -27,7 +27,7 @@ class HSL:
         self.alfa = alfa
     
     def __repr__(self) -> str:
-        return f"({self.tint}, {self.verzadiging}, {self.helderheid}, {self.alfa})" 
+        return f"({self.tint*360:.1f}\u00b0, {self.verzadiging:.1%}, {self.helderheid:.1%}, {self.alfa})" 
     
     # CLASS METHODS
     

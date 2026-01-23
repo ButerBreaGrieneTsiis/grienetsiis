@@ -27,7 +27,7 @@ class CMYK:
         self.zwart = zwart
     
     def __repr__(self) -> str:
-        return f"({self.cyaan}, {self.magenta}, {self.geel}, {self.zwart})" 
+        return f"({self.cyaan:.1%}, {self.magenta:.1%}, {self.geel:.1%}, {self.zwart:.1%})" 
     
     # CLASS METHODS
     
