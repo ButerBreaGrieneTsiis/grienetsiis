@@ -165,7 +165,7 @@ class RGB:
         ):
         
         if 0 <= rood <= LIMIT_8BIT:
-            self._rood  =   int(round(rood))
+            self._rood = int(round(rood))
         else:
             raise ValueError(f"waarde moet tussen 0 en {LIMIT_8BIT} zitten, niet {rood}")
     
@@ -180,7 +180,7 @@ class RGB:
         ):
         
         if 0 <= groen <= LIMIT_8BIT:
-            self._groen  =   int(round(groen))
+            self._groen = int(round(groen))
         else:
             raise ValueError(f"Waarde moet tussen 0 en {LIMIT_8BIT} zitten, niet {groen}")
     
@@ -195,7 +195,7 @@ class RGB:
         ):
         
         if 0 <= blauw <= LIMIT_8BIT:
-            self._blauw  =   int(round(blauw))
+            self._blauw = int(round(blauw))
         else:
             raise ValueError(f"Waarde moet tussen 0 en {LIMIT_8BIT} zitten, niet {blauw}")
     
@@ -210,7 +210,7 @@ class RGB:
         ):
         
         if 0 <= alfa <= 1:
-            self._alfa  =   alfa
+            self._alfa = alfa
         else:
             raise ValueError(f"Waarde moet tussen 0.0 en 1.0 zitten, niet {alfa}")
     
