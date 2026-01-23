@@ -2,7 +2,8 @@
 grienetsiis.kleuren
 """
 from grienetsiis.kleuren.kleurcodering import HEX, HSL, HSV, CMYK, RGB
-from .kleur import Kleur
+from grienetsiis.kleuren.kleurschalen import kleur_schaal
+from grienetsiis.kleuren.kleur import Kleur
 
 
 __all__ = [
@@ -12,4 +13,5 @@ __all__ = [
     "CMYK",
     "RGB",
     "Kleur",
+    "kleur_schaal",
     ]
