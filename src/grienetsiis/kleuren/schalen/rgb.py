@@ -1,6 +1,6 @@
 from typing import List
 
-from grienetsiis.kleuren.kleurcodering import RGB
+from grienetsiis.kleuren.codering import RGB
 
 
 def kleur_schaal_rgba(

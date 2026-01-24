@@ -1,6 +1,6 @@
 from typing import List
 
-from grienetsiis.kleuren.kleurcodering import CMYK
+from grienetsiis.kleuren.codering import CMYK
 
 
 def kleur_schaal_cmyka(

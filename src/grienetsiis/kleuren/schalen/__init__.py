@@ -19,7 +19,7 @@ from .cmyk import (
     )
 
 if TYPE_CHECKING:
-    from grienetsiis.kleuren.kleurcodering import HEX, HSL, HSV, CMYK, RGB
+    from grienetsiis.kleuren.codering import HEX, HSL, HSV, CMYK, RGB
     from grienetsiis.kleuren.kleur import Kleur
 
 

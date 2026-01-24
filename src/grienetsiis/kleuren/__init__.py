@@ -1,8 +1,8 @@
 """
 grienetsiis.kleuren
 """
-from grienetsiis.kleuren.kleurcodering import HEX, HSL, HSV, CMYK, RGB
-from grienetsiis.kleuren.kleurschalen import kleur_schaal
+from grienetsiis.kleuren.codering import HEX, HSL, HSV, CMYK, RGB
+from grienetsiis.kleuren.schalen import kleur_schaal
 from grienetsiis.kleuren.kleur import Kleur
 
 
