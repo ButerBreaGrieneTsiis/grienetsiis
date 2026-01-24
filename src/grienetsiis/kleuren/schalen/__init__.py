@@ -7,6 +7,7 @@ from .rgb import (
     kleur_schaal_rood,
     kleur_schaal_groen,
     kleur_schaal_blauw,
+    kleur_schaal_alfa,
     )
 from .cmyk import (
     kleur_schaal_cmyka,
@@ -29,6 +30,10 @@ from .hsv import (
     kleur_schaal_hsv,
     kleur_schaal_waarde,
     )
+from grienetsiis.wiskunde.interpolatie import (
+    lineair,
+    lineair_door_grenzen,
+    )
 
 if TYPE_CHECKING:
     from grienetsiis.kleuren.codering import HEX, HSL, HSV, CMYK, RGB
@@ -41,6 +46,7 @@ SCHAAL_FUNCTIES = {
     "rood": (kleur_schaal_rood, "rgb"),
     "groen": (kleur_schaal_groen, "rgb"),
     "blauw": (kleur_schaal_blauw, "rgb"),
+    "alfa": (kleur_schaal_alfa, "rgb"),
     "cmyka": (kleur_schaal_cmyka, "cmyk"),
     "cmyk": (kleur_schaal_cmyk, "cmyk"),
     "cmy": (kleur_schaal_cmy, "cmyk"),
@@ -56,6 +62,10 @@ SCHAAL_FUNCTIES = {
     "hsva": (kleur_schaal_hsva, "hsv"),
     "hsv": (kleur_schaal_hsv, "hsv"),
     "waarde": (kleur_schaal_waarde, "hsv"),
+    }
+INTERPOLATIE_FUNCTIES = {
+    "lineair": lineair,
+    "lineair_omgekeerd": lineair_door_grenzen,
     }
 
 def kleur_schaal(
@@ -84,7 +94,16 @@ def kleur_schaal(
         "hsva",
         "hsv",
         "waarde",
-        ],
+        ] = "rgba",
+    interpolatie: Literal[
+        "lineair",
+        "lineair_omgekeerd",
+        ] = "lineair",
+    constante: Literal[
+        "start",
+        "eind",
+        "gemiddeld",
+        ] = "start",
     ) -> List[RGB]:
     
     if schaal not in SCHAAL_FUNCTIES:
@@ -94,4 +113,6 @@ def kleur_schaal(
         start = getattr(start, SCHAAL_FUNCTIES[schaal][1]),
         eind = getattr(eind, SCHAAL_FUNCTIES[schaal][1]),
         aantal_kleuren = aantal_kleuren,
+        interpolatie_func = INTERPOLATIE_FUNCTIES[interpolatie],
+        constante = constante,
         )

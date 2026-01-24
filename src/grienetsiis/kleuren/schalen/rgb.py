@@ -1,24 +1,40 @@
-from typing import List
+from typing import Callable, List
 
-from grienetsiis.kleuren.codering import RGB
+from grienetsiis.kleuren.codering.rgb import RGB, LIMIT_8BIT
 
 
 def kleur_schaal_rgba(
     start: RGB,
     eind: RGB,
     aantal_kleuren: int,
+    interpolatie_func: Callable,
+    constante: str,
     ) -> List[RGB]:
     
     kleuren = []
     
-    for index_kleur in range(aantal_kleuren):
+    waardes_rood = interpolatie_func(start.rood/LIMIT_8BIT, eind.rood/LIMIT_8BIT, aantal_kleuren)
+    waardes_groen = interpolatie_func(start.groen/LIMIT_8BIT, eind.groen/LIMIT_8BIT, aantal_kleuren)
+    waardes_blauw = interpolatie_func(start.blauw/LIMIT_8BIT, eind.blauw/LIMIT_8BIT, aantal_kleuren)
+    waardes_alfa = interpolatie_func(start.alfa, eind.alfa, aantal_kleuren)
+    
+    for (
+        rood,
+        groen,
+        blauw,
+        alfa,
+        ) in zip(
+        waardes_rood,
+        waardes_groen,
+        waardes_blauw,
+        waardes_alfa,
+        ):
         
-        ratio = index_kleur / (aantal_kleuren - 1)
         kleur = RGB(
-            rood = start.rood  * (1-ratio) + eind.rood  * ratio,
-            groen = start.groen * (1-ratio) + eind.groen * ratio,
-            blauw = start.blauw * (1-ratio) + eind.blauw * ratio,
-            alfa = start.alfa  * (1-ratio) + eind.alfa  * ratio,
+            rood = rood * LIMIT_8BIT,
+            groen = groen * LIMIT_8BIT,
+            blauw = blauw * LIMIT_8BIT,
+            alfa = alfa,
             )
         
         kleuren.append(kleur)
@@ -29,18 +45,38 @@ def kleur_schaal_rgb(
     start: RGB,
     eind: RGB,
     aantal_kleuren: int,
+    interpolatie_func: Callable,
+    constante: str,
     ) -> List[RGB]:
     
     kleuren = []
     
-    for index_kleur in range(aantal_kleuren):
+    waardes_rood = interpolatie_func(start.rood/LIMIT_8BIT, eind.rood/LIMIT_8BIT, aantal_kleuren)
+    waardes_groen = interpolatie_func(start.groen/LIMIT_8BIT, eind.groen/LIMIT_8BIT, aantal_kleuren)
+    waardes_blauw = interpolatie_func(start.blauw/LIMIT_8BIT, eind.blauw/LIMIT_8BIT, aantal_kleuren)
+    
+    if constante == "start":
+        alfa = start.alfa
+    elif constante == "eind":
+        alfa = eind.alfa
+    elif constante == "gemiddeld":
+        alfa = 0.5 * start.alfa + 0.5 * eind.alfa
+    
+    for (
+        rood,
+        groen,
+        blauw,
+        ) in zip(
+        waardes_rood,
+        waardes_groen,
+        waardes_blauw,
+        ):
         
-        ratio = index_kleur / (aantal_kleuren - 1)
         kleur = RGB(
-            rood = start.rood  * (1-ratio) + eind.rood  * ratio,
-            groen = start.groen * (1-ratio) + eind.groen * ratio,
-            blauw = start.blauw * (1-ratio) + eind.blauw * ratio,
-            alfa = start.alfa,
+            rood = rood * LIMIT_8BIT,
+            groen = groen * LIMIT_8BIT,
+            blauw = blauw * LIMIT_8BIT,
+            alfa = alfa,
             )
         
         kleuren.append(kleur)
@@ -51,17 +87,34 @@ def kleur_schaal_rood(
     start: RGB,
     eind: RGB,
     aantal_kleuren: int,
+    interpolatie_func: Callable,
+    constante: str,
     ) -> List[RGB]:
     
     kleuren = []
     
-    for index_kleur in range(aantal_kleuren):
+    waardes_rood = interpolatie_func(start.rood/LIMIT_8BIT, eind.rood/LIMIT_8BIT, aantal_kleuren)
+    
+    if constante == "start":
+        groen = start.groen
+        blauw = start.blauw
+        alfa = start.alfa
+    elif constante == "eind":
+        groen = eind.groen
+        blauw = eind.blauw
+        alfa = eind.alfa
+    elif constante == "gemiddeld":
+        groen = 0.5 * start.groen + 0.5 * eind.groen
+        blauw = 0.5 * start.blauw + 0.5 * eind.blauw
+        alfa = 0.5 * start.alfa + 0.5 * eind.alfa
+    
+    for rood in waardes_rood:
         
-        ratio = index_kleur / (aantal_kleuren - 1)
         kleur = RGB(
-            rood = start.rood  * (1-ratio) + eind.rood  * ratio,
-            groen = start.groen,
-            blauw = start.blauw,
+            rood = rood * LIMIT_8BIT,
+            groen = groen,
+            blauw = blauw,
+            alfa = alfa,
             )
         
         kleuren.append(kleur)
@@ -72,17 +125,34 @@ def kleur_schaal_groen(
     start: RGB,
     eind: RGB,
     aantal_kleuren: int,
+    interpolatie_func: Callable,
+    constante: str,
     ) -> List[RGB]:
     
     kleuren = []
     
-    for index_kleur in range(aantal_kleuren):
+    waardes_groen = interpolatie_func(start.groen/LIMIT_8BIT, eind.groen/LIMIT_8BIT, aantal_kleuren)
+    
+    if constante == "start":
+        rood = start.rood
+        blauw = start.blauw
+        alfa = start.alfa
+    elif constante == "eind":
+        rood = eind.rood
+        blauw = eind.blauw
+        alfa = eind.alfa
+    elif constante == "gemiddeld":
+        rood = 0.5 * start.rood + 0.5 * eind.rood
+        blauw = 0.5 * start.blauw + 0.5 * eind.blauw
+        alfa = 0.5 * start.alfa + 0.5 * eind.alfa
+    
+    for groen in waardes_groen:
         
-        ratio = index_kleur / (aantal_kleuren - 1)
         kleur = RGB(
-            rood = start.rood,
-            groen = start.groen * (1-ratio) + eind.groen * ratio,
-            blauw = start.blauw,
+            rood = rood,
+            groen = groen * LIMIT_8BIT,
+            blauw = blauw,
+            alfa = alfa,
             )
         
         kleuren.append(kleur)
@@ -93,17 +163,72 @@ def kleur_schaal_blauw(
     start: RGB,
     eind: RGB,
     aantal_kleuren: int,
+    interpolatie_func: Callable,
+    constante: str,
     ) -> List[RGB]:
     
     kleuren = []
     
-    for index_kleur in range(aantal_kleuren):
+    waardes_blauw = interpolatie_func(start.blauw/LIMIT_8BIT, eind.blauw/LIMIT_8BIT, aantal_kleuren)
+    
+    if constante == "start":
+        rood = start.rood
+        groen = start.groen
+        alfa = start.alfa
+    elif constante == "eind":
+        rood = eind.rood
+        groen = eind.groen
+        alfa = eind.alfa
+    elif constante == "gemiddeld":
+        rood = 0.5 * start.rood + 0.5 * eind.rood
+        groen = 0.5 * start.groen + 0.5 * eind.groen
+        alfa = 0.5 * start.alfa + 0.5 * eind.alfa
+    
+    for blauw in waardes_blauw:
         
-        ratio = index_kleur / (aantal_kleuren - 1)
         kleur = RGB(
-            rood = start.rood,
-            groen = start.groen,
-            blauw = start.blauw * (1-ratio) + eind.blauw * ratio,
+            rood = rood,
+            groen = groen,
+            blauw = blauw * LIMIT_8BIT,
+            alfa = alfa,
+            )
+        
+        kleuren.append(kleur)
+    
+    return kleuren
+
+def kleur_schaal_alfa(
+    start: RGB,
+    eind: RGB,
+    aantal_kleuren: int,
+    interpolatie_func: Callable,
+    constante: str,
+    ) -> List[RGB]:
+    
+    kleuren = []
+    
+    waardes_alfa = interpolatie_func(start.alfa, eind.alfa, aantal_kleuren)
+    
+    if constante == "start":
+        rood = start.rood
+        groen = start.groen
+        blauw = start.blauw
+    elif constante == "eind":
+        rood = eind.rood
+        groen = eind.groen
+        blauw = eind.blauw
+    elif constante == "gemiddeld":
+        rood = 0.5 * start.rood + 0.5 * eind.rood
+        groen = 0.5 * start.groen + 0.5 * eind.groen
+        blauw = 0.5 * start.blauw + 0.5 * eind.blauw
+    
+    for alfa in waardes_alfa:
+        
+        kleur = RGB(
+            rood = rood,
+            groen = groen,
+            blauw = blauw,
+            alfa = alfa,
             )
         
         kleuren.append(kleur)
