@@ -71,7 +71,7 @@ def lineair_door_grenzen(
             
             waarde = start + afstand/(aantal - 1) * (index_kleur)
             
-            if waarde > bovengrens:
+            if waarde >= bovengrens:
                 waarde = ondergrens - (bovengrens - waarde)
             
             waardes.append(waarde)
