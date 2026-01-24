@@ -17,6 +17,18 @@ from .cmyk import (
     kleur_schaal_geel,
     kleur_schaal_zwart,
     )
+from .hsl import (
+    kleur_schaal_hsla,
+    kleur_schaal_hsl,
+    kleur_schaal_tint,
+    kleur_schaal_verzadiging,
+    kleur_schaal_helderheid,
+    )
+from .hsv import (
+    kleur_schaal_hsva,
+    kleur_schaal_hsv,
+    kleur_schaal_waarde,
+    )
 
 if TYPE_CHECKING:
     from grienetsiis.kleuren.codering import HEX, HSL, HSV, CMYK, RGB
@@ -36,6 +48,14 @@ SCHAAL_FUNCTIES = {
     "magenta": (kleur_schaal_magenta, "cmyk"),
     "geel": (kleur_schaal_geel, "cmyk"),
     "zwart": (kleur_schaal_zwart, "cmyk"),
+    "hsla": (kleur_schaal_hsla, "hsl"),
+    "hsl": (kleur_schaal_hsl, "hsl"),
+    "tint": (kleur_schaal_tint, "hsl"),
+    "verzadiging": (kleur_schaal_verzadiging, "hsl"),
+    "helderheid": (kleur_schaal_helderheid, "hsl"),
+    "hsva": (kleur_schaal_hsva, "hsv"),
+    "hsv": (kleur_schaal_hsv, "hsv"),
+    "waarde": (kleur_schaal_waarde, "hsv"),
     }
 
 def kleur_schaal(
@@ -56,15 +76,19 @@ def kleur_schaal(
         "magenta",
         "geel",
         "zwart",
+        "hsla",
+        "hsl",
         "verzadiging",
         "tint",
         "helderheid",
+        "hsva",
+        "hsv",
         "waarde",
-        ]
+        ],
     ) -> List[RGB]:
     
     if schaal not in SCHAAL_FUNCTIES:
-        raise ValueError("onbekende schaal \"{schaal}\"")
+        raise ValueError(f"onbekende schaal \"{schaal}\"")
     
     return SCHAAL_FUNCTIES[schaal][0](
         start = getattr(start, SCHAAL_FUNCTIES[schaal][1]),
