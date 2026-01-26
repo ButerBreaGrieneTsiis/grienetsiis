@@ -197,6 +197,132 @@ def kleur_schaal_blauw(
     
     return kleuren
 
+def kleur_schaal_roodgroen(
+    start: RGB,
+    eind: RGB,
+    aantal_kleuren: int,
+    interpolatie_func: Callable,
+    constante: str,
+    ) -> List[RGB]:
+    
+    kleuren = []
+    
+    waardes_rood = interpolatie_func(start.rood/LIMIT_8BIT, eind.rood/LIMIT_8BIT, aantal_kleuren)
+    waardes_groen = interpolatie_func(start.groen/LIMIT_8BIT, eind.groen/LIMIT_8BIT, aantal_kleuren)
+    
+    if constante == "start":
+        blauw = start.blauw
+        alfa = start.alfa
+    elif constante == "eind":
+        blauw = eind.blauw
+        alfa = eind.alfa
+    elif constante == "gemiddeld":
+        blauw = 0.5 * start.blauw + 0.5 * eind.blauw
+        alfa = 0.5 * start.alfa + 0.5 * eind.alfa
+    
+    for (
+        rood,
+        groen,
+        ) in zip(
+        waardes_rood,
+        waardes_groen,
+        ):
+        
+        kleur = RGB(
+            rood = rood * LIMIT_8BIT,
+            groen = groen * LIMIT_8BIT,
+            blauw = blauw,
+            alfa = alfa,
+            )
+        
+        kleuren.append(kleur)
+    
+    return kleuren
+
+def kleur_schaal_roodblauw(
+    start: RGB,
+    eind: RGB,
+    aantal_kleuren: int,
+    interpolatie_func: Callable,
+    constante: str,
+    ) -> List[RGB]:
+    
+    kleuren = []
+    
+    waardes_rood = interpolatie_func(start.rood/LIMIT_8BIT, eind.rood/LIMIT_8BIT, aantal_kleuren)
+    waardes_blauw = interpolatie_func(start.blauw/LIMIT_8BIT, eind.blauw/LIMIT_8BIT, aantal_kleuren)
+    
+    if constante == "start":
+        groen = start.groen
+        alfa = start.alfa
+    elif constante == "eind":
+        groen = eind.groen
+        alfa = eind.alfa
+    elif constante == "gemiddeld":
+        groen = 0.5 * start.groen + 0.5 * eind.groen
+        alfa = 0.5 * start.alfa + 0.5 * eind.alfa
+    
+    for (
+        rood,
+        blauw,
+        ) in zip(
+        waardes_rood,
+        waardes_blauw,
+        ):
+        
+        kleur = RGB(
+            rood = rood * LIMIT_8BIT,
+            groen = groen,
+            blauw = blauw * LIMIT_8BIT,
+            alfa = alfa,
+            )
+        
+        kleuren.append(kleur)
+    
+    return kleuren
+
+def kleur_schaal_groenblauw(
+    start: RGB,
+    eind: RGB,
+    aantal_kleuren: int,
+    interpolatie_func: Callable,
+    constante: str,
+    ) -> List[RGB]:
+    
+    kleuren = []
+    
+    waardes_groen = interpolatie_func(start.groen/LIMIT_8BIT, eind.groen/LIMIT_8BIT, aantal_kleuren)
+    waardes_blauw = interpolatie_func(start.blauw/LIMIT_8BIT, eind.blauw/LIMIT_8BIT, aantal_kleuren)
+    
+    if constante == "start":
+        rood = start.rood
+        alfa = start.alfa
+    elif constante == "eind":
+        rood = eind.rood
+        alfa = eind.alfa
+    elif constante == "gemiddeld":
+        rood = 0.5 * start.rood + 0.5 * eind.rood
+        alfa = 0.5 * start.alfa + 0.5 * eind.alfa
+    
+    for (
+        groen,
+        blauw,
+        ) in zip(
+        waardes_groen,
+        waardes_blauw,
+        ):
+        
+        kleur = RGB(
+            rood = rood,
+            groen = groen * LIMIT_8BIT,
+            blauw = blauw * LIMIT_8BIT,
+            alfa = alfa,
+            )
+        
+        kleuren.append(kleur)
+    
+    return kleuren
+
 def kleur_schaal_alfa(
     start: RGB,
     eind: RGB,

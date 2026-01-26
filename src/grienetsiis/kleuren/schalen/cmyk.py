@@ -263,6 +263,144 @@ def kleur_schaal_geel(
     
     return kleuren
 
+def kleur_schaal_cyaanmagenta(
+    start: CMYK,
+    eind: CMYK,
+    aantal_kleuren: int,
+    interpolatie_func: Callable,
+    constante: str,
+    ) -> List[CMYK]:
+    
+    kleuren = []
+    
+    waardes_cyaan = interpolatie_func(start.cyaan, eind.cyaan, aantal_kleuren)
+    waardes_magenta = interpolatie_func(start.magenta, eind.magenta, aantal_kleuren)
+    
+    if constante == "start":
+        geel = start.geel
+        zwart = start.zwart
+        alfa = start.alfa
+    elif constante == "eind":
+        geel = eind.geel
+        zwart = eind.zwart
+        alfa = eind.alfa
+    elif constante == "gemiddeld":
+        geel = 0.5 * start.geel + 0.5 * eind.geel
+        zwart = 0.5 * start.zwart + 0.5 * eind.zwart
+        alfa = 0.5 * start.alfa + 0.5 * eind.alfa
+    
+    for (
+        cyaan,
+        magenta,
+        ) in zip(
+        waardes_cyaan,
+        waardes_magenta,
+        ):
+        
+        kleur = CMYK(
+            cyaan = cyaan,
+            magenta = magenta,
+            geel = geel,
+            zwart = zwart,
+            alfa = alfa,
+            )
+        
+        kleuren.append(kleur)
+    
+    return kleuren
+
+def kleur_schaal_cyaangeel(
+    start: CMYK,
+    eind: CMYK,
+    aantal_kleuren: int,
+    interpolatie_func: Callable,
+    constante: str,
+    ) -> List[CMYK]:
+    
+    kleuren = []
+    
+    waardes_cyaan = interpolatie_func(start.cyaan, eind.cyaan, aantal_kleuren)
+    waardes_geel = interpolatie_func(start.geel, eind.geel, aantal_kleuren)
+    
+    if constante == "start":
+        magenta = start.magenta
+        zwart = start.zwart
+        alfa = start.alfa
+    elif constante == "eind":
+        magenta = eind.magenta
+        zwart = eind.zwart
+        alfa = eind.alfa
+    elif constante == "gemiddeld":
+        magenta = 0.5 * start.magenta + 0.5 * eind.magenta
+        zwart = 0.5 * start.zwart + 0.5 * eind.zwart
+        alfa = 0.5 * start.alfa + 0.5 * eind.alfa
+    
+    for (
+        cyaan,
+        geel,
+        ) in zip(
+        waardes_cyaan,
+        waardes_geel,
+        ):
+        
+        kleur = CMYK(
+            cyaan = cyaan,
+            magenta = magenta,
+            geel = geel,
+            zwart = zwart,
+            alfa = alfa,
+            )
+        
+        kleuren.append(kleur)
+    
+    return kleuren
+
+def kleur_schaal_magentageel(
+    start: CMYK,
+    eind: CMYK,
+    aantal_kleuren: int,
+    interpolatie_func: Callable,
+    constante: str,
+    ) -> List[CMYK]:
+    
+    kleuren = []
+    
+    waardes_magenta = interpolatie_func(start.magenta, eind.magenta, aantal_kleuren)
+    waardes_geel = interpolatie_func(start.geel, eind.geel, aantal_kleuren)
+    
+    if constante == "start":
+        cyaan = start.cyaan
+        zwart = start.zwart
+        alfa = start.alfa
+    elif constante == "eind":
+        cyaan = eind.cyaan
+        zwart = eind.zwart
+        alfa = eind.alfa
+    elif constante == "gemiddeld":
+        cyaan = 0.5 * start.cyaan + 0.5 * eind.cyaan
+        zwart = 0.5 * start.zwart + 0.5 * eind.zwart
+        alfa = 0.5 * start.alfa + 0.5 * eind.alfa
+    
+    for (
+        magenta,
+        geel,
+        ) in zip(
+        waardes_magenta,
+        waardes_geel,
+        ):
+        
+        kleur = CMYK(
+            cyaan = cyaan,
+            magenta = magenta,
+            geel = geel,
+            zwart = zwart,
+            alfa = alfa,
+            )
+        
+        kleuren.append(kleur)
+    
+    return kleuren
+
 def kleur_schaal_zwart(
     start: CMYK,
     eind: CMYK,
