@@ -40,5 +40,3 @@ def formatteer_getal(
     suffix = " " + suffix if suffix_spatie and suffix else suffix
     
     return f"{prefix}{teken}{integer_geformatteerd}{decimaal_teken}{decimalen_geformatteerd}{suffix}"
-
-print(getal_naar_tekst(123.456))
