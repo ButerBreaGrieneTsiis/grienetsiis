@@ -14,16 +14,17 @@ def opslaan_json(
     bestandspad: Path,
     bestandsnaam: str | None = None,
     extensie: str | None = None,
-    vercijfer_functie: Callable | None = None,
-    vercijfer_objecten_standaard: List[str] | None = None,
-    vercijfer_objecten_functie: List[Vercijferaar] | None = None,
+    vercijfer_functie_object: Callable | None = None,
+    vercijfer_functie_subobjecten: List[Vercijferaar] | None = None,
+    vercijfer_standaard_objecten: List[str] | None = None,
+    vercijfer_standaard_overslaan: List[str] | None = None,
     vercijfer_enum: Dict[str, Enum] | None = None,
     vercijfer_datum: bool = True,
     encoding: str = "utf-8",
     ) -> None:
     
-    vercijfer_objecten_standaard = [] if vercijfer_objecten_standaard is None else vercijfer_objecten_standaard
-    vercijfer_objecten_functie = [] if vercijfer_objecten_functie is None else vercijfer_objecten_functie
+    vercijfer_standaard_objecten = [] if vercijfer_standaard_objecten is None else vercijfer_standaard_objecten
+    vercijfer_functie_subobjecten = [] if vercijfer_functie_subobjecten is None else vercijfer_functie_subobjecten
     vercijfer_enum = {} if vercijfer_enum is None else vercijfer_enum
     
     if extensie is None and bestandsnaam is not None:
@@ -45,25 +46,31 @@ def opslaan_json(
                 if isinstance(object, dt.datetime):
                     return {"__datumtijd__": object.strftime("%Y-%m-%d %H:%M:%S")}
             
-            if vercijfer_functie:
+            if vercijfer_functie_object:
                 try:
-                    return getattr(object, vercijfer_functie.__name__)()
+                    return getattr(object, vercijfer_functie_object.__name__)()
                 except:
                     pass
             
-            for object_class_naam in vercijfer_objecten_standaard:
+            for object_class_naam in vercijfer_standaard_objecten:
                 if object.__class__.__name__ == object_class_naam:
-                    return {
+                    object_dict = {
                         "__class__": object.__class__.__name__,
                         **object.__dict__,
                         }
+                    for veld in vercijfer_standaard_overslaan:
+                        object_dict.pop(veld, None)
+                    return object_dict
             
-            for vercijfer_object_functie in vercijfer_objecten_functie:
-                if object.__class__.__name__ == vercijfer_object_functie.class_naam:
-                    return getattr(object, vercijfer_object_functie.vercijfer_functie_naam)()
+            for vercijfer_functie_subobject in vercijfer_functie_subobjecten:
+                if object.__class__.__name__ == vercijfer_functie_subobject.class_naam:
+                    return getattr(object, vercijfer_functie_subobject.vercijfer_functie_naam)()
             
             try:
-                return object.__dict__
+                object_dict = object.__dict__
+                for veld in vercijfer_standaard_overslaan:
+                    object_dict.pop(veld, None)
+                return object_dict
             except:
                 return json.JSONEncoder.default(self, object)
     
