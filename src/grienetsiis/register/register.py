@@ -36,7 +36,7 @@ class Register(dict, metaclass = Singleton):
         
         for subregister_naam, subregister_dict in register._SUBREGISTERS.items():
             
-            register[subregister_naam] = Subregister()
+            register[subregister_naam] = Subregister(subregister_dict["type"])
             
             if not subregister_dict["opslaan"]:
                 continue
@@ -198,6 +198,6 @@ class Register(dict, metaclass = Singleton):
             subregister_naam = instantie._SUBREGISTER_NAAM
             
             if subregister_naam not in self:
-                self[subregister_naam] = Subregister()
+                self[subregister_naam] = Subregister(instantie.__class__)
             
             self[subregister_naam][instantie.uuid] = instantie
