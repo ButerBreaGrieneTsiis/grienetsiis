@@ -34,8 +34,6 @@ class GeregistreerdObject(metaclass = GeregistreerdType):
             # alle velden uitsluiten die standaardwaardes hebben; nutteloos om op te slaan
             if not veld_waarde:
                 continue
-            elif veld_sleutel == "uuid":
-                continue
             else:
                 dict_naar_json[veld_sleutel] = veld_waarde
         
