@@ -67,6 +67,10 @@ def opslaan_json(
             except:
                 return json.JSONEncoder.default(self, object)
     
+    for map in reversed(bestandspad.parents):
+        if not map.exists():
+            map.mkdir()
+    
     with open(bestandspad, "w", encoding = encoding) as bestand:
         bestand.write(json.dumps(
             object,
