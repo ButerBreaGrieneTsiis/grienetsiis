@@ -18,13 +18,19 @@ def opslaan_json(
     vercijfer_functie_subobjecten: List[Vercijferaar] | None = None,
     vercijfer_standaard_objecten: List[str] | None = None,
     vercijfer_standaard_overslaan: List[str] | None = None,
+    vercijfer_standaard_naam: str = "__class__",
     vercijfer_enum: Dict[str, Enum] | None = None,
+    vercijfer_enum_naam: str = "__enum__",
     vercijfer_datum: bool = True,
+    vercijfer_datum_naam: str = "__datum__",
+    vercijfer_datum_formaat: str = "%Y-%m-%d",
+    vercijfer_datumtijd_naam: str = "__datumtijd__",
+    vercijfer_datumtijd_formaat: str = "%Y-%m-%d %H:%M:%S",
     encoding: str = "utf-8",
     ) -> None:
     
-    vercijfer_standaard_objecten = [] if vercijfer_standaard_objecten is None else vercijfer_standaard_objecten
     vercijfer_functie_subobjecten = [] if vercijfer_functie_subobjecten is None else vercijfer_functie_subobjecten
+    vercijfer_standaard_objecten = [] if vercijfer_standaard_objecten is None else vercijfer_standaard_objecten
     vercijfer_enum = {} if vercijfer_enum is None else vercijfer_enum
     
     if extensie is None and bestandsnaam is not None:
@@ -37,14 +43,14 @@ def opslaan_json(
         def default(self, object):
             
             if type(object) in vercijfer_enum.values():
-                return {"__enum__": str(object)}
+                return {vercijfer_enum_naam: str(object)}
             
             if vercijfer_datum:
                 if isinstance(object, dt.date):
-                    return {"__datum__": object.strftime("%Y-%m-%d")}
+                    return {vercijfer_datum_naam: object.strftime(vercijfer_datum_formaat)}
                 
                 if isinstance(object, dt.datetime):
-                    return {"__datumtijd__": object.strftime("%Y-%m-%d %H:%M:%S")}
+                    return {vercijfer_datumtijd_naam: object.strftime(vercijfer_datumtijd_formaat)}
             
             if vercijfer_functie_object:
                 try:
@@ -55,7 +61,7 @@ def opslaan_json(
             for object_class_naam in vercijfer_standaard_objecten:
                 if object.__class__.__name__ == object_class_naam:
                     object_dict = {
-                        "__class__": object.__class__.__name__,
+                        vercijfer_standaard_naam: object.__class__.__name__,
                         **object.__dict__,
                         }
                     for veld in vercijfer_standaard_overslaan:
