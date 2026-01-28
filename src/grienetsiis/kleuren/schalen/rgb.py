@@ -1,6 +1,6 @@
 from typing import Callable, List
 
-from grienetsiis.kleuren.codering.rgb import RGB, LIMIT_8BIT
+from grienetsiis.kleuren.codering.rgb import RGB
 
 
 def kleur_schaal_rgba(
@@ -13,9 +13,9 @@ def kleur_schaal_rgba(
     
     kleuren = []
     
-    waardes_rood = interpolatie_func(start.rood/LIMIT_8BIT, eind.rood/LIMIT_8BIT, aantal_kleuren)
-    waardes_groen = interpolatie_func(start.groen/LIMIT_8BIT, eind.groen/LIMIT_8BIT, aantal_kleuren)
-    waardes_blauw = interpolatie_func(start.blauw/LIMIT_8BIT, eind.blauw/LIMIT_8BIT, aantal_kleuren)
+    waardes_rood = interpolatie_func(start.rood/RGB.LIMIT_8BIT, eind.rood/RGB.LIMIT_8BIT, aantal_kleuren)
+    waardes_groen = interpolatie_func(start.groen/RGB.LIMIT_8BIT, eind.groen/RGB.LIMIT_8BIT, aantal_kleuren)
+    waardes_blauw = interpolatie_func(start.blauw/RGB.LIMIT_8BIT, eind.blauw/RGB.LIMIT_8BIT, aantal_kleuren)
     waardes_alfa = interpolatie_func(start.alfa, eind.alfa, aantal_kleuren)
     
     for (
@@ -31,9 +31,9 @@ def kleur_schaal_rgba(
         ):
         
         kleur = RGB(
-            rood = rood * LIMIT_8BIT,
-            groen = groen * LIMIT_8BIT,
-            blauw = blauw * LIMIT_8BIT,
+            rood = rood * RGB.LIMIT_8BIT,
+            groen = groen * RGB.LIMIT_8BIT,
+            blauw = blauw * RGB.LIMIT_8BIT,
             alfa = alfa,
             )
         
@@ -51,9 +51,9 @@ def kleur_schaal_rgb(
     
     kleuren = []
     
-    waardes_rood = interpolatie_func(start.rood/LIMIT_8BIT, eind.rood/LIMIT_8BIT, aantal_kleuren)
-    waardes_groen = interpolatie_func(start.groen/LIMIT_8BIT, eind.groen/LIMIT_8BIT, aantal_kleuren)
-    waardes_blauw = interpolatie_func(start.blauw/LIMIT_8BIT, eind.blauw/LIMIT_8BIT, aantal_kleuren)
+    waardes_rood = interpolatie_func(start.rood/RGB.LIMIT_8BIT, eind.rood/RGB.LIMIT_8BIT, aantal_kleuren)
+    waardes_groen = interpolatie_func(start.groen/RGB.LIMIT_8BIT, eind.groen/RGB.LIMIT_8BIT, aantal_kleuren)
+    waardes_blauw = interpolatie_func(start.blauw/RGB.LIMIT_8BIT, eind.blauw/RGB.LIMIT_8BIT, aantal_kleuren)
     
     if constante == "start":
         alfa = start.alfa
@@ -73,9 +73,9 @@ def kleur_schaal_rgb(
         ):
         
         kleur = RGB(
-            rood = rood * LIMIT_8BIT,
-            groen = groen * LIMIT_8BIT,
-            blauw = blauw * LIMIT_8BIT,
+            rood = rood * RGB.LIMIT_8BIT,
+            groen = groen * RGB.LIMIT_8BIT,
+            blauw = blauw * RGB.LIMIT_8BIT,
             alfa = alfa,
             )
         
@@ -93,7 +93,7 @@ def kleur_schaal_rood(
     
     kleuren = []
     
-    waardes_rood = interpolatie_func(start.rood/LIMIT_8BIT, eind.rood/LIMIT_8BIT, aantal_kleuren)
+    waardes_rood = interpolatie_func(start.rood/RGB.LIMIT_8BIT, eind.rood/RGB.LIMIT_8BIT, aantal_kleuren)
     
     if constante == "start":
         groen = start.groen
@@ -111,7 +111,7 @@ def kleur_schaal_rood(
     for rood in waardes_rood:
         
         kleur = RGB(
-            rood = rood * LIMIT_8BIT,
+            rood = rood * RGB.LIMIT_8BIT,
             groen = groen,
             blauw = blauw,
             alfa = alfa,
@@ -131,7 +131,7 @@ def kleur_schaal_groen(
     
     kleuren = []
     
-    waardes_groen = interpolatie_func(start.groen/LIMIT_8BIT, eind.groen/LIMIT_8BIT, aantal_kleuren)
+    waardes_groen = interpolatie_func(start.groen/RGB.LIMIT_8BIT, eind.groen/RGB.LIMIT_8BIT, aantal_kleuren)
     
     if constante == "start":
         rood = start.rood
@@ -150,7 +150,7 @@ def kleur_schaal_groen(
         
         kleur = RGB(
             rood = rood,
-            groen = groen * LIMIT_8BIT,
+            groen = groen * RGB.LIMIT_8BIT,
             blauw = blauw,
             alfa = alfa,
             )
@@ -169,7 +169,7 @@ def kleur_schaal_blauw(
     
     kleuren = []
     
-    waardes_blauw = interpolatie_func(start.blauw/LIMIT_8BIT, eind.blauw/LIMIT_8BIT, aantal_kleuren)
+    waardes_blauw = interpolatie_func(start.blauw/RGB.LIMIT_8BIT, eind.blauw/RGB.LIMIT_8BIT, aantal_kleuren)
     
     if constante == "start":
         rood = start.rood
@@ -189,7 +189,7 @@ def kleur_schaal_blauw(
         kleur = RGB(
             rood = rood,
             groen = groen,
-            blauw = blauw * LIMIT_8BIT,
+            blauw = blauw * RGB.LIMIT_8BIT,
             alfa = alfa,
             )
         
@@ -207,8 +207,8 @@ def kleur_schaal_roodgroen(
     
     kleuren = []
     
-    waardes_rood = interpolatie_func(start.rood/LIMIT_8BIT, eind.rood/LIMIT_8BIT, aantal_kleuren)
-    waardes_groen = interpolatie_func(start.groen/LIMIT_8BIT, eind.groen/LIMIT_8BIT, aantal_kleuren)
+    waardes_rood = interpolatie_func(start.rood/RGB.LIMIT_8BIT, eind.rood/RGB.LIMIT_8BIT, aantal_kleuren)
+    waardes_groen = interpolatie_func(start.groen/RGB.LIMIT_8BIT, eind.groen/RGB.LIMIT_8BIT, aantal_kleuren)
     
     if constante == "start":
         blauw = start.blauw
@@ -229,8 +229,8 @@ def kleur_schaal_roodgroen(
         ):
         
         kleur = RGB(
-            rood = rood * LIMIT_8BIT,
-            groen = groen * LIMIT_8BIT,
+            rood = rood * RGB.LIMIT_8BIT,
+            groen = groen * RGB.LIMIT_8BIT,
             blauw = blauw,
             alfa = alfa,
             )
@@ -249,8 +249,8 @@ def kleur_schaal_roodblauw(
     
     kleuren = []
     
-    waardes_rood = interpolatie_func(start.rood/LIMIT_8BIT, eind.rood/LIMIT_8BIT, aantal_kleuren)
-    waardes_blauw = interpolatie_func(start.blauw/LIMIT_8BIT, eind.blauw/LIMIT_8BIT, aantal_kleuren)
+    waardes_rood = interpolatie_func(start.rood/RGB.LIMIT_8BIT, eind.rood/RGB.LIMIT_8BIT, aantal_kleuren)
+    waardes_blauw = interpolatie_func(start.blauw/RGB.LIMIT_8BIT, eind.blauw/RGB.LIMIT_8BIT, aantal_kleuren)
     
     if constante == "start":
         groen = start.groen
@@ -271,9 +271,9 @@ def kleur_schaal_roodblauw(
         ):
         
         kleur = RGB(
-            rood = rood * LIMIT_8BIT,
+            rood = rood * RGB.LIMIT_8BIT,
             groen = groen,
-            blauw = blauw * LIMIT_8BIT,
+            blauw = blauw * RGB.LIMIT_8BIT,
             alfa = alfa,
             )
         
@@ -291,8 +291,8 @@ def kleur_schaal_groenblauw(
     
     kleuren = []
     
-    waardes_groen = interpolatie_func(start.groen/LIMIT_8BIT, eind.groen/LIMIT_8BIT, aantal_kleuren)
-    waardes_blauw = interpolatie_func(start.blauw/LIMIT_8BIT, eind.blauw/LIMIT_8BIT, aantal_kleuren)
+    waardes_groen = interpolatie_func(start.groen/RGB.LIMIT_8BIT, eind.groen/RGB.LIMIT_8BIT, aantal_kleuren)
+    waardes_blauw = interpolatie_func(start.blauw/RGB.LIMIT_8BIT, eind.blauw/RGB.LIMIT_8BIT, aantal_kleuren)
     
     if constante == "start":
         rood = start.rood
@@ -314,8 +314,8 @@ def kleur_schaal_groenblauw(
         
         kleur = RGB(
             rood = rood,
-            groen = groen * LIMIT_8BIT,
-            blauw = blauw * LIMIT_8BIT,
+            groen = groen * RGB.LIMIT_8BIT,
+            blauw = blauw * RGB.LIMIT_8BIT,
             alfa = alfa,
             )
         
