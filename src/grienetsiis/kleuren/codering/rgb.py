@@ -309,6 +309,15 @@ class RGB:
         return self
     
     @property
+    def inverse(self) -> RGB:
+        return RGB(
+            rood = RGB.LIMIT_8BIT - self.rood,
+            groen = RGB.LIMIT_8BIT - self.groen,
+            blauw = RGB.LIMIT_8BIT - self.blauw,
+            alfa = self.alfa,
+            )
+    
+    @property
     def grijswaarde(self) -> float:
         return (0.2126*self.rood + 0.7152*self.groen + 0.0722*self.blauw) / self.LIMIT_8BIT
 
