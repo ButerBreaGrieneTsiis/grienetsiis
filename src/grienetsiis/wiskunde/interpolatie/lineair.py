@@ -1,3 +1,4 @@
+"""grienetsiis.wiskunde.interpolatie.lineair"""
 from typing import List
 
 

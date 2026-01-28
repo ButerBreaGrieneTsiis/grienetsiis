@@ -1,3 +1,6 @@
+"""
+grienetsiis.kleuren.schalen
+"""
 from __future__ import annotations
 from typing import List, Literal, TYPE_CHECKING
 
@@ -39,6 +42,7 @@ from .hsv import (
 from grienetsiis.wiskunde.interpolatie import (
     lineair,
     lineair_door_grenzen,
+    logaritmisch,
     )
 
 if TYPE_CHECKING:
@@ -78,6 +82,7 @@ SCHAAL_FUNCTIES = {
 INTERPOLATIE_FUNCTIES = {
     "lineair": lineair,
     "lineair_omgekeerd": lineair_door_grenzen,
+    "logaritmisch": logaritmisch,
     }
 
 def kleur_schaal(
@@ -122,7 +127,7 @@ def kleur_schaal(
         "eind",
         "gemiddeld",
         ] = "start",
-    ) -> List[RGB]:
+    ) -> List[HEX | HSL | HSV | CMYK | RGB]:
     
     if schaal not in SCHAAL_FUNCTIES:
         raise ValueError(f"onbekende schaal \"{schaal}\"")

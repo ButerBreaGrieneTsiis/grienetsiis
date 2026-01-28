@@ -1,3 +1,6 @@
+"""
+grienetsiis.kleuren.codering
+"""
 from .hex import HEX
 from .hsl import HSL
 from .hsv import HSV
