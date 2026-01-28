@@ -1,3 +1,4 @@
+"""grienetsiis.kleuren.codering.hex"""
 from __future__ import annotations
 import re
 from typing import ClassVar, TYPE_CHECKING
@@ -11,6 +12,7 @@ if TYPE_CHECKING:
 
 class HEX:
     
+    LIMIT_HEXDECIMAL: ClassVar[int] = 16
     _RGB: ClassVar[RGB | None]  = None
     
     # DUNDER METHODS

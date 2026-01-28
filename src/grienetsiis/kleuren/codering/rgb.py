@@ -1,4 +1,6 @@
+"""grienetsiis.kleuren.codering.rgb"""
 from __future__ import annotations
+from typing import ClassVar
 
 from .hex import HEX
 from .hsl import HSL
@@ -6,12 +8,11 @@ from .hsv import HSV
 from .cmyk import CMYK
 
 
-LIMIT_8BIT: int = 255
-LIMIT_HEXDECIMAL: int = 16
-
 class RGB:
     
     # DUNDER METHODS
+    
+    LIMIT_8BIT: ClassVar[int] = 255
     
     def __init__(
         self,
@@ -37,10 +38,10 @@ class RGB:
         hex: HEX,
         ) -> RGB:
         
-        rood = int(hex.hex_rood, LIMIT_HEXDECIMAL)
-        groen = int(hex.hex_groen, LIMIT_HEXDECIMAL)
-        blauw = int(hex.hex_blauw, LIMIT_HEXDECIMAL)
-        alfa = int(hex.hex_alfa, LIMIT_HEXDECIMAL) / LIMIT_8BIT
+        rood = int(hex.hex_rood, HEX.LIMIT_HEXDECIMAL)
+        groen = int(hex.hex_groen, HEX.LIMIT_HEXDECIMAL)
+        blauw = int(hex.hex_blauw, HEX.LIMIT_HEXDECIMAL)
+        alfa = int(hex.hex_alfa, HEX.LIMIT_HEXDECIMAL) / cls.LIMIT_8BIT
         
         return cls(
             rood = rood,
@@ -77,9 +78,9 @@ class RGB:
                 rood, groen, blauw = chroma, 0, waarde
             
             return cls(
-                rood = LIMIT_8BIT*(rood + hsl.helderheid - chroma/2),
-                groen = LIMIT_8BIT*(groen + hsl.helderheid - chroma/2),
-                blauw = LIMIT_8BIT*(blauw + hsl.helderheid - chroma/2),
+                rood = cls.LIMIT_8BIT*(rood + hsl.helderheid - chroma/2),
+                groen = cls.LIMIT_8BIT*(groen + hsl.helderheid - chroma/2),
+                blauw = cls.LIMIT_8BIT*(blauw + hsl.helderheid - chroma/2),
                 alfa = hsl.alfa,
                 )
     
@@ -110,9 +111,9 @@ class RGB:
                 rood, groen, blauw = chroma, 0, waarde
             
             return cls(
-                rood = LIMIT_8BIT*(rood + hsv.waarde - chroma),
-                groen = LIMIT_8BIT*(groen + hsv.waarde - chroma),
-                blauw = LIMIT_8BIT*(blauw + hsv.waarde - chroma),
+                rood = cls.LIMIT_8BIT*(rood + hsv.waarde - chroma),
+                groen = cls.LIMIT_8BIT*(groen + hsv.waarde - chroma),
+                blauw = cls.LIMIT_8BIT*(blauw + hsv.waarde - chroma),
                 alfa = hsv.alfa,
                 )
     
@@ -122,9 +123,9 @@ class RGB:
         cmyk: CMYK,
         ) -> RGB:
         
-        rood = LIMIT_8BIT * (1 - cmyk.cyaan) * (1 - cmyk.zwart)
-        groen = LIMIT_8BIT * (1 - cmyk.magenta) * (1 - cmyk.zwart)
-        blauw = LIMIT_8BIT * (1 - cmyk.geel) * (1 - cmyk.zwart)
+        rood = cls.LIMIT_8BIT * (1 - cmyk.cyaan) * (1 - cmyk.zwart)
+        groen = cls.LIMIT_8BIT * (1 - cmyk.magenta) * (1 - cmyk.zwart)
+        blauw = cls.LIMIT_8BIT * (1 - cmyk.geel) * (1 - cmyk.zwart)
         
         return cls(
             rood = rood,
@@ -136,14 +137,14 @@ class RGB:
     # INSTANCE METHODS
     
     def naar_hex(self) -> HEX:
-        return HEX(f"#{self.rood:02x}{self.groen:02x}{self.blauw:02x}{int(self.alfa*LIMIT_8BIT):02x}")
+        return HEX(f"#{self.rood:02x}{self.groen:02x}{self.blauw:02x}{int(self.alfa*self.LIMIT_8BIT):02x}")
     
     def naar_hsl(self) -> HSL:
         
         # https://gist.github.com/ciembor/1494530
-        rood_decimaal = self.rood / LIMIT_8BIT
-        groen_decimaal = self.groen / LIMIT_8BIT
-        blauw_decimaal = self.blauw / LIMIT_8BIT
+        rood_decimaal = self.rood / self.LIMIT_8BIT
+        groen_decimaal = self.groen / self.LIMIT_8BIT
+        blauw_decimaal = self.blauw / self.LIMIT_8BIT
         
         waarde_min = min(rood_decimaal, groen_decimaal, blauw_decimaal)
         waarde_max = max(rood_decimaal, groen_decimaal, blauw_decimaal)
@@ -175,9 +176,9 @@ class RGB:
     
     def naar_hsv(self) -> HSV:
         
-        rood_decimaal = self.rood / LIMIT_8BIT
-        groen_decimaal = self.groen / LIMIT_8BIT
-        blauw_decimaal = self.blauw / LIMIT_8BIT
+        rood_decimaal = self.rood / self.LIMIT_8BIT
+        groen_decimaal = self.groen / self.LIMIT_8BIT
+        blauw_decimaal = self.blauw / self.LIMIT_8BIT
         
         waarde_min = min(rood_decimaal, groen_decimaal, blauw_decimaal)
         waarde_max = max(rood_decimaal, groen_decimaal, blauw_decimaal)
@@ -211,11 +212,11 @@ class RGB:
     
     def naar_cmyk(self) -> CMYK:
         
-        zwart = 1 - max((self.rood/LIMIT_8BIT, self.groen/LIMIT_8BIT, self.blauw/LIMIT_8BIT))
+        zwart = 1 - max((self.rood/self.LIMIT_8BIT, self.groen/self.LIMIT_8BIT, self.blauw/self.LIMIT_8BIT))
         
-        cyaan = (1 - self.rood/LIMIT_8BIT - zwart) / (1 - zwart)
-        magenta = (1 - self.groen/LIMIT_8BIT - zwart) / (1 - zwart)
-        geel = (1 - self.blauw/LIMIT_8BIT - zwart) / (1 - zwart)
+        cyaan = (1 - self.rood/self.LIMIT_8BIT - zwart) / (1 - zwart)
+        magenta = (1 - self.groen/self.LIMIT_8BIT - zwart) / (1 - zwart)
+        geel = (1 - self.blauw/self.LIMIT_8BIT - zwart) / (1 - zwart)
         
         return CMYK(
             cyaan = cyaan,
@@ -237,10 +238,10 @@ class RGB:
         rood: int,
         ):
         
-        if 0 <= rood <= LIMIT_8BIT:
+        if 0 <= rood <= self.LIMIT_8BIT:
             self._rood = int(round(rood))
         else:
-            raise ValueError(f"waarde moet tussen 0 en {LIMIT_8BIT} zitten, niet {rood}")
+            raise ValueError(f"waarde moet tussen 0 en {self.LIMIT_8BIT} zitten, niet {rood}")
     
     @property
     def groen(self):
@@ -252,10 +253,10 @@ class RGB:
         groen: int,
         ):
         
-        if 0 <= groen <= LIMIT_8BIT:
+        if 0 <= groen <= self.LIMIT_8BIT:
             self._groen = int(round(groen))
         else:
-            raise ValueError(f"Waarde moet tussen 0 en {LIMIT_8BIT} zitten, niet {groen}")
+            raise ValueError(f"Waarde moet tussen 0 en {self.LIMIT_8BIT} zitten, niet {groen}")
     
     @property
     def blauw(self):
@@ -267,10 +268,10 @@ class RGB:
         blauw: int,
         ):
         
-        if 0 <= blauw <= LIMIT_8BIT:
+        if 0 <= blauw <= self.LIMIT_8BIT:
             self._blauw = int(round(blauw))
         else:
-            raise ValueError(f"Waarde moet tussen 0 en {LIMIT_8BIT} zitten, niet {blauw}")
+            raise ValueError(f"Waarde moet tussen 0 en {self.LIMIT_8BIT} zitten, niet {blauw}")
     
     @property
     def alfa(self):
@@ -309,7 +310,7 @@ class RGB:
     
     @property
     def grijswaarde(self) -> float:
-        return (0.2126*self.rood + 0.7152*self.groen + 0.0722*self.blauw) / LIMIT_8BIT
+        return (0.2126*self.rood + 0.7152*self.groen + 0.0722*self.blauw) / self.LIMIT_8BIT
 
 HEX._RGB = RGB
 HSL._RGB = RGB

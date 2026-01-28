@@ -1,3 +1,4 @@
+"""grienetsiis.kleuren.codering.cmyk"""
 from __future__ import annotations
 from typing import ClassVar, TYPE_CHECKING
 
