@@ -49,8 +49,8 @@ def schaalfactoren(
     return schaalfactoren
 
 def kleur_tint_hsl(
-    grondkleur: Kleur | HEX | HSL | HSV | CMYK | RGB,
     aantal_kleuren: int,
+    grondkleur: Kleur | HEX | HSL | HSV | CMYK | RGB = HEX("#ffffffff"),
     schaal_tint: Tuple[float | Literal["min", "max"], float | Literal["min", "max"]] = (1.0, "max"),
     schaal_verzadiging: Tuple[float | Literal["min", "max"], float | Literal["min", "max"]] = (1.0, "max"),
     schaal_helderheid: Tuple[float | Literal["min", "max"], float | Literal["min", "max"]] = (1.0, "max"),
@@ -121,8 +121,8 @@ def kleur_tint_hsl(
     return kleuren
 
 def kleur_tint_hsv(
-    grondkleur: Kleur | HEX | HSL | HSV | CMYK | RGB,
     aantal_kleuren: int,
+    grondkleur: Kleur | HEX | HSL | HSV | CMYK | RGB = HEX("#ffffffff"),
     schaal_tint: Tuple[float | Literal["min", "max"], float | Literal["min", "max"]] = (1.0, "max"),
     schaal_verzadiging: Tuple[float | Literal["min", "max"], float | Literal["min", "max"]] = (1.0, "max"),
     schaal_waarde: Tuple[float | Literal["min", "max"], float | Literal["min", "max"]] = (1.0, "max"),
@@ -193,8 +193,8 @@ def kleur_tint_hsv(
     return kleuren
 
 def kleur_tint_cmyk(
-    grondkleur: Kleur | HEX | HSL | HSV | CMYK | RGB,
     aantal_kleuren: int,
+    grondkleur: Kleur | HEX | HSL | HSV | CMYK | RGB = HEX("#ffffffff"),
     schaal_cyaan: Tuple[float | Literal["min", "max"], float | Literal["min", "max"]] = (1.0, "max"),
     schaal_magenta: Tuple[float | Literal["min", "max"], float | Literal["min", "max"]] = (1.0, "max"),
     schaal_geel: Tuple[float | Literal["min", "max"], float | Literal["min", "max"]] = (1.0, "max"),
@@ -278,8 +278,8 @@ def kleur_tint_cmyk(
     return kleuren
 
 def kleur_tint_rgb(
-    grondkleur: Kleur | HEX | HSL | HSV | CMYK | RGB,
     aantal_kleuren: int,
+    grondkleur: Kleur | HEX | HSL | HSV | CMYK | RGB = HEX("#ffffffff"),
     schaal_rood: Tuple[float | Literal["min", "max"], float | Literal["min", "max"]] = (1.0, "max"),
     schaal_groen: Tuple[float | Literal["min", "max"], float | Literal["min", "max"]] = (1.0, "max"),
     schaal_blauw: Tuple[float | Literal["min", "max"], float | Literal["min", "max"]] = (1.0, "max"),
