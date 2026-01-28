@@ -124,5 +124,9 @@ class HEX:
         return self.naar_rgb()
     
     @property
+    def inverse(self) -> HEX:
+        return self.rgb.inverse.hex
+    
+    @property
     def grijswaarde(self) -> float:
         return self.rgb.grijswaarde

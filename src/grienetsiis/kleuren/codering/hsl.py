@@ -98,5 +98,9 @@ class HSL:
         return self.naar_rgb()
     
     @property
+    def inverse(self) -> HSL:
+        return self.rgb.inverse.hsl
+    
+    @property
     def grijswaarde(self) -> float:
         return self.rgb.grijswaarde

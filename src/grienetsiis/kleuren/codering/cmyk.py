@@ -100,5 +100,9 @@ class CMYK:
         return self.naar_rgb()
     
     @property
+    def inverse(self) -> CMYK:
+        return self.rgb.inverse.cmyk
+    
+    @property
     def grijswaarde(self) -> float:
         return self.rgb.grijswaarde
