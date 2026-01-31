@@ -87,11 +87,6 @@ class Menu:
     
     @property
     def opties(self) -> Dict[INDEX, OPTIE]:
-        if self._opties is None:
-            return None
-        
-        if isinstance(self._opties, list):
-            return {_optie: _optie for _optie in self._opties}
         return self._opties
     
     @property
