@@ -80,6 +80,81 @@ class CMYK:
     # PROPERTIES
     
     @property
+    def cyaan(self):
+        return self._cyaan
+    
+    @cyaan.setter
+    def cyaan(
+        self,
+        cyaan: int,
+        ):
+        
+        if 0.0 <= cyaan <= 1.0:
+            self._cyaan = cyaan
+        else:
+            raise ValueError(f"cyaan moet tussen 0.0 en 1.0 zitten, niet {cyaan}")
+    
+    @property
+    def magenta(self):
+        return self._magenta
+    
+    @magenta.setter
+    def magenta(
+        self,
+        magenta: int,
+        ):
+        
+        if 0.0 <= magenta <= 1.0:
+            self._magenta = magenta
+        else:
+            raise ValueError(f"magenta moet tussen 0.0 en 1.0 zitten, niet {magenta}")
+    
+    @property
+    def geel(self):
+        return self._geel
+    
+    @geel.setter
+    def geel(
+        self,
+        geel: int,
+        ):
+        
+        if 0.0 <= geel <= 1.0:
+            self._geel = geel
+        else:
+            raise ValueError(f"geel moet tussen 0.0 en 1.0 zitten, niet {geel}")
+    
+    @property
+    def zwart(self):
+        return self._zwart
+    
+    @zwart.setter
+    def zwart(
+        self,
+        zwart: int,
+        ):
+        
+        if 0.0 <= zwart <= 1.0:
+            self._zwart = zwart
+        else:
+            raise ValueError(f"zwart moet tussen 0.0 en 1.0 zitten, niet {zwart}")
+    
+    @property
+    def alfa(self):
+        return self._alfa
+    
+    @alfa.setter
+    def alfa(
+        self,
+        alfa: float,
+        ):
+        
+        if 0.0 <= alfa <= 1.0:
+            self._alfa = alfa
+        else:
+            raise ValueError(f"alfa moet tussen 0.0 en 1.0 zitten, niet {alfa}")
+    
+    @property
     def hex(self) -> HEX:
         return self.naar_hex()
     
