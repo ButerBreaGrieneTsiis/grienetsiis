@@ -1,9 +1,9 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Callable, ClassVar, Dict, List, TypeVar
+from typing import ClassVar, Dict, List, TypeVar
 
 from grienetsiis.opdrachtprompt.invoer import kiezen
-import grienetsiis.opdrachtprompt.commando as commando
+from grienetsiis.opdrachtprompt import commando
 from grienetsiis.opdrachtprompt.constantes import TEKST_INDENTATIE
 
 
@@ -17,7 +17,7 @@ class Menu:
     super_menu: Menu | None = None
     
     # interne variabelen
-    _opties: List[OPTIE] | Dict[INDEX, OPTIE] | None = None
+    _opties: Dict[INDEX, OPTIE] | None = None
     
     # class variables
     __TEKST_ANNULEREN: ClassVar[str] = "terug naar"
@@ -75,16 +75,12 @@ class Menu:
         index: INDEX | None = None,
         ):
         
-        if index is not None and isinstance(self, list):
-            raise ValueError(f"geïndexeerde opties niet mogelijk")
+        if self._opties is None:
+            self._opties = {}
         
         if index is None:
-            if self._opties is None:
-                self._opties = []
-            self._opties.append(optie)
+            self._opties[optie] = optie
         else:
-            if self._opties is None:
-                self._opties = {}
             self._opties[index] = optie
     
     # PROPERTIES
@@ -117,7 +113,7 @@ if __name__ == "__main__":
     menu.toevoegen_optie(lambda: print("1234"))
     
     menu_kaas.toevoegen_optie("jong")
-    menu_kaas.toevoegen_optie("jong belegen")
+    menu_kaas.toevoegen_optie("jong belegen", "kaas jonge")
     menu_kaas.toevoegen_optie("belegen")
     
     menu()
