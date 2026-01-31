@@ -90,7 +90,7 @@ class HSV:
         if 0.0 <= tint <= 1.0:
             self._tint = tint
         else:
-            raise ValueError(f"waarde moet tussen 0.0 en 1.0 zitten, niet {tint}")
+            raise ValueError(f"tint moet tussen 0.0 en 1.0 zitten, niet {tint}")
     
     @property
     def verzadiging(self):
@@ -105,7 +105,7 @@ class HSV:
         if 0.0 <= verzadiging <= 1.0:
             self._verzadiging = verzadiging
         else:
-            raise ValueError(f"waarde moet tussen 0.0 en 1.0 zitten, niet {verzadiging}")
+            raise ValueError(f"verzadiging moet tussen 0.0 en 1.0 zitten, niet {verzadiging}")
     
     @property
     def waarde(self):
@@ -135,7 +135,7 @@ class HSV:
         if 0.0 <= alfa <= 1.0:
             self._alfa = alfa
         else:
-            raise ValueError(f"Waarde moet tussen 0.0 en 1.0 zitten, niet {alfa}")
+            raise ValueError(f"alfa moet tussen 0.0 en 1.0 zitten, niet {alfa}")
     
     @property
     def hex(self) -> HEX:

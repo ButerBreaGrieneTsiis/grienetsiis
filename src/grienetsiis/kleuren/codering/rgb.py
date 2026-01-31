@@ -241,7 +241,7 @@ class RGB:
         if 0.0 <= rood <= self.LIMIT_8BIT:
             self._rood = int(round(rood))
         else:
-            raise ValueError(f"waarde moet tussen 0.0 en {self.LIMIT_8BIT} zitten, niet {rood}")
+            raise ValueError(f"rood moet tussen 0.0 en {self.LIMIT_8BIT} zitten, niet {rood}")
     
     @property
     def groen(self):
@@ -256,7 +256,7 @@ class RGB:
         if 0.0 <= groen <= self.LIMIT_8BIT:
             self._groen = int(round(groen))
         else:
-            raise ValueError(f"Waarde moet tussen 0.0 en {self.LIMIT_8BIT} zitten, niet {groen}")
+            raise ValueError(f"groen moet tussen 0.0 en {self.LIMIT_8BIT} zitten, niet {groen}")
     
     @property
     def blauw(self):
@@ -271,7 +271,7 @@ class RGB:
         if 0.0 <= blauw <= self.LIMIT_8BIT:
             self._blauw = int(round(blauw))
         else:
-            raise ValueError(f"Waarde moet tussen 0.0 en {self.LIMIT_8BIT} zitten, niet {blauw}")
+            raise ValueError(f"blauw moet tussen 0.0 en {self.LIMIT_8BIT} zitten, niet {blauw}")
     
     @property
     def alfa(self):
@@ -286,7 +286,7 @@ class RGB:
         if 0.0 <= alfa <= 1.0:
             self._alfa = alfa
         else:
-            raise ValueError(f"Waarde moet tussen 0.0 en 1.0 zitten, niet {alfa}")
+            raise ValueError(f"alfa moet tussen 0.0 en 1.0 zitten, niet {alfa}")
     
     @property
     def hex(self) -> HEX:

@@ -78,6 +78,66 @@ class HSL:
     # PROPERTIES
     
     @property
+    def tint(self):
+        return self._tint
+    
+    @tint.setter
+    def tint(
+        self,
+        tint: int,
+        ):
+        
+        if 0.0 <= tint <= 1.0:
+            self._tint = tint
+        else:
+            raise ValueError(f"tint moet tussen 0.0 en 1.0 zitten, niet {tint}")
+    
+    @property
+    def verzadiging(self):
+        return self._verzadiging
+    
+    @verzadiging.setter
+    def verzadiging(
+        self,
+        verzadiging: int,
+        ):
+        
+        if 0.0 <= verzadiging <= 1.0:
+            self._verzadiging = verzadiging
+        else:
+            raise ValueError(f"verzadiging moet tussen 0.0 en 1.0 zitten, niet {verzadiging}")
+    
+    @property
+    def helderheid(self):
+        return self._helderheid
+    
+    @helderheid.setter
+    def helderheid(
+        self,
+        helderheid: int,
+        ):
+        
+        if 0.0 <= helderheid <= 1.0:
+            self._helderheid = helderheid
+        else:
+            raise ValueError(f"helderheid moet tussen 0.0 en 1.0 zitten, niet {helderheid}")
+    
+    @property
+    def alfa(self):
+        return self._alfa
+    
+    @alfa.setter
+    def alfa(
+        self,
+        alfa: float,
+        ):
+        
+        if 0.0 <= alfa <= 1.0:
+            self._alfa = alfa
+        else:
+            raise ValueError(f"Waarde moet tussen 0.0 en 1.0 zitten, niet {alfa}")
+    
+    @property
     def hex(self) -> HEX:
         return self.naar_hex()
     
