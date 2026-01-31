@@ -15,8 +15,8 @@ def formatteer_bedrag(
         absoluut = True,
         )
     
-    bedrag_tekst = bedrag_geformateerd.split(",")[0]+",- " if abs(bedrag) % 1 == 0 else bedrag_geformateerd
-    bedrag_teken = "" if bedrag > 0 else "-"
+    bedrag_tekst = bedrag_geformateerd.split(",")[0]+",- " if abs(bedrag) % 1 == 0.0 else bedrag_geformateerd
+    bedrag_teken = "" if bedrag > 0.0 else "-"
     
     if symbool_ervoor:
         return f"{bedrag_teken}{symbool}{" "*spatie}{bedrag_tekst}"

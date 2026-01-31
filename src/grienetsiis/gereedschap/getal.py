@@ -13,6 +13,8 @@ def formatteer_getal(
     suffix_spatie: bool = True,
     ) -> str:
     
+    THIN_SPACE = u"\u2009"
+    
     if not decimalen_automatisch:
         getal_tekst = f"{abs(getal):.{decimalen}f}"
     else:
@@ -28,13 +30,13 @@ def formatteer_getal(
     decimalen = getal_tekst.split(".")[1]
     
     if groeperen:
-        integer_geformatteerd = u"\u2009".join([integer[::-1][index:index+groeperen_per] for index in range(0, len(integer), groeperen_per)])[::-1]
-        decimalen_geformatteerd = u"\u2009".join([decimalen[index:index+groeperen_per] for index in range(0, len(decimalen), groeperen_per)])
+        integer_geformatteerd = THIN_SPACE.join([integer[::-1][index:index+groeperen_per] for index in range(0, len(integer), groeperen_per)])[::-1]
+        decimalen_geformatteerd = THIN_SPACE.join([decimalen[index:index+groeperen_per] for index in range(0, len(decimalen), groeperen_per)])
     else:
         integer_geformatteerd = integer
         decimalen_geformatteerd = decimalen
     
-    teken = "-" if (getal < 0 and not absoluut) else ""
+    teken = "-" if (getal < 0.0 and not absoluut) else ""
     
     prefix = prefix + " " if prefix_spatie and prefix else prefix
     suffix = " " + suffix if suffix_spatie and suffix else suffix
