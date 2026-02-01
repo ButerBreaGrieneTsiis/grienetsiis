@@ -12,8 +12,8 @@ def logaritmisch(
     
     waardes = []
     
-    log_start = start - ondergrens if start < ondergrens else log(start)
-    log_eind = eind - ondergrens if eind < ondergrens else log(eind)
+    log_start = log(ondergrens) - start if start < ondergrens else log(start)
+    log_eind = log(ondergrens) - eind if eind < ondergrens else log(eind)
     
     afstand = log_eind - log_start
     
