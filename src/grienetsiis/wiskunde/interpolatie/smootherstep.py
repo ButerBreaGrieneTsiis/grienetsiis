@@ -12,12 +12,12 @@ def smootherstep(
     
     waardes = []
     
-    a = 6.0
-    b = -15.0
-    c = 10.0
+    a = 6.0 * (eind - start)
+    b = -15.0 * (eind - start)
+    c = 10.0 * (eind - start)
     d = 0.0
+    f = start
     e = 0.0
-    f = 0.0
     
     for index_kleur in range(aantal):
         
