@@ -1,15 +1,8 @@
 """grienetsiis.wiskunde.interpolatie.kubisch"""
 from typing import List
 
+from grienetsiis.wiskunde import functies
 
-def _kubisch(
-    a: float,
-    b: float,
-    c: float,
-    d: float,
-    x: float,
-    ) -> float:
-    return a*x**3 + b*x**2 + c*x + d
 
 def kubisch(
     start: float,
@@ -30,7 +23,7 @@ def kubisch(
         
         x = index_kleur/(aantal - 1)
         
-        waarde = _kubisch(a, b, c, d, x)
+        waarde = functies.polynoom(a, b, c, d, x)
         waardes.append(waarde)
     
     return waardes
