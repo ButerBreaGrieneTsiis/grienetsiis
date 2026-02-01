@@ -26,7 +26,7 @@ def kwadratisch(
         
         x = index_kleur/(aantal - 1)
         
-        waarde = functies.polynoom(a, b, c, x)
+        waarde = functies.polynoom(x, a, b, c)
         waardes.append(waarde)
     
     return waardes
