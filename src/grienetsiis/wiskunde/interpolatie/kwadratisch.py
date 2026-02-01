@@ -1,14 +1,8 @@
 """grienetsiis.wiskunde.interpolatie.kwadratisch"""
 from typing import List, Literal
 
+from grienetsiis.wiskunde import functies
 
-def _kwadratisch(
-    a: float,
-    b: float,
-    c: float,
-    x: float,
-    ) -> float:
-    return a*x**2 + b*x + c
 
 def kwadratisch(
     start: float,
@@ -32,7 +26,7 @@ def kwadratisch(
         
         x = index_kleur/(aantal - 1)
         
-        waarde = _kwadratisch(a, b, c, x)
+        waarde = functies.polynoom(a, b, c, x)
         waardes.append(waarde)
     
     return waardes

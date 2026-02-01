@@ -1,6 +1,8 @@
 """grienetsiis.wiskunde.interpolatie.lineair"""
 from typing import List
 
+from grienetsiis.wiskunde import functies
+
 
 def lineair(
     start: float,
@@ -10,11 +12,14 @@ def lineair(
     
     waardes = []
     
-    afstand = eind - start
+    b = start
+    a = eind - start
     
     for index_kleur in range(aantal):
         
-        waarde = start + afstand/(aantal - 1) * (index_kleur)
+        x = index_kleur/(aantal - 1)
+        
+        waarde = functies.polynoom(x, a, b)
         waardes.append(waarde)
     
     return waardes
