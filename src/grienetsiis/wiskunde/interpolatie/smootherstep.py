@@ -4,7 +4,7 @@ from typing import List
 from grienetsiis.wiskunde import functies
 
 
-def smoothstep(
+def smootherstep(
     start: float,
     eind: float,
     aantal: int,

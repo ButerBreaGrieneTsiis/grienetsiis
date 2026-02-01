@@ -1,12 +1,19 @@
 """
 grienetsiis.wiskunde.interpolatie
 """
-from .lineair import lineair, lineair_door_grenzen
+from .lineair import lineair
+from .kwadratisch import kwadratisch
+from .kubisch import kubisch
+from .smoothstep import smoothstep
+from .smootherstep import smootherstep
 from .logaritmisch import logaritmisch
 
 
 __all__ = [
     "lineair",
-    "lineair_door_grenzen",
+    "kwadratisch",
+    "kubisch",
+    "smoothstep",
+    "smootherstep",
     "logaritmisch",
     ]
