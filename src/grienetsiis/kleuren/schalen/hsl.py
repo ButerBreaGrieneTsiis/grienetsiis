@@ -1,22 +1,51 @@
-from typing import Callable, List
+"""
+grienetsiis.kleuren.schalen.hsl
+"""
+from typing import List, Literal
 
-from grienetsiis.kleuren.codering import HSL
+from grienetsiis.kleuren.codering import HEX, HSL, HSV, CMYK, RGB
+from ._invoer_naar_waardes import _invoer_naar_waardes
 
 
-def kleur_schaal_hsla(
-    start: HSL,
-    eind: HSL,
+def kleur_schaal_hsl(
+    start: HEX | HSL | HSV | CMYK | RGB,
+    eind: HEX | HSL | HSV | CMYK | RGB,
     aantal_kleuren: int,
-    interpolatie_func: Callable,
-    constante: str,
+    tint: Literal["start", "gemiddeld", "eind", "lineair", "kwadratisch-start", "kwadratisch-eind", "kubisch", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
+    verzadiging: Literal["start", "gemiddeld", "eind", "lineair", "kwadratisch-start", "kwadratisch-eind", "kubisch", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
+    helderheid: Literal["start", "gemiddeld", "eind", "lineair", "kwadratisch-start", "kwadratisch-eind", "kubisch", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
+    alfa: Literal["start", "gemiddeld", "eind", "lineair", "kwadratisch-start", "kwadratisch-eind", "kubisch", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
     ) -> List[HSL]:
     
     kleuren = []
     
-    waardes_tint = interpolatie_func(start.tint, eind.tint, aantal_kleuren)
-    waardes_verzadiging = interpolatie_func(start.verzadiging, eind.verzadiging, aantal_kleuren)
-    waardes_helderheid = interpolatie_func(start.helderheid, eind.helderheid, aantal_kleuren)
-    waardes_alfa = interpolatie_func(start.alfa, eind.alfa, aantal_kleuren)
+    start = start.hsl
+    eind = eind.hsl
+    
+    waardes_tint = _invoer_naar_waardes(
+        start = start.tint,
+        eind = eind.tint,
+        kleur_invoer = tint,
+        aantal_kleuren = aantal_kleuren,
+        )
+    waardes_verzadiging = _invoer_naar_waardes(
+        start = start.verzadiging,
+        eind = eind.verzadiging,
+        kleur_invoer = verzadiging,
+        aantal_kleuren = aantal_kleuren,
+        )
+    waardes_helderheid = _invoer_naar_waardes(
+        start = start.helderheid,
+        eind = eind.helderheid,
+        kleur_invoer = helderheid,
+        aantal_kleuren = aantal_kleuren,
+        )
+    waardes_alfa = _invoer_naar_waardes(
+        start = start.alfa,
+        eind = eind.alfa,
+        kleur_invoer = alfa,
+        aantal_kleuren = aantal_kleuren,
+        )
     
     for (
         tint,
@@ -29,163 +58,6 @@ def kleur_schaal_hsla(
         waardes_helderheid,
         waardes_alfa,
         ):
-        
-        kleur = HSL(
-            tint = tint,
-            verzadiging = verzadiging,
-            helderheid = helderheid,
-            alfa = alfa,
-            )
-        
-        kleuren.append(kleur)
-    
-    return kleuren
-
-def kleur_schaal_hsl(
-    start: HSL,
-    eind: HSL,
-    aantal_kleuren: int,
-    interpolatie_func: Callable,
-    constante: str,
-    ) -> List[HSL]:
-    
-    kleuren = []
-    
-    waardes_tint = interpolatie_func(start.tint, eind.tint, aantal_kleuren)
-    waardes_verzadiging = interpolatie_func(start.verzadiging, eind.verzadiging, aantal_kleuren)
-    waardes_helderheid = interpolatie_func(start.helderheid, eind.helderheid, aantal_kleuren)
-    
-    if constante == "start":
-        alfa = start.alfa
-    elif constante == "eind":
-        alfa = eind.alfa
-    elif constante == "gemiddeld":
-        alfa = 0.5 * start.alfa + 0.5 * eind.alfa
-    
-    for (
-        tint,
-        verzadiging,
-        helderheid,
-        ) in zip(
-        waardes_tint,
-        waardes_verzadiging,
-        waardes_helderheid,
-        ):
-        
-        kleur = HSL(
-            tint = tint,
-            verzadiging = verzadiging,
-            helderheid = helderheid,
-            alfa = alfa,
-            )
-        
-        kleuren.append(kleur)
-    
-    return kleuren
-
-def kleur_schaal_tint(
-    start: HSL,
-    eind: HSL,
-    aantal_kleuren: int,
-    interpolatie_func: Callable,
-    constante: str,
-    ) -> List[HSL]:
-    
-    kleuren = []
-    
-    waardes_tint = interpolatie_func(start.tint, eind.tint, aantal_kleuren)
-    alfa = start.alfa
-    
-    if constante == "start":
-        verzadiging = start.verzadiging
-        helderheid = start.helderheid
-        alfa = start.alfa
-    elif constante == "eind":
-        verzadiging = eind.verzadiging
-        helderheid = eind.helderheid
-        alfa = eind.alfa
-    elif constante == "gemiddeld":
-        verzadiging = 0.5 * start.verzadiging + 0.5 * eind.verzadiging
-        helderheid = 0.5 * start.helderheid + 0.5 * eind.helderheid
-        alfa = 0.5 * start.alfa + 0.5 * eind.alfa
-    
-    for tint in waardes_tint:
-        
-        kleur = HSL(
-            tint = tint,
-            verzadiging = verzadiging,
-            helderheid = helderheid,
-            alfa = alfa,
-            )
-        
-        kleuren.append(kleur)
-    
-    return kleuren
-
-def kleur_schaal_verzadiging(
-    start: HSL,
-    eind: HSL,
-    aantal_kleuren: int,
-    interpolatie_func: Callable,
-    constante: str,
-    ) -> List[HSL]:
-    
-    kleuren = []
-    
-    waardes_verzadiging = interpolatie_func(start.verzadiging, eind.verzadiging, aantal_kleuren)
-    
-    if constante == "start":
-        tint = start.tint
-        helderheid = start.helderheid
-        alfa = start.alfa
-    elif constante == "eind":
-        tint = eind.tint
-        helderheid = eind.helderheid
-        alfa = eind.alfa
-    elif constante == "gemiddeld":
-        tint = 0.5 * start.tint + 0.5 * eind.tint
-        helderheid = 0.5 * start.helderheid + 0.5 * eind.helderheid
-        alfa = 0.5 * start.alfa + 0.5 * eind.alfa
-    
-    for verzadiging in waardes_verzadiging:
-        
-        kleur = HSL(
-            tint = tint,
-            verzadiging = verzadiging,
-            helderheid = helderheid,
-            alfa = alfa,
-            )
-        
-        kleuren.append(kleur)
-    
-    return kleuren
-
-def kleur_schaal_helderheid(
-    start: HSL,
-    eind: HSL,
-    aantal_kleuren: int,
-    interpolatie_func: Callable,
-    constante: str,
-    ) -> List[HSL]:
-    
-    kleuren = []
-    
-    waardes_helderheid = interpolatie_func(start.helderheid, eind.helderheid, aantal_kleuren)
-    
-    if constante == "start":
-        tint = start.tint
-        verzadiging = start.verzadiging
-        alfa = start.alfa
-    elif constante == "eind":
-        tint = eind.tint
-        verzadiging = eind.verzadiging
-        alfa = eind.alfa
-    elif constante == "gemiddeld":
-        tint = 0.5 * start.tint + 0.5 * eind.tint
-        verzadiging = 0.5 * start.verzadiging + 0.5 * eind.verzadiging
-        alfa = 0.5 * start.alfa + 0.5 * eind.alfa
-    
-    for helderheid in waardes_helderheid:
         
         kleur = HSL(
             tint = tint,
