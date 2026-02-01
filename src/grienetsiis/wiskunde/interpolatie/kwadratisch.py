@@ -20,7 +20,7 @@ def kwadratisch(
     
     c = start
     a = (c-eind)/(2*x_helling - 1)
-    b = eind-a
+    b = eind-c-a
     
     for index_kleur in range(aantal):
         
