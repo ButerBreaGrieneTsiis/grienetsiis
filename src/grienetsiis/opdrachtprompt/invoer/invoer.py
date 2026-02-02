@@ -60,7 +60,7 @@ def invoeren(
                         continue
                 
                 if waardes_bereik:
-                    if min(waardes_bereik) <= invoer <= max(waardes_bereik):
+                    if not (min(waardes_bereik) <= invoer <= max(waardes_bereik)):
                         print(f"{tekst_indentatie}invoer \"{invoer}\" incorrect, moet tussen {min(waardes_bereik)} en {max(waardes_bereik)} liggen")
                         continue
                 
@@ -81,7 +81,7 @@ def invoeren(
                         continue
                 
                 if waardes_bereik:
-                    if min(waardes_bereik) <= invoer <= max(waardes_bereik):
+                    if not (min(waardes_bereik) <= invoer <= max(waardes_bereik)):
                         print(f"{tekst_indentatie}invoer \"{invoer}\" incorrect, moet tussen {min(waardes_bereik)} en {max(waardes_bereik)} liggen")
                         continue
                 
