@@ -78,6 +78,45 @@ class Interpolatie:
             schaalfactor_eind = schaalfactor_eind,
             )
     
+    @classmethod
+    def logaritmisch(
+        cls,
+        schaalfactor_start: Literal["min", "max"] | float,
+        schaalfactor_eind: Literal["min", "max"] | float,
+        ) -> Interpolatie:
+        
+        return cls(
+            methode = InterpolatieMethode.LOGARITMISCH,
+            schaalfactor_start = schaalfactor_start,
+            schaalfactor_eind = schaalfactor_eind,
+            )
+    
+    @classmethod
+    def smoothstep(
+        cls,
+        schaalfactor_start: Literal["min", "max"] | float,
+        schaalfactor_eind: Literal["min", "max"] | float,
+        ) -> Interpolatie:
+        
+        return cls(
+            methode = InterpolatieMethode.SMOOTHSTEP,
+            schaalfactor_start = schaalfactor_start,
+            schaalfactor_eind = schaalfactor_eind,
+            )
+    
+    @classmethod
+    def smootherstep(
+        cls,
+        schaalfactor_start: Literal["min", "max"] | float,
+        schaalfactor_eind: Literal["min", "max"] | float,
+        ) -> Interpolatie:
+        
+        return cls(
+            methode = InterpolatieMethode.SMOOTHERSTEP,
+            schaalfactor_start = schaalfactor_start,
+            schaalfactor_eind = schaalfactor_eind,
+            )
+    
     # INSTANCE METHODS
     
     def toepassen(
