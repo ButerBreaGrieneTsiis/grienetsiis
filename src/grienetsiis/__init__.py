@@ -6,4 +6,4 @@ die ik in meerdere projecten kan gebruiken.
 """
 
 
-__version__ = "2.0.0-dev"
+__version__ = "2.0.0-rc1"
