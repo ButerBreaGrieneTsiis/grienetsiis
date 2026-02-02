@@ -1,19 +1,21 @@
 """
 grienetsiis.wiskunde.interpolatie
 """
-from .lineair import lineair
-from .kwadratisch import kwadratisch
+from .interpoleer import interpoleer
 from .kubisch import kubisch
-from .smoothstep import smoothstep
-from .smootherstep import smootherstep
+from .kwadratisch import kwadratisch
+from .lineair import lineair
 from .logaritmisch import logaritmisch
+from .smootherstep import smootherstep
+from .smoothstep import smoothstep
 
 
 __all__ = [
-    "lineair",
-    "kwadratisch",
+    "interpoleer",
     "kubisch",
-    "smoothstep",
-    "smootherstep",
+    "kwadratisch",
+    "lineair",
     "logaritmisch",
+    "smootherstep",
+    "smoothstep",
     ]
