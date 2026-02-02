@@ -7,7 +7,7 @@ from grienetsiis.opdrachtprompt.constantes import TEKST_INDENTATIE
 
 def invoeren(
     tekst_beschrijving: str,
-    invoer_type: Literal["int", "float", "str", "bool"],
+    invoer_type: Literal["int", "float", "str", "bool"] | int | float | str | bool,
     invoer_annuleren: bool = True,
     tekst_annuleren: str = "stop",
     uitvoer_annuleren: commando.Commando = commando.STOP,
@@ -45,7 +45,7 @@ def invoeren(
                 
                 continue
         
-        if invoer_type == "int":
+        if invoer_type in ("int", int):
             
             try:
                 invoer = int(invoer)
@@ -66,7 +66,7 @@ def invoeren(
                 
                 return invoer
         
-        elif invoer_type == "float":
+        elif invoer_type in ("float", float):
             
             try:
                 invoer = float(invoer)
@@ -87,7 +87,7 @@ def invoeren(
                 
                 return invoer
         
-        elif invoer_type == "str":
+        elif invoer_type in ("str", str):
             
             if waardes_lijst:
                 if invoer not in waardes_lijst:
@@ -109,7 +109,7 @@ def invoeren(
             
             return invoer
         
-        elif invoer_type == "bool":
+        elif invoer_type in ("bool", bool):
             
             if invoer.casefold() in waardes_waar:
                 return True
