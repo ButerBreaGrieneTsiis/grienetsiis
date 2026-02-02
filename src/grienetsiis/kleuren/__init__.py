@@ -17,10 +17,10 @@ grienetsiis.kleuren.palet
 
 """
 from grienetsiis.kleuren.codering import HEX, HSL, HSV, CMYK, RGB
+from grienetsiis.kleuren.kleur import Kleur
 from grienetsiis.kleuren.palet import palet_regenboog
 from grienetsiis.kleuren.schalen import kleur_schaal_hsl, kleur_schaal_hsv, kleur_schaal_cmyk, kleur_schaal_rgb
 from grienetsiis.kleuren.tinten import kleur_tint_hsl, kleur_tint_hsv, kleur_tint_cmyk, kleur_tint_rgb
-from grienetsiis.kleuren.kleur import Kleur
 
 
 __all__ = [
@@ -29,8 +29,8 @@ __all__ = [
     "HSV",
     "CMYK",
     "RGB",
-    "palet_regenboog",
     "Kleur",
+    "palet_regenboog",
     "kleur_schaal_hsl",
     "kleur_schaal_hsv",
     "kleur_schaal_cmyk",
