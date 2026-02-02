@@ -4,17 +4,17 @@ grienetsiis.kleuren.schalen.hsv
 from typing import List, Literal
 
 from grienetsiis.kleuren.codering import HEX, HSL, HSV, CMYK, RGB
-from ._invoer_naar_waardes import _invoer_naar_waardes
+from grienetsiis.wiskunde.interpolatie import interpoleer
 
 
 def kleur_schaal_hsv(
     start: HEX | HSL | HSV | CMYK | RGB,
     eind: HEX | HSL | HSV | CMYK | RGB,
     aantal_kleuren: int,
-    tint: Literal["start", "gemiddeld", "eind", "lineair", "kwadratisch-start", "kwadratisch-eind", "kubisch", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
-    verzadiging: Literal["start", "gemiddeld", "eind", "lineair", "kwadratisch-start", "kwadratisch-eind", "kubisch", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
-    waarde: Literal["start", "gemiddeld", "eind", "lineair", "kwadratisch-start", "kwadratisch-eind", "kubisch", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
-    alfa: Literal["start", "gemiddeld", "eind", "lineair", "kwadratisch-start", "kwadratisch-eind", "kubisch", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
+    tint: Literal["start", "gemiddeld", "eind", "lineair", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
+    verzadiging: Literal["start", "gemiddeld", "eind", "lineair", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
+    waarde: Literal["start", "gemiddeld", "eind", "lineair", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
+    alfa: Literal["start", "gemiddeld", "eind", "lineair", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
     ) -> List[HSV]:
     
     kleuren = []
@@ -22,29 +22,29 @@ def kleur_schaal_hsv(
     start = start.hsv
     eind = eind.hsv
     
-    waardes_tint = _invoer_naar_waardes(
+    waardes_tint = interpoleer(
         start = start.tint,
         eind = eind.tint,
-        kleur_invoer = tint,
-        aantal_kleuren = aantal_kleuren,
+        methode = tint,
+        aantal = aantal_kleuren,
         )
-    waardes_verzadiging = _invoer_naar_waardes(
+    waardes_verzadiging = interpoleer(
         start = start.verzadiging,
         eind = eind.verzadiging,
-        kleur_invoer = verzadiging,
-        aantal_kleuren = aantal_kleuren,
+        methode = verzadiging,
+        aantal = aantal_kleuren,
         )
-    waardes_waarde = _invoer_naar_waardes(
+    waardes_waarde = interpoleer(
         start = start.waarde,
         eind = eind.waarde,
-        kleur_invoer = waarde,
-        aantal_kleuren = aantal_kleuren,
+        methode = waarde,
+        aantal = aantal_kleuren,
         )
-    waardes_alfa = _invoer_naar_waardes(
+    waardes_alfa = interpoleer(
         start = start.alfa,
         eind = eind.alfa,
-        kleur_invoer = alfa,
-        aantal_kleuren = aantal_kleuren,
+        methode = alfa,
+        aantal = aantal_kleuren,
         )
     
     for (

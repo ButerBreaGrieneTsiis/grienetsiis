@@ -4,18 +4,18 @@ grienetsiis.kleuren.schalen.cmyk
 from typing import List, Literal
 
 from grienetsiis.kleuren.codering import HEX, HSL, HSV, CMYK, RGB
-from ._invoer_naar_waardes import _invoer_naar_waardes
+from grienetsiis.wiskunde.interpolatie import interpoleer
 
 
 def kleur_schaal_cmyk(
     start: HEX | HSL | HSV | CMYK | RGB,
     eind: HEX | HSL | HSV | CMYK | RGB,
     aantal_kleuren: int,
-    cyaan: Literal["start", "gemiddeld", "eind", "lineair", "kwadratisch-start", "kwadratisch-eind", "kubisch", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
-    magenta: Literal["start", "gemiddeld", "eind", "lineair", "kwadratisch-start", "kwadratisch-eind", "kubisch", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
-    geel: Literal["start", "gemiddeld", "eind", "lineair", "kwadratisch-start", "kwadratisch-eind", "kubisch", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
-    zwart: Literal["start", "gemiddeld", "eind", "lineair", "kwadratisch-start", "kwadratisch-eind", "kubisch", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
-    alfa: Literal["start", "gemiddeld", "eind", "lineair", "kwadratisch-start", "kwadratisch-eind", "kubisch", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
+    cyaan: Literal["start", "gemiddeld", "eind", "lineair", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
+    magenta: Literal["start", "gemiddeld", "eind", "lineair", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
+    geel: Literal["start", "gemiddeld", "eind", "lineair", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
+    zwart: Literal["start", "gemiddeld", "eind", "lineair", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
+    alfa: Literal["start", "gemiddeld", "eind", "lineair", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
     ) -> List[CMYK]:
     
     kleuren = []
@@ -23,35 +23,35 @@ def kleur_schaal_cmyk(
     start = start.cmyk
     eind = eind.cmyk
     
-    waardes_cyaan = _invoer_naar_waardes(
+    waardes_cyaan = interpoleer(
         start = start.cyaan,
         eind = eind.cyaan,
-        kleur_invoer = cyaan,
-        aantal_kleuren = aantal_kleuren,
+        methode = cyaan,
+        aantal = aantal_kleuren,
         )
-    waardes_magenta = _invoer_naar_waardes(
+    waardes_magenta = interpoleer(
         start = start.magenta,
         eind = eind.magenta,
-        kleur_invoer = magenta,
-        aantal_kleuren = aantal_kleuren,
+        methode = magenta,
+        aantal = aantal_kleuren,
         )
-    waardes_geel = _invoer_naar_waardes(
+    waardes_geel = interpoleer(
         start = start.geel,
         eind = eind.geel,
-        kleur_invoer = geel,
-        aantal_kleuren = aantal_kleuren,
+        methode = geel,
+        aantal = aantal_kleuren,
         )
-    waardes_zwart = _invoer_naar_waardes(
+    waardes_zwart = interpoleer(
         start = start.zwart,
         eind = eind.zwart,
-        kleur_invoer = zwart,
-        aantal_kleuren = aantal_kleuren,
+        methode = zwart,
+        aantal = aantal_kleuren,
         )
-    waardes_alfa = _invoer_naar_waardes(
+    waardes_alfa = interpoleer(
         start = start.alfa,
         eind = eind.alfa,
-        kleur_invoer = alfa,
-        aantal_kleuren = aantal_kleuren,
+        methode = alfa,
+        aantal = aantal_kleuren,
         )
     
     for (

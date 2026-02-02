@@ -30,3 +30,5 @@ def interpoleer(
         return smootherstep(start, eind, aantal)
     elif isinstance(methode, float):
         return [methode for _ in range(aantal)]
+    
+    raise ValueError(f"onbekende methode \"{methode}\"")
