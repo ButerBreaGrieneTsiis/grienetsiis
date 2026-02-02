@@ -22,7 +22,7 @@ class Subregister(dict):
     
     def filter(
         self,
-        methode: Literal["of", "en"] = "of",
+        methode: Literal["of", "en"] = "en",
         **filters,
         ) -> Subregister:
         
