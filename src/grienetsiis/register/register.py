@@ -25,6 +25,16 @@ class Register(dict, metaclass = Singleton):
     
     _REGISTREER: ClassVar[bool] = True
     
+    # DUNDER METHODS
+    
+    def __getattr__(self, naam):
+        if naam not in self._SUBREGISTERS:
+            raise ValueError(f"ongeregistreerd type \"{naam}\"")
+        
+        if naam not in self:
+            self[naam] = Subregister(type = self.TYPES[naam])
+        return self[naam]
+    
     # CLASS METHODS
     
     @classmethod
@@ -58,7 +68,7 @@ class Register(dict, metaclass = Singleton):
                 else:
                     geregistreerde_objecten = openen_json(
                         bestandspad = bestandspad,
-                        ontcijfer_functie_object = subregister_dict["ontcijfer_functie_object"],
+                        ontcijfer_functie_object = subregister_dict["ontcijfer_functie_objecten"],
                         ontcijfer_functie_subobjecten = subregister_dict["ontcijfer_functie_subobjecten"],
                         ontcijfer_enum = subregister_dict["enums"],
                         )
@@ -74,7 +84,7 @@ class Register(dict, metaclass = Singleton):
     
     # INSTANCE METHODS
     
-    def opslaan(self) -> None:
+    def opslaan(self) -> None: 
         
         for subregister_naam, subregister_dict in self._SUBREGISTERS.items():
             
@@ -96,10 +106,27 @@ class Register(dict, metaclass = Singleton):
                         bestandspad = subregister_dict["bestandsmap"],
                         bestandsnaam = subregister_dict["bestandsnaam"],
                         extensie = subregister_dict["extensie"],
-                        vercijfer_functie_object = subregister_dict["vercijfer_functie_object"],
+                        vercijfer_functie_object = subregister_dict["vercijfer_functie_objecten"],
                         vercijfer_functie_subobjecten = subregister_dict["vercijfer_functie_subobjecten"],
                         vercijfer_enum = subregister_dict["enums"],
                         )
+    
+    def registreer_instantie(
+        self,
+        instantie: object,
+        ) -> None:
+        
+        if self._REGISTREER:
+            
+            if self._REGISTRATIE_METHODE == "uuid":
+                instantie.uuid = str(uuid4())
+            
+            subregister_naam = instantie._SUBREGISTER_NAAM
+            
+            if subregister_naam not in self:
+                self[subregister_naam] = Subregister(instantie.__class__)
+            
+            self[subregister_naam][instantie.uuid] = instantie
     
     # STATIC METHODS
     
@@ -134,6 +161,8 @@ class Register(dict, metaclass = Singleton):
         
         if not Register._INGESTELD:
             logger.error("Register moest eerst ingesteld worden met Register.instellen()")
+        
+        geregistreerd_type._id_veld = Register._REGISTRATIE_METHODE
         
         geregistreerd_type_naam = geregistreerd_type.__name__
         
@@ -184,20 +213,3 @@ class Register(dict, metaclass = Singleton):
                     subregister_dict["ontcijfer_functie_subobjecten"] = ontcijfer_functie_subobjecten
             
             Register._SUBREGISTERS[subregister_naam] = subregister_dict
-    
-    def registreer_instantie(
-        self,
-        instantie: object,
-        ) -> None:
-        
-        if self._REGISTREER:
-            
-            if self._REGISTRATIE_METHODE == "uuid":
-                instantie.uuid = str(uuid4())
-            
-            subregister_naam = instantie._SUBREGISTER_NAAM
-            
-            if subregister_naam not in self:
-                self[subregister_naam] = Subregister(instantie.__class__)
-            
-            self[subregister_naam][instantie.uuid] = instantie
