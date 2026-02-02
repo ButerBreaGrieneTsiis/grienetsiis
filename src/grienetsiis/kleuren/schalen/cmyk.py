@@ -4,12 +4,13 @@ grienetsiis.kleuren.schalen.cmyk
 from typing import List, Literal
 
 from grienetsiis.kleuren.codering import HEX, HSL, HSV, CMYK, RGB
+from grienetsiis.kleuren.kleur import Kleur
 from grienetsiis.wiskunde.interpolatie import interpoleer
 
 
 def kleur_schaal_cmyk(
-    start: HEX | HSL | HSV | CMYK | RGB,
-    eind: HEX | HSL | HSV | CMYK | RGB,
+    start: Kleur | HEX | HSL | HSV | CMYK | RGB,
+    eind: Kleur | HEX | HSL | HSV | CMYK | RGB,
     aantal_kleuren: int,
     cyaan: Literal["start", "gemiddeld", "eind", "lineair", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
     magenta: Literal["start", "gemiddeld", "eind", "lineair", "logaritmisch", "smoothstep", "smootherstep"] | float = "gemiddeld",
