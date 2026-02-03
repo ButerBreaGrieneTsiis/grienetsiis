@@ -78,7 +78,7 @@ class Register(dict, metaclass = Singleton):
                     geregistreerd_object.uuid = uuid
                     register[subregister_naam][uuid] = geregistreerd_object
         
-        register._REGISTREER = False
+        register._REGISTREER = True
         
         return register
     
