@@ -45,7 +45,7 @@ class GeregistreerdObject(metaclass = GeregistreerdType):
                     opties = {enum.value: enum for enum in _type},
                     tekst_beschrijving = veld,
                     )
-            elif _type in (int, float, str):
+            elif _type in ("int", "float", "str"):
                 waarde = invoeren(
                     tekst_beschrijving = veld,
                     invoer_type = _type,
