@@ -1,3 +1,3 @@
 # grienetsiis
 
-Persoonlijke bibliotheek met handige functies en classes die ik in verscheidene projecten gebruik.
+Net zoals griene tsiis een veelzijdig stukje kaas is met verschillende smaken, zo heeft deze persoonlijke bibliotheek allerlei handige functionaliteiten die ik in verscheidene persoonlijke projecten gebruik.
