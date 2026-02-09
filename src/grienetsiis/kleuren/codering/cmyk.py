@@ -33,6 +33,9 @@ class CMYK:
     def __repr__(self) -> str:
         return f"CMYK({self.cyaan:.1%}, {self.magenta:.1%}, {self.geel:.1%}, {self.zwart:.1%}, {self.alfa:.1%})" 
     
+    def __eq__(self, other) -> bool:
+        return self.cyaan == other.cyaan and self.magenta == other.magenta and self.geel == other.geel and self.zwart == other.zwart and self.alfa == other.alfa
+    
     # CLASS METHODS
     
     @classmethod
