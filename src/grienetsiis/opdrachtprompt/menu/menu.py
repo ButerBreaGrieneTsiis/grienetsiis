@@ -20,8 +20,10 @@ class Menu:
     _opties: Dict[INDEX, OPTIE] | None = None
     
     # class variables
-    __TEKST_ANNULEREN: ClassVar[str] = "terug naar"
-    __UITVOER_ANNULEREN: ClassVar[str] = commando.TERUG
+    _TEKST_ANNULEREN: ClassVar[str] = "terug naar"
+    _TEKST_AFSLUITEN: ClassVar[str] = "afsluiten"
+    _UITVOER_ANNULEREN: ClassVar[commando] = commando.TERUG
+    _UITVOER_AFSLUITEN: ClassVar[commando] = commando.STOP
     
     # DUNDER METHODS
     
@@ -35,24 +37,33 @@ class Menu:
                     tekst_beschrijving = f"{str(self).capitalize()}: kies een optie",
                     tekst_kies_een = False,
                     keuze_annuleren = True,
-                    tekst_annuleren = self.__TEKST_ANNULEREN + f" {self.super_menu.naam}",
-                    uitvoer_annuleren = self.__UITVOER_ANNULEREN,
+                    tekst_annuleren = self._TEKST_ANNULEREN + f" {self.super_menu.naam}",
+                    uitvoer_annuleren = self._UITVOER_ANNULEREN,
                     )
             else:
                 keuze = kiezen(
                     opties = self.opties,
                     tekst_beschrijving = f"{str(self).capitalize()}: kies een optie",
                     tekst_kies_een = False,
-                    keuze_annuleren = False,
+                    keuze_annuleren = True,
+                    tekst_annuleren = self._TEKST_AFSLUITEN,
+                    uitvoer_annuleren = self._UITVOER_AFSLUITEN,
                     )
             
-            if self.is_submenu and keuze is self.__UITVOER_ANNULEREN:
-                self.super_menu()
-            else:
-                if callable(keuze):
+            if keuze is self._UITVOER_AFSLUITEN:
+                return 0
+            
+            if keuze is self._UITVOER_ANNULEREN:
+                return self.super_menu()
+            
+            if callable(keuze):
+                if not isinstance(keuze, Menu):
                     keuze()
+                    return self()
                 else:
-                    return keuze
+                    return keuze()
+            else:
+                return keuze
         
         else:
             if self.is_hoofdmenu:
