@@ -162,7 +162,8 @@ class Register(dict, metaclass = Singleton):
         if not Register._INGESTELD:
             logger.error("Register moest eerst ingesteld worden met Register.instellen()")
         
-        geregistreerd_type._id_veld = Register._REGISTRATIE_METHODE
+        geregistreerd_type._ID_VELD = Register._REGISTRATIE_METHODE
+        geregistreerd_type._SUBREGISTER_NAAM = subregister_naam
         
         geregistreerd_type_naam = geregistreerd_type.__name__
         

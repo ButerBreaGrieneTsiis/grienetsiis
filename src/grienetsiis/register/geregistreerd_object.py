@@ -31,29 +31,28 @@ class GeregistreerdObject(metaclass = GeregistreerdType):
         return cls(**dict)
     
     @classmethod
-    def nieuw(
-        cls,
-        velden: Dict[str, type],
-        ) -> GeregistreerdObject:
+    def nieuw(cls) -> GeregistreerdObject:
+        
+        velden = {sleutel: veld for sleutel, veld in cls.__annotations__.items() if sleutel not in cls.__dict__}
         
         dict = {}
         
-        for veld, _type in velden.items():
+        for sleutel, veld in velden.items():
             
-            if isinstance(_type, type) and issubclass(_type, Enum):
+            if isinstance(veld, type) and issubclass(veld, Enum):
                 waarde = kiezen(
-                    opties = {enum.value: enum for enum in _type},
-                    tekst_beschrijving = veld,
+                    opties = {enum.value: enum for enum in veld},
+                    tekst_beschrijving = sleutel,
                     )
-            elif _type in ("int", "float", "str"):
+            elif veld in ("int", "float", "str"):
                 waarde = invoeren(
-                    tekst_beschrijving = veld,
-                    invoer_type = _type,
+                    tekst_beschrijving = sleutel,
+                    invoer_type = veld,
                     )
             else:
                 continue
             
-            dict[veld] = waarde
+            dict[sleutel] = waarde
         
         return cls(**dict)
     
@@ -69,7 +68,7 @@ class GeregistreerdObject(metaclass = GeregistreerdType):
             if not veld_waarde:
                 continue
             
-            if veld_sleutel == self._id_veld:
+            if veld_sleutel == self._ID_VELD:
                 continue
             else:
                 dict_naar_json[veld_sleutel] = veld_waarde

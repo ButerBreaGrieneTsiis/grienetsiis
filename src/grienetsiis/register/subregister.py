@@ -89,11 +89,11 @@ class Subregister(dict):
         
         print(f"maak een nieuw {self.geregistreerd_type.__name__.lower()}")
         
-        basis_type = self.geregistreerd_type.nieuw({sleutel: veld for sleutel, veld in self.geregistreerd_type.__annotations__.items() if sleutel not in self.geregistreerd_type.__dict__})
+        geregistreerd_object = self.geregistreerd_type.nieuw()
         
         if geef_id:
-            return getattr(basis_type, basis_type._id_veld)
-        return basis_type
+            return getattr(geregistreerd_object, geregistreerd_object._ID_VELD)
+        return geregistreerd_object
     
     def verwijderen(self):
         
