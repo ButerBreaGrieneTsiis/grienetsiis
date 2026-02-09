@@ -34,4 +34,4 @@ class Kleur:
     
     @property
     def grijswaarde(self) -> float:
-        return self.codering.hgrijswaardeex
+        return self.codering.grijswaarde
