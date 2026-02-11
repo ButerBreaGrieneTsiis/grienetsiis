@@ -262,6 +262,9 @@ def kiezen(
         if isinstance(keuze, list):
             print(f"{tekst_indentatie}gekozen: ({", ".join(_keuze for _keuze in keuze)})")
         else:
-            print(f"{tekst_indentatie}gekozen: {keuze}")
+            try:
+                print(f"{tekst_indentatie}gekozen: {keuze.__qualname__}()")
+            except AttributeError:
+                print(f"{tekst_indentatie}gekozen: {keuze}")
     
     return keuze
