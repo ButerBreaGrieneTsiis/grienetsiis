@@ -41,6 +41,7 @@ def invoeren(
                     },
                 tekst_beschrijving = f"bevestig {tekst_beschrijving} \"{invoer}\"",
                 tekst_kies_een = False,
+                keuze_annuleren = False,
                 ):
                 
                 continue
