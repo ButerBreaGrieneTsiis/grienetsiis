@@ -35,7 +35,7 @@ class Menu:
             if self.is_submenu:
                 keuze = kiezen(
                     opties = self.opties,
-                    tekst_beschrijving = f"{str(self).capitalize()}: kies een optie",
+                    tekst_beschrijving = f"{str(self)}: kies een optie",
                     tekst_kies_een = False,
                     keuze_annuleren = True,
                     tekst_annuleren = self._TEKST_ANNULEREN + f" {self.super_menu.naam}",
@@ -44,7 +44,7 @@ class Menu:
             else:
                 keuze = kiezen(
                     opties = self.opties,
-                    tekst_beschrijving = f"{str(self).capitalize()}: kies een optie",
+                    tekst_beschrijving = f"{str(self)}: kies een optie",
                     tekst_kies_een = False,
                     keuze_annuleren = True,
                     tekst_annuleren = self._TEKST_AFSLUITEN,
@@ -78,7 +78,7 @@ class Menu:
         return hash(self.naam)
     
     def __repr__(self) -> str:
-        return f"menu {self.naam}"
+        return f"{self.naam}"
     
     # INSTANCE METHODS
     
