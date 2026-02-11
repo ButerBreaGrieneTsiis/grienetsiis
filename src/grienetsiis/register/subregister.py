@@ -66,7 +66,7 @@ class Subregister(dict):
         opties = {id: f"{geregistreerd_object}" for id, geregistreerd_object in self.items()}
         
         if nieuw_toestaan:
-            opties = {f"nieuw {self.geregistreerd_type.__name__.lower()}": "nieuw"} | opties
+            opties = {"nieuw": f"nieuw {self.geregistreerd_type.__name__.lower()}"} | opties
         
         keuze_optie = kiezen(
             opties = opties,
