@@ -61,7 +61,7 @@ class Subregister(dict):
         self,
         geef_id = True,
         nieuw_toestaan = True,
-        ) -> str:
+        ) -> str | GeregistreerdObject:
         
         opties = {id: f"{geregistreerd_object}" for id, geregistreerd_object in self.items()}
         
@@ -74,7 +74,7 @@ class Subregister(dict):
             )
         
         if keuze_optie is commando.STOP:
-            return None
+            return commando.STOP
         elif keuze_optie == "nieuw":
             id = self.nieuw()
         else:
@@ -102,6 +102,10 @@ class Subregister(dict):
         self,
         id: str | None = None,
         ):
+        
+        if len(self) == 0:
+            print(f"\n>>> geen {self.geregistreerd_type.__name__.lower()} aanwezig")
+            return None
         
         if id is None:
             id = self.selecteren(nieuw_toestaan = False)
