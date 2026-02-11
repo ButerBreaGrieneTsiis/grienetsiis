@@ -95,9 +95,14 @@ class Subregister(dict):
             return getattr(geregistreerd_object, geregistreerd_object._ID_VELD)
         return geregistreerd_object
     
-    def verwijderen(self):
+    def verwijderen(
+        self,
+        id: str | None = None,
+        ):
         
-        id = self.kiezen(nieuw_toestaan = False)
+        if id is None:
+            id = self.kiezen(nieuw_toestaan = False)
+        
         del self[id]
     
     # PROPERTIES
