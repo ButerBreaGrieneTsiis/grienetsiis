@@ -35,7 +35,7 @@ def invoeren(
         
         if valideren:
             if not kiezen(
-                keuzes = {
+                opties = {
                     "ja": True,
                     "nee": False,
                     },
