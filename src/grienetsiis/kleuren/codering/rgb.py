@@ -30,6 +30,9 @@ class RGB:
     def __repr__(self) -> str:
         return f"RGB({self.rood}, {self.groen}, {self.blauw}, {self.alfa})"
     
+    def __eq__(self, other) -> bool:
+        return self.rood == other.rood and self.groen == other.groen and self.blauw == other.blauw and self.alfa == other.alfa
+    
     # CLASS METHODS
     
     @classmethod

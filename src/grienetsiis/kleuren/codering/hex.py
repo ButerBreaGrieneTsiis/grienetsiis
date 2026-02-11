@@ -27,6 +27,9 @@ class HEX:
     def __repr__(self) -> str:
         return f"HEX({self.code})"
     
+    def __eq__(self, other) -> bool:
+        return self.code == other.code
+    
     # CLASS METHODS
     
     @classmethod

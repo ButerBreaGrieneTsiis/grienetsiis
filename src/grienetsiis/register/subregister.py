@@ -1,7 +1,8 @@
 from __future__ import annotations
-from typing import List, Literal, Type, TYPE_CHECKING
+from typing import List, Literal, TYPE_CHECKING
 
 from grienetsiis.opdrachtprompt.invoer import kiezen
+from grienetsiis.opdrachtprompt import commando
 
 if TYPE_CHECKING:
     from .geregistreerd_object import GeregistreerdObject
@@ -13,7 +14,7 @@ class Subregister(dict):
     
     def __init__(
         self,
-        geregistreerd_type: Type
+        geregistreerd_type: GeregistreerdObject
         ):
         
         self.geregistreerd_type = geregistreerd_type
@@ -56,23 +57,25 @@ class Subregister(dict):
         
         return subregister
     
-    def kiezen(
+    def selecteren(
         self,
         geef_id = True,
         nieuw_toestaan = True,
-        ) -> str:
+        ) -> str | GeregistreerdObject:
         
-        opties = {f"{geregistreerd_object}": id for id, geregistreerd_object in self.items()}
+        opties = {id: f"{geregistreerd_object}" for id, geregistreerd_object in self.items()}
         
         if nieuw_toestaan:
-            opties = {f"nieuw {self.geregistreerd_type.__name__.lower()}": "nieuw"} | opties
+            opties = {"nieuw": f"nieuw {self.geregistreerd_type.__name__.lower()}"} | opties
         
         keuze_optie = kiezen(
             opties = opties,
             tekst_beschrijving = f"{self.geregistreerd_type.__name__.lower()}",
             )
         
-        if keuze_optie == "nieuw":
+        if keuze_optie is commando.STOP:
+            return commando.STOP
+        elif keuze_optie == "nieuw":
             id = self.nieuw()
         else:
             id = keuze_optie
@@ -89,16 +92,37 @@ class Subregister(dict):
         
         print(f"maak een nieuw {self.geregistreerd_type.__name__.lower()}")
         
-        basis_type = self.geregistreerd_type.nieuw({sleutel: veld for sleutel, veld in self.geregistreerd_type.__annotations__.items() if sleutel not in self.geregistreerd_type.__dict__})
+        geregistreerd_object = self.geregistreerd_type.nieuw()
         
         if geef_id:
-            return getattr(basis_type, basis_type._id_veld)
-        return basis_type
+            return getattr(geregistreerd_object, geregistreerd_object._ID_VELD)
+        return geregistreerd_object
     
-    def verwijderen(self):
+    def verwijderen(
+        self,
+        id: str | None = None,
+        ):
         
-        id = self.kiezen(nieuw_toestaan = False)
+        if len(self) == 0:
+            print(f"\n>>> geen {self.geregistreerd_type.__name__.lower()} aanwezig")
+            return None
+        
+        if id is None:
+            id = self.selecteren(nieuw_toestaan = False)
+        
+        if id is commando.STOP:
+            return None
+        
         del self[id]
+    
+    def weergeven(self) -> None:
+        
+        print()
+        if len(self) == 0:
+            print(f">>> geen {self.geregistreerd_type.__name__.lower()} aanwezig")
+        else:
+            for registreerd_object in self.lijst:
+                print(f"    {registreerd_object}")
     
     # PROPERTIES
     

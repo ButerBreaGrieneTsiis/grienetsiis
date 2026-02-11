@@ -35,12 +35,13 @@ def invoeren(
         
         if valideren:
             if not kiezen(
-                keuzes = {
-                    "ja": True,
-                    "nee": False,
+                opties = {
+                    True: "ja",
+                    False: "nee",
                     },
                 tekst_beschrijving = f"bevestig {tekst_beschrijving} \"{invoer}\"",
                 tekst_kies_een = False,
+                keuze_annuleren = False,
                 ):
                 
                 continue
@@ -119,10 +120,10 @@ def invoeren(
             print(f"{tekst_indentatie}invoer \"{invoer}\" incorrect, niet binnen de opties ({", ".join(f"\"{waarde}\"" for waarde in waardes_waar)}) of ({", ".join(f"\"{waarde}\"" for waarde in waardes_onwaar)})")
 
 OPTIE = TypeVar("optie")
-INDEX = TypeVar("index")
+OPTIE_TONEN = TypeVar("optie_tonen")
 
 def kiezen(
-    opties: Tuple[OPTIE] | List[OPTIE] | Dict[INDEX, OPTIE],
+    opties: Tuple[OPTIE] | List[OPTIE] | Dict[OPTIE, OPTIE_TONEN],
     tekst_beschrijving: str | None = None,
     tekst_kies_een: bool = True,
     keuze_annuleren: bool = True,
@@ -144,13 +145,13 @@ def kiezen(
     
     if isinstance(opties, (list, tuple)):
         
-        opties_tonen = opties
         opties_geven = opties
+        opties_tonen = opties
     
     elif isinstance(opties, dict):
         
-        opties_tonen = list(opties.keys())
-        opties_geven = list(opties.values())
+        opties_geven = list(opties.keys())
+        opties_tonen = list(opties.values())
     
     index_minimaal = 1
     index_maximaal = len(opties)
@@ -237,6 +238,7 @@ def kiezen(
                 continue
             
             keuze = [opties_geven[index_keuze-1] for index_keuze in set(index_keuzes)]
+            keuze_tekst = [opties_tonen[index_keuze-1] for index_keuze in set(index_keuzes)]
             break
     
     else:
@@ -256,11 +258,15 @@ def kiezen(
                 )
         
         keuze =  opties_geven[index_keuze-1] if bool(index_keuze) else uitvoer_annuleren
+        keuze_tekst = opties_tonen[index_keuze-1] if bool(index_keuze) else uitvoer_annuleren
     
     if keuze_terugkoppeling:
-        if isinstance(keuze, list):
-            print(f"{tekst_indentatie}gekozen: ({", ".join(_keuze for _keuze in keuze)})")
+        if isinstance(keuze_tekst, list):
+            print(f"{tekst_indentatie}gekozen: ({", ".join(_keuze_tekst for _keuze_tekst in keuze_tekst)})")
         else:
-            print(f"{tekst_indentatie}gekozen: {keuze}")
+            try:
+                print(f"{tekst_indentatie}gekozen: {keuze_tekst.__qualname__}()")
+            except AttributeError:
+                print(f"{tekst_indentatie}gekozen: {keuze_tekst}")
     
     return keuze

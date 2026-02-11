@@ -8,20 +8,23 @@ from grienetsiis.opdrachtprompt.constantes import TEKST_INDENTATIE
 
 
 OPTIE = TypeVar("optie")
-INDEX = TypeVar("index")
+OPTIE_TONEN = TypeVar("optie_tonen")
 
 @dataclass
 class Menu:
     
     naam: str
     super_menu: Menu | None = None
+    blijf_in_menu: bool = True
     
     # interne variabelen
-    _opties: Dict[INDEX, OPTIE] | None = None
+    _opties: Dict[OPTIE, OPTIE_TONEN] | None = None
     
     # class variables
-    __TEKST_ANNULEREN: ClassVar[str] = "terug naar"
-    __UITVOER_ANNULEREN: ClassVar[str] = commando.TERUG
+    _TEKST_ANNULEREN: ClassVar[str] = "terug naar"
+    _TEKST_AFSLUITEN: ClassVar[str] = "afsluiten"
+    _UITVOER_ANNULEREN: ClassVar[commando] = commando.TERUG
+    _UITVOER_AFSLUITEN: ClassVar[commando] = commando.STOP
     
     # DUNDER METHODS
     
@@ -32,27 +35,37 @@ class Menu:
             if self.is_submenu:
                 keuze = kiezen(
                     opties = self.opties,
-                    tekst_beschrijving = f"{str(self).capitalize()}: kies een optie",
+                    tekst_beschrijving = f"{str(self)}: kies een optie",
                     tekst_kies_een = False,
                     keuze_annuleren = True,
-                    tekst_annuleren = self.__TEKST_ANNULEREN + f" {self.super_menu.naam}",
-                    uitvoer_annuleren = self.__UITVOER_ANNULEREN,
+                    tekst_annuleren = self._TEKST_ANNULEREN + f" {self.super_menu.naam}",
+                    uitvoer_annuleren = self._UITVOER_ANNULEREN,
                     )
             else:
                 keuze = kiezen(
                     opties = self.opties,
-                    tekst_beschrijving = f"{str(self).capitalize()}: kies een optie",
+                    tekst_beschrijving = f"{str(self)}: kies een optie",
                     tekst_kies_een = False,
-                    keuze_annuleren = False,
+                    keuze_annuleren = True,
+                    tekst_annuleren = self._TEKST_AFSLUITEN,
+                    uitvoer_annuleren = self._UITVOER_AFSLUITEN,
                     )
             
-            if self.is_submenu and keuze is self.__UITVOER_ANNULEREN:
+            if keuze is self._UITVOER_AFSLUITEN:
+                return 0
+            
+            elif keuze is self._UITVOER_ANNULEREN:
                 self.super_menu()
+            
+            elif callable(keuze):
+                keuze()
+                if not isinstance(keuze, Menu):
+                    if self.blijf_in_menu:
+                        self()
+                    else:
+                        self.super_menu()
             else:
-                if callable(keuze):
-                    keuze()
-                else:
-                    return keuze
+                return keuze
         
         else:
             if self.is_hoofdmenu:
@@ -65,28 +78,28 @@ class Menu:
         return hash(self.naam)
     
     def __repr__(self) -> str:
-        return f"menu {self.naam}"
+        return f"{self.naam}"
     
     # INSTANCE METHODS
     
     def toevoegen_optie(
         self,
         optie: OPTIE,
-        index: INDEX | None = None,
+        optie_tonen: OPTIE_TONEN | None = None,
         ):
         
         if self._opties is None:
             self._opties = {}
         
-        if index is None:
+        if optie_tonen is None:
             self._opties[optie] = optie
         else:
-            self._opties[index] = optie
+            self._opties[optie] = optie_tonen
     
     # PROPERTIES
     
     @property
-    def opties(self) -> Dict[INDEX, OPTIE]:
+    def opties(self) -> Dict[OPTIE, OPTIE_TONEN]:
         return self._opties
     
     @property

@@ -31,6 +31,9 @@ class HSL:
     def __repr__(self) -> str:
         return f"HSL({self.tint*360:.1f}\u00b0, {self.verzadiging:.1%}, {self.helderheid:.1%}, {self.alfa:.1%})"
     
+    def __eq__(self, other) -> bool:
+        return self.tint == other.tint and self.verzadiging == other.verzadiging and self.helderheid == other.helderheid and self.alfa == other.alfa
+    
     # CLASS METHODS
     
     @classmethod
