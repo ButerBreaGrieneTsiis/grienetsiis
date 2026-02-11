@@ -238,6 +238,7 @@ def kiezen(
                 continue
             
             keuze = [opties_geven[index_keuze-1] for index_keuze in set(index_keuzes)]
+            keuze_tekst = [opties_tonen[index_keuze-1] for index_keuze in set(index_keuzes)]
             break
     
     else:
@@ -257,14 +258,15 @@ def kiezen(
                 )
         
         keuze =  opties_geven[index_keuze-1] if bool(index_keuze) else uitvoer_annuleren
+        keuze_tekst = opties_tonen[index_keuze-1] if bool(index_keuze) else uitvoer_annuleren
     
     if keuze_terugkoppeling:
-        if isinstance(keuze, list):
-            print(f"{tekst_indentatie}gekozen: ({", ".join(_keuze for _keuze in keuze)})")
+        if isinstance(keuze_tekst, list):
+            print(f"{tekst_indentatie}gekozen: ({", ".join(_keuze_tekst for _keuze_tekst in keuze_tekst)})")
         else:
             try:
-                print(f"{tekst_indentatie}gekozen: {keuze.__qualname__}()")
+                print(f"{tekst_indentatie}gekozen: {keuze_tekst.__qualname__}()")
             except AttributeError:
-                print(f"{tekst_indentatie}gekozen: {keuze}")
+                print(f"{tekst_indentatie}gekozen: {keuze_tekst}")
     
     return keuze
