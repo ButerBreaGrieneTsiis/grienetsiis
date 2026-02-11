@@ -15,6 +15,7 @@ class Menu:
     
     naam: str
     super_menu: Menu | None = None
+    blijf_in_menu: bool = True
     
     # interne variabelen
     _opties: Dict[INDEX, OPTIE] | None = None
@@ -53,15 +54,16 @@ class Menu:
             if keuze is self._UITVOER_AFSLUITEN:
                 return 0
             
-            if keuze is self._UITVOER_ANNULEREN:
-                return self.super_menu()
+            elif keuze is self._UITVOER_ANNULEREN:
+                self.super_menu()
             
-            if callable(keuze):
+            elif callable(keuze):
+                keuze()
                 if not isinstance(keuze, Menu):
-                    keuze()
-                    return self()
-                else:
-                    return keuze()
+                    if self.blijf_in_menu:
+                        self()
+                    else:
+                        self.super_menu()
             else:
                 return keuze
         
