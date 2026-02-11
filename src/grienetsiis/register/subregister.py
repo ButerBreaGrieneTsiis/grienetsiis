@@ -101,9 +101,14 @@ class Subregister(dict):
         ):
         
         if id is None:
-            id = self.kiezen(nieuw_toestaan = False)
+            id = self.selecteren(nieuw_toestaan = False)
         
         del self[id]
+    
+    def weergeven(self) -> None:
+        print()
+        for registreerd_object in self.lijst:
+            print(f"    {registreerd_object}")
     
     # PROPERTIES
     
