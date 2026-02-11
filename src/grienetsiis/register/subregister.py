@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Literal, Type, TYPE_CHECKING
+from typing import List, Literal, TYPE_CHECKING
 
 from grienetsiis.opdrachtprompt.invoer import kiezen
 from grienetsiis.opdrachtprompt import commando
@@ -14,7 +14,7 @@ class Subregister(dict):
     
     def __init__(
         self,
-        geregistreerd_type: Type
+        geregistreerd_type: GeregistreerdObject
         ):
         
         self.geregistreerd_type = geregistreerd_type
@@ -114,8 +114,11 @@ class Subregister(dict):
     def weergeven(self) -> None:
         
         print()
-        for registreerd_object in self.lijst:
-            print(f"    {registreerd_object}")
+        if len(self) == 0:
+            print(f">>> geen {self.geregistreerd_type.__name__.lower()} aanwezig")
+        else:
+            for registreerd_object in self.lijst:
+                print(f"    {registreerd_object}")
     
     # PROPERTIES
     
