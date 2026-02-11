@@ -36,8 +36,8 @@ def invoeren(
         if valideren:
             if not kiezen(
                 opties = {
-                    "ja": True,
-                    "nee": False,
+                    True: "ja",
+                    False: "nee",
                     },
                 tekst_beschrijving = f"bevestig {tekst_beschrijving} \"{invoer}\"",
                 tekst_kies_een = False,
@@ -120,10 +120,10 @@ def invoeren(
             print(f"{tekst_indentatie}invoer \"{invoer}\" incorrect, niet binnen de opties ({", ".join(f"\"{waarde}\"" for waarde in waardes_waar)}) of ({", ".join(f"\"{waarde}\"" for waarde in waardes_onwaar)})")
 
 OPTIE = TypeVar("optie")
-INDEX = TypeVar("index")
+OPTIE_TONEN = TypeVar("optie_tonen")
 
 def kiezen(
-    opties: Tuple[OPTIE] | List[OPTIE] | Dict[INDEX, OPTIE],
+    opties: Tuple[OPTIE] | List[OPTIE] | Dict[OPTIE, OPTIE_TONEN],
     tekst_beschrijving: str | None = None,
     tekst_kies_een: bool = True,
     keuze_annuleren: bool = True,
@@ -145,13 +145,13 @@ def kiezen(
     
     if isinstance(opties, (list, tuple)):
         
-        opties_tonen = opties
         opties_geven = opties
+        opties_tonen = opties
     
     elif isinstance(opties, dict):
         
-        opties_tonen = list(opties.keys())
-        opties_geven = list(opties.values())
+        opties_geven = list(opties.keys())
+        opties_tonen = list(opties.values())
     
     index_minimaal = 1
     index_maximaal = len(opties)

@@ -8,7 +8,7 @@ from grienetsiis.opdrachtprompt.constantes import TEKST_INDENTATIE
 
 
 OPTIE = TypeVar("optie")
-INDEX = TypeVar("index")
+OPTIE_TONEN = TypeVar("optie_tonen")
 
 @dataclass
 class Menu:
@@ -18,7 +18,7 @@ class Menu:
     blijf_in_menu: bool = True
     
     # interne variabelen
-    _opties: Dict[INDEX, OPTIE] | None = None
+    _opties: Dict[OPTIE, OPTIE_TONEN] | None = None
     
     # class variables
     _TEKST_ANNULEREN: ClassVar[str] = "terug naar"
@@ -85,21 +85,21 @@ class Menu:
     def toevoegen_optie(
         self,
         optie: OPTIE,
-        index: INDEX | None = None,
+        optie_tonen: OPTIE_TONEN | None = None,
         ):
         
         if self._opties is None:
             self._opties = {}
         
-        if index is None:
+        if optie_tonen is None:
             self._opties[optie] = optie
         else:
-            self._opties[index] = optie
+            self._opties[optie] = optie_tonen
     
     # PROPERTIES
     
     @property
-    def opties(self) -> Dict[INDEX, OPTIE]:
+    def opties(self) -> Dict[OPTIE, OPTIE_TONEN]:
         return self._opties
     
     @property

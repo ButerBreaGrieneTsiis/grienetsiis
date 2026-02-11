@@ -41,7 +41,7 @@ class GeregistreerdObject(metaclass = GeregistreerdType):
             
             if isinstance(veld, type) and issubclass(veld, Enum):
                 waarde = kiezen(
-                    opties = {enum.value: enum for enum in veld},
+                    opties = {enum: enum.value for enum in veld},
                     tekst_beschrijving = sleutel,
                     )
             elif veld in ("int", "float", "str"):
