@@ -56,7 +56,7 @@ class Subregister(dict):
         
         return subregister
     
-    def kiezen(
+    def selecteren(
         self,
         geef_id = True,
         nieuw_toestaan = True,
