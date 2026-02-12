@@ -1,7 +1,7 @@
 from __future__ import annotations
-from typing import List, Literal, TYPE_CHECKING
+from typing import Dict, List, Literal, TYPE_CHECKING
 
-from grienetsiis.opdrachtprompt.invoer import kiezen
+from grienetsiis.opdrachtprompt.invoer import invoeren, kiezen
 from grienetsiis.opdrachtprompt import commando
 
 if TYPE_CHECKING:
@@ -59,8 +59,8 @@ class Subregister(dict):
     
     def selecteren(
         self,
-        geef_id = True,
-        nieuw_toestaan = True,
+        geef_id: bool = True,
+        nieuw_toestaan: bool = True,
         ) -> str | GeregistreerdObject:
         
         opties = {id: f"{geregistreerd_object}" for id, geregistreerd_object in self.items()}
@@ -85,12 +85,43 @@ class Subregister(dict):
         else:
             return self[id]
     
+    def zoeken(
+        self,
+        veld: str | None = None,
+        geef_id: bool = True,
+        ) -> str | GeregistreerdObject:
+        
+        if not veld:
+            veld = self.selecteren_veld()
+        
+        if veld is commando.STOP:
+            return commando.STOP
+        
+        zoekterm = invoeren(
+            tekst_beschrijving = veld,
+            invoer_type = self.velden[veld],
+            uitsluiten_leeg = True,
+            )
+        
+        filter = {veld: zoekterm}
+        subregister_gefilterd = self.filter(**filter)
+        
+        if len(subregister_gefilterd) == 0:
+            print(f">>> geen {self.geregistreerd_type.__name__.lower()} aanwezig voor \"{veld} = {zoekterm}\"")
+            return None
+        if len(subregister_gefilterd) == 1:
+            print(f">>> één {self.geregistreerd_type.__name__.lower()} aanwezig voor \"{veld} = {zoekterm}\"")
+            if geef_id:
+                return list(subregister_gefilterd.keys())[0]
+            else:
+                return list(subregister_gefilterd.values())[0]
+        
+        return subregister_gefilterd.selecteren(geef_id = geef_id)
+    
     def nieuw(
         self,
         geef_id: bool = True,
         ):
-        
-        print(f"maak een nieuw {self.geregistreerd_type.__name__.lower()}")
         
         geregistreerd_object = self.geregistreerd_type.nieuw()
         
@@ -124,8 +155,18 @@ class Subregister(dict):
             for registreerd_object in self.lijst:
                 print(f"    {registreerd_object}")
     
+    def selecteren_veld(self) -> str | commando.Commando:
+        return kiezen(
+            opties = list(self.velden.keys()),
+            tekst_beschrijving = "veld",
+            )
+    
     # PROPERTIES
     
     @property
     def lijst(self) -> List[GeregistreerdObject]:
         return list(self.values())
+    
+    @property
+    def velden(self) -> Dict[str, type]:
+        return {veld: type for veld, type in self.geregistreerd_type.__annotations__.items() if type in ("int", "str", "float", "bool")}
