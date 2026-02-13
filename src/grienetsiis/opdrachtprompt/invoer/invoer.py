@@ -5,12 +5,16 @@ import grienetsiis.opdrachtprompt.commando as commando
 from grienetsiis.opdrachtprompt.constantes import TEKST_INDENTATIE
 
 
+OPTIE = TypeVar("optie")
+OPTIE_TONEN = TypeVar("optie_tonen")
+ANNULEREN = TypeVar("annuleren")
+
 def invoeren(
     tekst_beschrijving: str,
     invoer_type: Literal["int", "float", "str", "bool"] | int | float | str | bool,
     invoer_annuleren: bool = True,
-    tekst_annuleren: str = "stop",
-    uitvoer_annuleren: commando.Commando = commando.STOP,
+    tekst_annuleren: List[str] = ["terug", "stop"],
+    uitvoer_annuleren: ANNULEREN = commando.STOP,
     tekst_indentatie: str = TEKST_INDENTATIE,
     uitsluiten_leeg: bool = False,
     valideren: bool = False,
@@ -20,13 +24,28 @@ def invoeren(
     waardes_waar: Tuple[str, ...] = ("true", "waar", "juist", "1"),
     waardes_onwaar: Tuple[str, ...] = ("false", "onwaar", "onjuist", "0"),
     uitvoer_kleine_letters: bool = False,
-    ) -> int | str | float:
+    ) -> int | str | float | ANNULEREN:
     
     while True:
         
-        invoer = input(f"{tekst_beschrijving}: ")
+        invoer = input(f"> {tekst_beschrijving}: ")
         
-        if invoer_annuleren and invoer == tekst_annuleren:
+        if invoer == "__help__":
+            print(f"\nHELP INVOEREN")
+            print(f"{f"invoer_type:":<23} {invoer_type}")
+            print(f"{f"invoer_annuleren:":<23} {invoer_annuleren}")
+            print(f"{f"tekst_annuleren:":<23} {tekst_annuleren}")
+            print(f"{f"uitsluiten_leeg:":<23} {uitsluiten_leeg}")
+            print(f"{f"valideren:":<23} {valideren}")
+            print(f"{f"waardes_lijst:":<23} {waardes_lijst}")
+            print(f"{f"waardes_bereik:":<23} {waardes_bereik}")
+            print(f"{f"waardes_regex:":<23} {waardes_regex}")
+            print(f"{f"waardes_waar:":<23} {waardes_waar}")
+            print(f"{f"waardes_onwaar:":<23} {waardes_onwaar}")
+            print(f"{f"uitvoer_kleine_letters:":<23} {uitvoer_kleine_letters}\n")
+            continue
+        
+        if invoer_annuleren and invoer in tekst_annuleren:
             return uitvoer_annuleren
         
         if not invoer.strip() and uitsluiten_leeg:
@@ -119,20 +138,17 @@ def invoeren(
             
             print(f"{tekst_indentatie}invoer \"{invoer}\" incorrect, niet binnen de opties ({", ".join(f"\"{waarde}\"" for waarde in waardes_waar)}) of ({", ".join(f"\"{waarde}\"" for waarde in waardes_onwaar)})")
 
-OPTIE = TypeVar("optie")
-OPTIE_TONEN = TypeVar("optie_tonen")
-
 def kiezen(
     opties: Tuple[OPTIE] | List[OPTIE] | Dict[OPTIE, OPTIE_TONEN],
     tekst_beschrijving: str | None = None,
     tekst_kies_een: bool = True,
     keuze_annuleren: bool = True,
-    tekst_annuleren: str = "stop",
-    uitvoer_annuleren: commando.Commando = commando.STOP,
+    tekst_annuleren: str = "terug",
+    uitvoer_annuleren: ANNULEREN = commando.STOP,
     tekst_indentatie: str = TEKST_INDENTATIE,
     keuze_meerdere: bool = False,
     keuze_terugkoppeling: bool = True,
-    ) -> OPTIE | List[OPTIE]:
+    ) -> OPTIE | List[OPTIE] | ANNULEREN:
     
     if tekst_beschrijving:
         if tekst_kies_een:
@@ -171,6 +187,7 @@ def kiezen(
             invoer_keuzes = invoeren(
                 tekst_beschrijving = "keuze",
                 invoer_type = "str",
+                invoer_annuleren = keuze_annuleren,
                 tekst_indentatie = tekst_indentatie,
                 uitsluiten_leeg = True,
                 )
@@ -247,14 +264,16 @@ def kiezen(
             index_keuze = invoeren(
                 tekst_beschrijving = "keuze",
                 invoer_type = "int",
-                waardes_lijst = range(index_maximaal+1),
+                invoer_annuleren = keuze_annuleren,
+                waardes_lijst = list(range(index_maximaal+1)),
                 )
         
         else:
             index_keuze = invoeren(
                 tekst_beschrijving = "keuze",
                 invoer_type = "int",
-                waardes_lijst = range(index_minimaal, index_maximaal+1),
+                invoer_annuleren = keuze_annuleren,
+                waardes_lijst = list(range(index_minimaal, index_maximaal+1)),
                 )
         
         keuze =  opties_geven[index_keuze-1] if bool(index_keuze) else uitvoer_annuleren
@@ -267,6 +286,9 @@ def kiezen(
             try:
                 print(f"{tekst_indentatie}gekozen: {keuze_tekst.__qualname__}()")
             except AttributeError:
-                print(f"{tekst_indentatie}gekozen: {keuze_tekst}")
+                if keuze is uitvoer_annuleren:
+                    print(f"{tekst_indentatie}{tekst_annuleren}")
+                else:
+                    print(f"{tekst_indentatie}gekozen: {keuze_tekst}")
     
     return keuze
