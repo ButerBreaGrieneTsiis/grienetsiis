@@ -1,14 +1,11 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import ClassVar, Dict, List, TypeVar
+from typing import Callable, ClassVar, Dict
 
 from grienetsiis.opdrachtprompt.invoer import kiezen
 from grienetsiis.opdrachtprompt import commando
 from grienetsiis.opdrachtprompt.constantes import TEKST_INDENTATIE
 
-
-OPTIE = TypeVar("optie")
-OPTIE_TONEN = TypeVar("optie_tonen")
 
 @dataclass
 class Menu:
@@ -18,61 +15,46 @@ class Menu:
     blijf_in_menu: bool = True
     
     # interne variabelen
-    _opties: Dict[OPTIE, OPTIE_TONEN] | None = None
+    _opties: Dict[Callable, Callable | str] | None = None
     
     # class variables
     _TEKST_ANNULEREN: ClassVar[str] = "terug naar"
     _TEKST_AFSLUITEN: ClassVar[str] = "afsluiten"
-    _UITVOER_ANNULEREN: ClassVar[commando] = commando.TERUG
-    _UITVOER_AFSLUITEN: ClassVar[commando] = commando.STOP
     
     # DUNDER METHODS
     
     def __call__(self):
         
-        if self.opties:
+        while True:
+            
+            if not self.opties:
+                if self.is_hoofdmenu:
+                    raise RuntimeError("Menu bevat geen opties en is een hoofdmenu, kan niet uitgevoerd worden.")
+                else:
+                    print(f"{TEKST_INDENTATIE}menu {self.naam} bevat geen opties, terug naar menu erboven.")
+                    break
             
             if self.is_submenu:
-                keuze = kiezen(
-                    opties = self.opties,
-                    tekst_beschrijving = f"{str(self)}: kies een optie",
-                    tekst_kies_een = False,
-                    keuze_annuleren = True,
-                    tekst_annuleren = self._TEKST_ANNULEREN + f" {self.super_menu.naam}",
-                    uitvoer_annuleren = self._UITVOER_ANNULEREN,
-                    )
+                tekst_annuleren = self._TEKST_ANNULEREN + f" {self.super_menu.naam}"
             else:
-                keuze = kiezen(
-                    opties = self.opties,
-                    tekst_beschrijving = f"{str(self)}: kies een optie",
-                    tekst_kies_een = False,
-                    keuze_annuleren = True,
-                    tekst_annuleren = self._TEKST_AFSLUITEN,
-                    uitvoer_annuleren = self._UITVOER_AFSLUITEN,
-                    )
+                tekst_annuleren = self._TEKST_AFSLUITEN
             
-            if keuze is self._UITVOER_AFSLUITEN:
-                return 0
+            keuze = kiezen(
+                opties = self.opties,
+                tekst_beschrijving = f"{str(self)}: kies een optie",
+                tekst_kies_een = False,
+                keuze_annuleren = True,
+                tekst_annuleren = tekst_annuleren,
+                )
             
-            elif keuze is self._UITVOER_ANNULEREN:
-                self.super_menu()
+            uitvoer = keuze()
             
-            elif callable(keuze):
-                keuze()
-                if not isinstance(keuze, Menu):
-                    if self.blijf_in_menu:
-                        self()
-                    else:
-                        self.super_menu()
-            else:
-                return keuze
-        
-        else:
-            if self.is_hoofdmenu:
-                raise RuntimeError("Menu bevat geen opties en is een hoofdmenu, kan niet uitgevoerd worden.")
-            else:
-                print(f"{TEKST_INDENTATIE}menu {self.naam} bevat geen opties, terug naar menu erboven.")
-                self.super_menu()
+            if uitvoer is commando.STOP:
+                break
+            if uitvoer is commando.DOORGAAN or self.blijf_in_menu:
+                continue
+            
+            break
     
     def __hash__(self) -> int:
         return hash(self.naam)
@@ -84,9 +66,12 @@ class Menu:
     
     def toevoegen_optie(
         self,
-        optie: OPTIE,
-        optie_tonen: OPTIE_TONEN | None = None,
+        optie: Callable,
+        optie_tonen: str | None = None,
         ):
+        
+        if not callable(optie):
+            raise TypeError(f"optie moet oproepbaar zijn, niet type {type(optie)}")
         
         if self._opties is None:
             self._opties = {}
@@ -99,7 +84,7 @@ class Menu:
     # PROPERTIES
     
     @property
-    def opties(self) -> Dict[OPTIE, OPTIE_TONEN]:
+    def opties(self) -> Dict[Callable, Callable | str]:
         return self._opties
     
     @property
@@ -109,19 +94,3 @@ class Menu:
     @property
     def is_submenu(self) -> bool:
         return self.super_menu is not None
-
-if __name__ == "__main__":
-    
-    menu = Menu("hoofdmenu")
-    menu_kip = Menu("kip", super_menu = menu)
-    menu_kaas = Menu("kaas", super_menu = menu)
-    
-    menu.toevoegen_optie(menu_kip)
-    menu.toevoegen_optie(menu_kaas)
-    menu.toevoegen_optie(lambda: print("1234"))
-    
-    menu_kaas.toevoegen_optie("jong")
-    menu_kaas.toevoegen_optie("jong belegen", "kaas jonge")
-    menu_kaas.toevoegen_optie("belegen")
-    
-    menu()
