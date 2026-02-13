@@ -1,6 +1,6 @@
 from __future__ import annotations
 from enum import Enum
-from typing import Any, ClassVar, Dict
+from typing import Any, Dict
 
 from grienetsiis.opdrachtprompt.invoer import invoeren, kiezen
 
