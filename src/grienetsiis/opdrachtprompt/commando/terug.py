@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .commando import Commando
+from grienetsiis.opdrachtprompt.commando import Commando
 
 
 class Terug(Commando):

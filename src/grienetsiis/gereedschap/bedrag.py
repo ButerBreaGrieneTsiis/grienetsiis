@@ -1,4 +1,4 @@
-from grienetsiis.gereedschap.getal import formatteer_getal
+from grienetsiis.gereedschap import formatteer_getal
 
 
 def formatteer_bedrag(
