@@ -27,7 +27,10 @@ def formatteer_getal(
                 break
     
     integer = getal_tekst.split(".")[0]
-    decimalen = getal_tekst.split(".")[1]
+    try:
+        decimalen = getal_tekst.split(".")[1]
+    except IndexError:
+        decimalen = ""
     
     if groeperen:
         integer_geformatteerd = THIN_SPACE.join([integer[::-1][index:index+groeperen_per] for index in range(0, len(integer), groeperen_per)])[::-1]
@@ -41,4 +44,6 @@ def formatteer_getal(
     prefix = prefix + " " if prefix_spatie and prefix else prefix
     suffix = " " + suffix if suffix_spatie and suffix else suffix
     
+    if not decimalen:
+        return f"{prefix}{teken}{integer_geformatteerd}{suffix}"
     return f"{prefix}{teken}{integer_geformatteerd}{decimaal_teken}{decimalen_geformatteerd}{suffix}"
