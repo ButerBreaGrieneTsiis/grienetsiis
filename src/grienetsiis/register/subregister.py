@@ -5,7 +5,7 @@ from grienetsiis.opdrachtprompt.invoer import invoeren, kiezen
 from grienetsiis.opdrachtprompt import commando
 
 if TYPE_CHECKING:
-    from .geregistreerd_object import GeregistreerdObject
+    from grienetsiis.register import GeregistreerdObject
 
 
 class Subregister(dict):
@@ -86,7 +86,7 @@ class Subregister(dict):
             if keuze_optie is commando.STOP:
                 return commando.STOP
             elif keuze_optie == "nieuw":
-                id = self.nieuw()
+                id = self.nieuw(geef_id = True)
                 if id is commando.STOP:
                     return commando.STOP
             else:
@@ -148,7 +148,7 @@ class Subregister(dict):
             return None
         
         if geef_id:
-            return getattr(geregistreerd_object, geregistreerd_object._ID_VELD)
+            return geregistreerd_object._id
         return geregistreerd_object
     
     def verwijderen(
