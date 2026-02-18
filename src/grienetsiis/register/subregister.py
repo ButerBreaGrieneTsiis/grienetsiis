@@ -81,7 +81,7 @@ class Subregister(dict):
             opties = {id: f"{geregistreerd_object}" for id, geregistreerd_object in self.items()}
             
             if toestaan_nieuw:
-                opties = {"nieuw": f"nieuw {self.geregistreerd_type.__name__.lower()}"} | opties
+                opties |= {"nieuw": f"nieuw {self.geregistreerd_type.__name__.lower()}"}
             
             keuze_optie = kiezen(
                 opties = opties,
@@ -184,7 +184,7 @@ class Subregister(dict):
             print(f">>> geen {self.geregistreerd_type.__name__.lower()} aanwezig")
         else:
             for registreerd_object in self.lijst:
-                print(f"    {registreerd_object}")
+                print(f"{registreerd_object}")
     
     def selecteren_veld(self) -> str | commando.Stop:
         return kiezen(
