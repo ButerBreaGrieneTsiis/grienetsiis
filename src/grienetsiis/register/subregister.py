@@ -139,7 +139,7 @@ class Subregister(dict):
             print(f">>> geen {self.geregistreerd_type.__name__.lower()} aanwezig voor \"{veld} = {zoekterm}\"")
             return None
         if len(subregister_gefilterd) == 1:
-            print(f">>> één {self.geregistreerd_type.__name__.lower()} aanwezig voor \"{veld} = {zoekterm}\"")
+            print(f">>> één {self.geregistreerd_type.__name__.lower()} aanwezig voor \"{veld} = {zoekterm}\" ({list(subregister_gefilterd.values())[0]})")
             if geef_id:
                 return list(subregister_gefilterd.keys())[0]
             else:
