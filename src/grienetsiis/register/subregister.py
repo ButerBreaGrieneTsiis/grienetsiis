@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Dict, List, Literal, TYPE_CHECKING
+from typing import Dict, List, TYPE_CHECKING
 
 from grienetsiis.opdrachtprompt.invoer import invoeren, kiezen
 from grienetsiis.opdrachtprompt import commando
@@ -14,10 +14,12 @@ class Subregister(dict):
     
     def __init__(
         self,
-        geregistreerd_type: GeregistreerdObject
+        geregistreerd_type: GeregistreerdObject,
+        geregistreerde_instanties: List[str] | None = None,
         ):
         
         self.geregistreerd_type = geregistreerd_type
+        self.geregistreerde_instanties = geregistreerde_instanties if geregistreerde_instanties is not None else []
     
     # INSTANCE METHODS
     

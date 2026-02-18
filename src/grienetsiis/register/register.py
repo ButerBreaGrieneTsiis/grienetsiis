@@ -42,13 +42,13 @@ class Register(dict, metaclass = Singleton):
         
         register = cls()
         
-        register._REGISTREER = False
+        Register._REGISTREER = False
         
         for subregister_naam, subregister_dict in register._SUBREGISTERS.items():
             
             register[subregister_naam] = Subregister(subregister_dict["type"])
             
-            if not subregister_dict["opslaan"]:
+            if subregister_dict["opslaan"] == "niet":
                 continue
             
             bestandspad = subregister_dict["bestandsmap"] / f"{subregister_dict["bestandsnaam"]}.{subregister_dict["extensie"]}"
@@ -57,7 +57,10 @@ class Register(dict, metaclass = Singleton):
                 if not map.exists():
                     map.mkdir()
             
-            if bestandspad.is_file():
+            if not bestandspad.is_file():
+                continue
+            
+            if subregister_dict["opslaan"] == "register":
                 
                 if subregister_dict["vercijfer_methode"] == "standaard":
                     geregistreerde_objecten = openen_json(
@@ -78,18 +81,58 @@ class Register(dict, metaclass = Singleton):
                     if geregistreerd_object._REGISTRATIE_METHODE in ("uuid", "datum", "datumtijd"):
                         geregistreerd_object._id = id
                     register[subregister_naam][id] = geregistreerd_object
+                    register[subregister_naam].geregistreerde_instanties.append(id)
+            
+            elif subregister_dict["opslaan"] == "instantie":
+                
+                geregistreerde_instanties = openen_json(
+                    bestandspad = bestandspad,
+                    )
+                register[subregister_naam].geregistreerde_instanties = geregistreerde_instanties
         
-        register._REGISTREER = True
+        Register._REGISTREER = True
         
         return register
     
     # INSTANCE METHODS
     
+    def openen_instantie(
+        self,
+        subregister_naam: str,
+        id: str,
+        ) -> None:
+        
+        Register._REGISTREER = False
+        
+        subregister_dict = self._SUBREGISTERS[subregister_naam]
+        
+        bestandspad = subregister_dict["bestandsmap"] / f"{subregister_dict["bestandsnaam"]}_{id}.{subregister_dict["extensie"]}"
+        
+        if subregister_dict["vercijfer_methode"] == "standaard":
+            geregistreerd_object = openen_json(
+                bestandspad = bestandspad,
+                ontcijfer_standaard_objecten = subregister_dict["ontcijfer_standaard_objecten"],
+                ontcijfer_enum = subregister_dict["enums"],
+                )
+        else:
+            geregistreerd_object = openen_json(
+                bestandspad = bestandspad,
+                ontcijfer_functie_object = subregister_dict["ontcijfer_functie_objecten"],
+                ontcijfer_functie_subobjecten = subregister_dict["ontcijfer_functie_subobjecten"],
+                ontcijfer_enum = subregister_dict["enums"],
+                )
+        
+        self[subregister_naam][id] = geregistreerd_object
+        
+        Register._REGISTREER = True
+        
+        return geregistreerd_object
+        
     def opslaan(self) -> None: 
         
         for subregister_naam, subregister_dict in self._SUBREGISTERS.items():
             
-            if subregister_dict["opslaan"]:
+            if subregister_dict["opslaan"] == "register":
                 
                 if subregister_dict["vercijfer_methode"] == "standaard":
                     opslaan_json(
@@ -111,13 +154,45 @@ class Register(dict, metaclass = Singleton):
                         vercijfer_functie_subobjecten = subregister_dict["vercijfer_functie_subobjecten"],
                         vercijfer_enum = subregister_dict["enums"],
                         )
+            
+            elif subregister_dict["opslaan"] == "instantie":
+                
+                opslaan_json(
+                    object = self[subregister_naam].geregistreerde_instanties,
+                    bestandspad = subregister_dict["bestandsmap"],
+                    bestandsnaam = subregister_dict["bestandsnaam"],
+                    extensie = subregister_dict["extensie"],
+                    )
+                
+                for id, geregistreerd_object in self[subregister_naam].items():
+                    
+                    if subregister_dict["vercijfer_methode"] == "standaard":
+                        opslaan_json(
+                            object = geregistreerd_object,
+                            bestandspad = subregister_dict["bestandsmap"],
+                            bestandsnaam = f"{subregister_dict["bestandsnaam"]}_{id}",
+                            extensie = subregister_dict["extensie"],
+                            vercijfer_standaard_objecten = subregister_dict["vercijfer_standaard_objecten"],
+                            vercijfer_standaard_overslaan = subregister_dict["vercijfer_standaard_overslaan"],
+                            vercijfer_enum = subregister_dict["enums"],
+                            )
+                    else:
+                        opslaan_json(
+                            object = geregistreerd_object,
+                            bestandspad = subregister_dict["bestandsmap"],
+                            bestandsnaam = f"{subregister_dict["bestandsnaam"]}_{id}",
+                            extensie = subregister_dict["extensie"],
+                            vercijfer_functie_object = subregister_dict["vercijfer_functie_objecten"],
+                            vercijfer_functie_subobjecten = subregister_dict["vercijfer_functie_subobjecten"],
+                            vercijfer_enum = subregister_dict["enums"],
+                            )
     
     def registreer_instantie(
         self,
         instantie: object,
         ) -> None:
         
-        if self._REGISTREER:
+        if Register._REGISTREER:
             
             if instantie._REGISTRATIE_METHODE == "uuid":
                 instantie._id = str(uuid4())
@@ -132,6 +207,7 @@ class Register(dict, metaclass = Singleton):
                 self[subregister_naam] = Subregister(instantie.__class__)
             
             self[subregister_naam][instantie._id] = instantie
+            self[subregister_naam].geregistreerde_instanties.append(instantie._id)
     
     # STATIC METHODS
     
@@ -148,7 +224,7 @@ class Register(dict, metaclass = Singleton):
         geregistreerd_type: GeregistreerdObject,
         subregister_naam: str,
         registratie_methode: Literal["uuid", "datum", "datumtijd", "property"] = "uuid",
-        opslaan: bool = True,
+        opslaan: Literal["register", "instantie", "niet"] = "register",
         bestandsmap: Path | None = None,
         bestandsnaam: str | None = None,
         extensie: str = "json",
@@ -178,7 +254,7 @@ class Register(dict, metaclass = Singleton):
                 "opslaan": opslaan,
                 }
             
-            if opslaan:
+            if opslaan in ("register", "instantie"):
                 
                 if bestandsmap is None:
                     bestandsmap = Register._BESTANDSMAP
