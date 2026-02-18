@@ -11,7 +11,7 @@ from grienetsiis.opdrachtprompt.constantes import TEKST_INDENTATIE
 class Menu:
     
     naam: str
-    super_menu: Menu | None = None
+    super_menu: Menu | str | None = None
     blijf_in_menu: bool = True
     
     # interne variabelen
@@ -23,7 +23,12 @@ class Menu:
     
     # DUNDER METHODS
     
-    def __call__(self):
+    def __post_init__(self) -> None:
+        
+        if isinstance(self.super_menu, Menu):
+            self.super_menu = self.super_menu.naam
+    
+    def __call__(self) -> None:
         
         while True:
             
@@ -35,7 +40,7 @@ class Menu:
                     break
             
             if self.is_submenu:
-                tekst_annuleren = self._TEKST_ANNULEREN + f" {self.super_menu.naam}"
+                tekst_annuleren = self._TEKST_ANNULEREN + f" {self.super_menu}"
             else:
                 tekst_annuleren = self._TEKST_AFSLUITEN
             
