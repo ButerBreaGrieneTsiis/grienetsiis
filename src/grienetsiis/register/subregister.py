@@ -23,7 +23,8 @@ class Subregister(dict):
     
     def filter(
         self,
-        methode: Literal["of", "en"] = "en",
+        filters_inclusief: bool = True,
+        filters_exact_overeenkomend: bool = True,
         **filters,
         ) -> Subregister:
         
@@ -34,21 +35,26 @@ class Subregister(dict):
             masker = []
             
             for sleutel, waardes in filters.items():
-                if isinstance(waardes, list):
-                    for waarde in waardes:
-                        if getattr(geregistreerd_object, sleutel, None) == waarde:
+                
+                if not hasattr(geregistreerd_object, sleutel):
+                    masker.append(False)
+                    continue
+                
+                if not isinstance(waardes, list):
+                    waardes = [waardes]
+                for waarde in waardes:
+                    if filters_exact_overeenkomend:
+                        if waarde == getattr(geregistreerd_object, sleutel):
                             masker.append(True)
                             break
                     else:
-                        masker.append(False)
-                
+                        if waarde in getattr(geregistreerd_object, sleutel):
+                            masker.append(True)
+                            break
                 else:
-                    if getattr(geregistreerd_object, sleutel, None) == waardes:
-                        masker.append(True)
-                    else:
-                        masker.append(False)
+                    masker.append(False)
             
-            if methode == "en":
+            if filters_inclusief:
                 if all(masker):
                     subregister_gefilterd[id] = geregistreerd_object
             else:
@@ -101,6 +107,7 @@ class Subregister(dict):
     def zoeken(
         self,
         veld: str | None = None,
+        veld_exact_overeenkomend: bool = True,
         geef_id: bool = True,
         ) -> str | GeregistreerdObject | None | commando.Stop:
         
@@ -118,12 +125,15 @@ class Subregister(dict):
             invoer_type = self.velden[veld],
             uitsluiten_leeg = True,
             )
-        
         if zoekterm is commando.STOP:
             return commando.STOP
         
         filter = {veld: zoekterm}
-        subregister_gefilterd = self.filter(**filter)
+        subregister_gefilterd = self.filter(
+            filters_inclusief = True,
+            filters_exact_overeenkomend = veld_exact_overeenkomend,
+            **filter,
+            )
         
         if len(subregister_gefilterd) == 0:
             print(f">>> geen {self.geregistreerd_type.__name__.lower()} aanwezig voor \"{veld} = {zoekterm}\"")
