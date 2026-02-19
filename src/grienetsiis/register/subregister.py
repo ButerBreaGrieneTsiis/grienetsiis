@@ -180,8 +180,6 @@ class Subregister(dict):
             del self[id]
     
     def weergeven(self) -> None:
-        
-        print()
         if len(self) == 0:
             print(f">>> geen {self.geregistreerd_type.__name__.lower()} aanwezig")
         else:
