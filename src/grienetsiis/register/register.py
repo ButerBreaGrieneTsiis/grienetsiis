@@ -35,12 +35,12 @@ class Register(dict, metaclass = Singleton):
             self[naam] = Subregister(type = self.TYPES[naam])
         return self[naam]
     
-    # CLASS METHODS
+    # STATIC METHODS
     
-    @classmethod
-    def openen(cls) -> Register:
+    @staticmethod
+    def openen() -> Register:
         
-        register = cls()
+        register = Register()
         
         Register._REGISTREER = False
         
@@ -94,17 +94,17 @@ class Register(dict, metaclass = Singleton):
         
         return register
     
-    # INSTANCE METHODS
-    
+    @staticmethod
     def openen_instantie(
-        self,
         subregister_naam: str,
         id: str,
         ) -> None:
         
+        register = Register()
+        
         Register._REGISTREER = False
         
-        subregister_dict = self._SUBREGISTERS[subregister_naam]
+        subregister_dict = register._SUBREGISTERS[subregister_naam]
         
         bestandspad = subregister_dict["bestandsmap"] / f"{subregister_dict["bestandsnaam"]}_{id}.{subregister_dict["extensie"]}"
         
@@ -122,21 +122,24 @@ class Register(dict, metaclass = Singleton):
                 ontcijfer_enum = subregister_dict["enums"],
                 )
         
-        self[subregister_naam][id] = geregistreerd_object
+        register[subregister_naam][id] = geregistreerd_object
         
         Register._REGISTREER = True
         
         return geregistreerd_object
+    
+    @staticmethod
+    def opslaan() -> None:
         
-    def opslaan(self) -> None: 
+        register = Register()
         
-        for subregister_naam, subregister_dict in self._SUBREGISTERS.items():
+        for subregister_naam, subregister_dict in register._SUBREGISTERS.items():
             
             if subregister_dict["opslaan"] == "register":
                 
                 if subregister_dict["vercijfer_methode"] == "standaard":
                     opslaan_json(
-                        object = self[subregister_naam],
+                        object = register[subregister_naam],
                         bestandspad = subregister_dict["bestandsmap"],
                         bestandsnaam = subregister_dict["bestandsnaam"],
                         extensie = subregister_dict["extensie"],
@@ -146,7 +149,7 @@ class Register(dict, metaclass = Singleton):
                         )
                 else:
                     opslaan_json(
-                        object = self[subregister_naam],
+                        object = register[subregister_naam],
                         bestandspad = subregister_dict["bestandsmap"],
                         bestandsnaam = subregister_dict["bestandsnaam"],
                         extensie = subregister_dict["extensie"],
@@ -158,13 +161,13 @@ class Register(dict, metaclass = Singleton):
             elif subregister_dict["opslaan"] == "instantie":
                 
                 opslaan_json(
-                    object = self[subregister_naam].geregistreerde_instanties,
+                    object = register[subregister_naam].geregistreerde_instanties,
                     bestandspad = subregister_dict["bestandsmap"],
                     bestandsnaam = subregister_dict["bestandsnaam"],
                     extensie = subregister_dict["extensie"],
                     )
                 
-                for id, geregistreerd_object in self[subregister_naam].items():
+                for id, geregistreerd_object in register[subregister_naam].items():
                     
                     if subregister_dict["vercijfer_methode"] == "standaard":
                         opslaan_json(
@@ -187,10 +190,12 @@ class Register(dict, metaclass = Singleton):
                             vercijfer_enum = subregister_dict["enums"],
                             )
     
+    @staticmethod
     def registreer_instantie(
-        self,
         instantie: object,
         ) -> None:
+        
+        register = Register()
         
         if Register._REGISTREER:
             
@@ -203,13 +208,11 @@ class Register(dict, metaclass = Singleton):
             
             subregister_naam = instantie._SUBREGISTER_NAAM
             
-            if subregister_naam not in self:
-                self[subregister_naam] = Subregister(instantie.__class__)
+            if subregister_naam not in register:
+                register[subregister_naam] = Subregister(instantie.__class__)
             
-            self[subregister_naam][instantie._id] = instantie
-            self[subregister_naam].geregistreerde_instanties.append(instantie._id)
-    
-    # STATIC METHODS
+            register[subregister_naam][instantie._id] = instantie
+            register[subregister_naam].geregistreerde_instanties.append(instantie._id)
     
     @staticmethod
     def instellen(
