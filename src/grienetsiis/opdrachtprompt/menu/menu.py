@@ -17,16 +17,23 @@ class Menu:
     def __init__(
         self,
         naam: str | Callable,
-        super_naam: Menu | str | None = None,
-        blijf_in_menu: bool = True
+        naam_super: Menu | str | None = None,
+        blijf_in_menu: bool = True,
+        functie_start: Callable | None = None,
+        functie_eind: Callable | None = None,
         ) -> None:
         
         self.naam = naam
-        self.super_naam = super_naam
+        self.naam_super = naam_super
         self.blijf_in_menu = blijf_in_menu
+        self.functie_start = functie_start
+        self.functie_eind = functie_eind
+        
         self._opties = None
     
     def __call__(self) -> None:
+        
+        if callable(self.functie_start): self.functie_start()
         
         while True:
             
@@ -34,13 +41,13 @@ class Menu:
                 if self.is_hoofdmenu:
                     raise RuntimeError("Menu bevat geen opties en is een hoofdmenu, kan niet uitgevoerd worden.")
                 else:
-                    print(f"{TEKST_INDENTATIE}menu {self.super_naam} bevat geen opties, terug naar menu erboven.")
+                    print(f"{TEKST_INDENTATIE}menu {self.naam_super} bevat geen opties, terug naar menu erboven.")
                     break
             
             if self.is_hoofdmenu:
                 tekst_annuleren = self._TEKST_AFSLUITEN
             else:
-                tekst_annuleren = self._TEKST_ANNULEREN + f" {self.super_naam}"
+                tekst_annuleren = self._TEKST_ANNULEREN + f" {self.naam_super}"
             
             keuze = kiezen(
                 opties = self.opties,
@@ -58,6 +65,8 @@ class Menu:
                 continue
             
             break
+        
+        if callable(self.functie_eind): self.functie_eind()
     
     def __hash__(self) -> int:
         return hash(self.naam)
@@ -98,15 +107,15 @@ class Menu:
         self._naam = waarde
     
     @property
-    def super_naam(self) -> str:
-        return self._super_naam
+    def naam_super(self) -> str:
+        return self._naam_super
     
-    @super_naam.setter
-    def super_naam(self, waarde: Menu | str | None) -> None:
+    @naam_super.setter
+    def naam_super(self, waarde: Menu | str | None) -> None:
         if isinstance(waarde, Menu):
-            self._super_naam = waarde.naam
+            self._naam_super = waarde.naam
         else:
-            self._super_naam = waarde
+            self._naam_super = waarde
     
     @property
     def opties(self) -> Dict[Callable, Callable | str]:
@@ -114,8 +123,8 @@ class Menu:
     
     @property
     def is_hoofdmenu(self) -> bool:
-        return self.super_naam is None
+        return self.naam_super is None
     
     @property
     def is_submenu(self) -> bool:
-        return self.super_naam is not None
+        return self.naam_super is not None
