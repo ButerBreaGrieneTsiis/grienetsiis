@@ -8,13 +8,6 @@ from grienetsiis.opdrachtprompt.constantes import TEKST_INDENTATIE
 
 class Menu:
     
-    naam: str | Callable
-    super_menu: Menu | str | None = None
-    blijf_in_menu: bool = True
-    
-    # interne variabelen
-    _opties: Dict[Callable, Callable | str] | None = None
-    
     # class variables
     _TEKST_ANNULEREN: ClassVar[str] = "terug naar"
     _TEKST_AFSLUITEN: ClassVar[str] = "afsluiten"
@@ -31,6 +24,7 @@ class Menu:
         self.naam = naam
         self.super_naam = super_naam
         self.blijf_in_menu = blijf_in_menu
+        self._opties = None
     
     def __call__(self) -> None:
         
@@ -43,10 +37,10 @@ class Menu:
                     print(f"{TEKST_INDENTATIE}menu {self.super_naam} bevat geen opties, terug naar menu erboven.")
                     break
             
-            if self.is_submenu:
-                tekst_annuleren = self._TEKST_ANNULEREN + f" {self.super_menu}"
-            else:
+            if self.is_hoofdmenu:
                 tekst_annuleren = self._TEKST_AFSLUITEN
+            else:
+                tekst_annuleren = self._TEKST_ANNULEREN + f" {self.super_naam}"
             
             keuze = kiezen(
                 opties = self.opties,
@@ -107,9 +101,9 @@ class Menu:
     def super_naam(self) -> str:
         return self._super_naam
     
-    @naam.setter
-    def super_naam(self, waarde: str | Callable) -> None:
-        if isinstance(self.super_menu, Menu):
+    @super_naam.setter
+    def super_naam(self, waarde: Menu | str | None) -> None:
+        if isinstance(waarde, Menu):
             self._super_naam = waarde.naam
         else:
             self._super_naam = waarde
@@ -120,8 +114,8 @@ class Menu:
     
     @property
     def is_hoofdmenu(self) -> bool:
-        return self.super_menu is None
+        return self.super_naam is None
     
     @property
     def is_submenu(self) -> bool:
-        return self.super_menu is not None
+        return self.super_naam is not None
