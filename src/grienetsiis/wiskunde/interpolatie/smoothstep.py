@@ -1,7 +1,7 @@
 """grienetsiis.wiskunde.interpolatie.smoothstep"""
 from typing import List
 
-from .kubisch import kubisch
+from grienetsiis.wiskunde.interpolatie import kubisch
 
 
 def smoothstep(

@@ -1,12 +1,16 @@
-from ._commando import Commando
-from ._stop import _Stop
-from ._terug import _Terug
+from .commando import Commando
+from .stop import Stop
+from .terug import Terug
+from .doorgaan import Doorgaan
 
 
-STOP = _Stop()
-TERUG = _Terug()
+STOP = Stop()
+TERUG = Terug()
+DOORGAAN = Doorgaan()
 
 __all__ = [
+    "Commando",
     "STOP",
     "TERUG",
+    "DOORGAAN",
     ]

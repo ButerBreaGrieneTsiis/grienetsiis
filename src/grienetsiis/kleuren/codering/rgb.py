@@ -2,10 +2,12 @@
 from __future__ import annotations
 from typing import ClassVar
 
-from .hex import HEX
-from .hsl import HSL
-from .hsv import HSV
-from .cmyk import CMYK
+from grienetsiis.kleuren.codering import (
+    HEX,
+    HSL,
+    HSV,
+    CMYK,
+    )
 
 
 class RGB:

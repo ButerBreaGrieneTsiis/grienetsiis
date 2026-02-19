@@ -4,10 +4,12 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Callable, List, Literal
 
-from .lineair import lineair
-from .logaritmisch import logaritmisch
-from .smoothstep import smoothstep
-from .smootherstep import smootherstep
+from grienetsiis.wiskunde.interpolatie import (
+    lineair,
+    logaritmisch,
+    smoothstep,
+    smootherstep,
+    )
 
 
 def interpoleer(

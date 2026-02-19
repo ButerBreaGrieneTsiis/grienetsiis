@@ -1,8 +1,10 @@
 from __future__ import annotations
 from enum import Enum
-from typing import Any, ClassVar, Dict
+from typing import Any, Dict
 
+from grienetsiis.register import Register
 from grienetsiis.opdrachtprompt.invoer import invoeren, kiezen
+from grienetsiis.types import BasisType
 
 from .register import Register
 
@@ -18,24 +20,16 @@ class GeregistreerdType(type):
         
         return instantie
 
-class GeregistreerdObject(metaclass = GeregistreerdType):
+class GeregistreerdObject(BasisType, metaclass = GeregistreerdType):
     
     # CLASS METHODS
     
     @classmethod
-    def van_json(
-        cls,
-        **dict,
-        ) -> GeregistreerdObject:
-        
-        return cls(**dict)
-    
-    @classmethod
-    def nieuw(cls) -> GeregistreerdObject:
+    def nieuw(cls) -> BasisType:
         
         velden = {sleutel: veld for sleutel, veld in cls.__annotations__.items() if sleutel not in cls.__dict__}
         
-        dict = {}
+        dict_nieuw = {}
         
         for sleutel, veld in velden.items():
             
@@ -44,7 +38,7 @@ class GeregistreerdObject(metaclass = GeregistreerdType):
                     opties = {enum: enum.value for enum in veld},
                     tekst_beschrijving = sleutel,
                     )
-            elif veld in ("int", "float", "str"):
+            elif veld in ("int", "float", "str", "bool"):
                 waarde = invoeren(
                     tekst_beschrijving = sleutel,
                     invoer_type = veld,
@@ -52,25 +46,7 @@ class GeregistreerdObject(metaclass = GeregistreerdType):
             else:
                 continue
             
-            dict[sleutel] = waarde
+            dict_nieuw[sleutel] = waarde
         
-        return cls(**dict)
-    
-    # INSTANCE METHODS
-    
-    def naar_json(self) -> Dict[str, Any]:
-        
-        dict_naar_json = {}
-        
-        for veld_sleutel, veld_waarde in self.__dict__.items():
-            
-            # alle velden uitsluiten die standaardwaardes hebben; nutteloos om op te slaan
-            if not veld_waarde:
-                continue
-            
-            if veld_sleutel == self._ID_VELD:
-                continue
-            else:
-                dict_naar_json[veld_sleutel] = veld_waarde
-        
-        return dict_naar_json
+        return cls(**dict_nieuw)
+

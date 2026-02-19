@@ -4,10 +4,12 @@ import re
 from typing import ClassVar, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .hsl import HSL
-    from .hsv import HSV
-    from .cmyk import CMYK
-    from .rgb import RGB
+    from grienetsiis.kleuren.codering import (
+        HSL,
+        HSV,
+        CMYK,
+        RGB,
+        )
 
 
 class HEX:

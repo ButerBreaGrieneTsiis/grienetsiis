@@ -3,10 +3,12 @@ from __future__ import annotations
 from typing import ClassVar, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .hex import HEX
-    from .hsl import HSL
-    from .cmyk import CMYK
-    from .rgb import RGB
+    from grienetsiis.kleuren.codering import (
+        HEX,
+        HSL,
+        CMYK,
+        RGB,
+        )
 
 
 class HSV:
