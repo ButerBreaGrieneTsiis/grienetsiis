@@ -194,6 +194,16 @@ class Register(dict, metaclass = Singleton):
     @staticmethod
     def kopie_opslaan() -> None:
         
+        register = Register()
+        
+        for subregister_naam, subregister_dict in register._SUBREGISTERS.items():
+            if subregister_dict["opslaan"] == "instantie":
+                for geregistreerde_instantie in register[subregister_naam].geregistreerde_instanties:
+                    Register.openen_instantie(
+                        subregister_naam = subregister_naam,
+                        id = geregistreerde_instantie,
+                        )
+        
         datum_tekst = dt.date.today().strftime("%Y-%m-%d")
         
         if Register._BESTANDSMAP_KOPIE is None:
