@@ -21,6 +21,7 @@ class Register(dict, metaclass = Singleton):
     
     _SUBREGISTERS: ClassVar[Dict[str, Dict[str, Any]]] = {}
     _BESTANDSMAP: ClassVar[Path] | None = None
+    _BESTANDSMAP_KOPIE: ClassVar[Path] | None = None
     _INGESTELD: ClassVar[bool] = False
     
     _REGISTREER: ClassVar[bool] = True
@@ -129,7 +130,7 @@ class Register(dict, metaclass = Singleton):
         return geregistreerd_object
     
     @staticmethod
-    def opslaan() -> None:
+    def opslaan(relatief_pad: Path = Path()) -> None:
         
         register = Register()
         
@@ -140,7 +141,7 @@ class Register(dict, metaclass = Singleton):
                 if subregister_dict["vercijfer_methode"] == "standaard":
                     opslaan_json(
                         object = register[subregister_naam],
-                        bestandspad = subregister_dict["bestandsmap"],
+                        bestandspad = relatief_pad / subregister_dict["bestandsmap"],
                         bestandsnaam = subregister_dict["bestandsnaam"],
                         extensie = subregister_dict["extensie"],
                         vercijfer_standaard_objecten = subregister_dict["vercijfer_standaard_objecten"],
@@ -150,7 +151,7 @@ class Register(dict, metaclass = Singleton):
                 else:
                     opslaan_json(
                         object = register[subregister_naam],
-                        bestandspad = subregister_dict["bestandsmap"],
+                        bestandspad = relatief_pad / subregister_dict["bestandsmap"],
                         bestandsnaam = subregister_dict["bestandsnaam"],
                         extensie = subregister_dict["extensie"],
                         vercijfer_functie_object = subregister_dict["vercijfer_functie_objecten"],
@@ -162,7 +163,7 @@ class Register(dict, metaclass = Singleton):
                 
                 opslaan_json(
                     object = register[subregister_naam].geregistreerde_instanties,
-                    bestandspad = subregister_dict["bestandsmap"],
+                    bestandspad = relatief_pad / subregister_dict["bestandsmap"],
                     bestandsnaam = subregister_dict["bestandsnaam"],
                     extensie = subregister_dict["extensie"],
                     )
@@ -172,7 +173,7 @@ class Register(dict, metaclass = Singleton):
                     if subregister_dict["vercijfer_methode"] == "standaard":
                         opslaan_json(
                             object = geregistreerd_object,
-                            bestandspad = subregister_dict["bestandsmap"],
+                            bestandspad = relatief_pad / subregister_dict["bestandsmap"],
                             bestandsnaam = f"{subregister_dict["bestandsnaam"]}_{id}",
                             extensie = subregister_dict["extensie"],
                             vercijfer_standaard_objecten = subregister_dict["vercijfer_standaard_objecten"],
@@ -182,13 +183,25 @@ class Register(dict, metaclass = Singleton):
                     else:
                         opslaan_json(
                             object = geregistreerd_object,
-                            bestandspad = subregister_dict["bestandsmap"],
+                            bestandspad = relatief_pad / subregister_dict["bestandsmap"],
                             bestandsnaam = f"{subregister_dict["bestandsnaam"]}_{id}",
                             extensie = subregister_dict["extensie"],
                             vercijfer_functie_object = subregister_dict["vercijfer_functie_objecten"],
                             vercijfer_functie_subobjecten = subregister_dict["vercijfer_functie_subobjecten"],
                             vercijfer_enum = subregister_dict["enums"],
                             )
+    
+    @staticmethod
+    def kopie_opslaan() -> None:
+        
+        datum_tekst = dt.date.today().strftime("%Y-%m-%d")
+        
+        if Register._BESTANDSMAP_KOPIE is None:
+            relatief_pad = Path("kopie") / datum_tekst
+        else:
+            relatief_pad = Register._BESTANDSMAP_KOPIE / datum_tekst
+        
+        Register.opslaan(relatief_pad)
     
     @staticmethod
     def registreer_instantie(
@@ -217,9 +230,11 @@ class Register(dict, metaclass = Singleton):
     @staticmethod
     def instellen(
         bestandsmap: Path,
+        bestandsmap_kopie: Path | None = None
         ) -> None:
         
         Register._BESTANDSMAP = bestandsmap
+        Register._BESTANDSMAP_KOPIE = bestandsmap_kopie
         Register._INGESTELD = True
     
     @staticmethod
