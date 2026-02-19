@@ -1,5 +1,4 @@
 from __future__ import annotations
-from dataclasses import dataclass
 from typing import Callable, ClassVar, Dict
 
 from grienetsiis.opdrachtprompt.invoer import kiezen
@@ -7,10 +6,9 @@ from grienetsiis.opdrachtprompt import commando
 from grienetsiis.opdrachtprompt.constantes import TEKST_INDENTATIE
 
 
-@dataclass
 class Menu:
     
-    naam: str
+    naam: str | Callable
     super_menu: Menu | str | None = None
     blijf_in_menu: bool = True
     
@@ -23,10 +21,16 @@ class Menu:
     
     # DUNDER METHODS
     
-    def __post_init__(self) -> None:
+    def __init__(
+        self,
+        naam: str | Callable,
+        super_naam: Menu | str | None = None,
+        blijf_in_menu: bool = True
+        ) -> None:
         
-        if isinstance(self.super_menu, Menu):
-            self.super_menu = self.super_menu.naam
+        self.naam = naam
+        self.super_naam = super_naam
+        self.blijf_in_menu = blijf_in_menu
     
     def __call__(self) -> None:
         
@@ -36,7 +40,7 @@ class Menu:
                 if self.is_hoofdmenu:
                     raise RuntimeError("Menu bevat geen opties en is een hoofdmenu, kan niet uitgevoerd worden.")
                 else:
-                    print(f"{TEKST_INDENTATIE}menu {self.naam} bevat geen opties, terug naar menu erboven.")
+                    print(f"{TEKST_INDENTATIE}menu {self.super_naam} bevat geen opties, terug naar menu erboven.")
                     break
             
             if self.is_submenu:
@@ -46,7 +50,7 @@ class Menu:
             
             keuze = kiezen(
                 opties = self.opties,
-                tekst_beschrijving = f"{str(self)}: kies een optie",
+                tekst_beschrijving = f"{self.super_naam}: kies een optie",
                 tekst_kies_een = False,
                 keuze_annuleren = True,
                 tekst_annuleren = tekst_annuleren,
@@ -87,6 +91,28 @@ class Menu:
             self._opties[optie] = optie_tonen
     
     # PROPERTIES
+    
+    @property
+    def naam(self) -> str:
+        if callable(self._naam):
+            return self._naam()
+        else:
+            return self._naam
+    
+    @naam.setter
+    def naam(self, waarde: str | Callable) -> None:
+        self._naam = waarde
+    
+    @property
+    def super_naam(self) -> str:
+        return self._super_naam
+    
+    @naam.setter
+    def super_naam(self, waarde: str | Callable) -> None:
+        if isinstance(self.super_menu, Menu):
+            self._super_naam = waarde.naam
+        else:
+            self._super_naam = waarde
     
     @property
     def opties(self) -> Dict[Callable, Callable | str]:
