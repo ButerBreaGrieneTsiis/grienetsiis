@@ -44,7 +44,7 @@ class Menu:
             
             keuze = kiezen(
                 opties = self.opties,
-                tekst_beschrijving = f"{self.super_naam}: kies een optie",
+                tekst_beschrijving = f"{self.naam}: kies een optie",
                 tekst_kies_een = False,
                 keuze_annuleren = True,
                 tekst_annuleren = tekst_annuleren,
