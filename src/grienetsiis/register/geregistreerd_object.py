@@ -4,21 +4,10 @@ from typing import Any, Dict
 
 from grienetsiis.register import Register
 from grienetsiis.opdrachtprompt.invoer import invoeren, kiezen
+from grienetsiis.register.types.geregistreerd_type import GeregistreerdType
 from grienetsiis.types import BasisType
 
-from .register import Register
 
-
-class GeregistreerdType(type):
-    
-    REGISTREER_OBJECT: bool = True
-    
-    def __call__(self, *args, **kwargs):
-        
-        instantie = super().__call__(*args, **kwargs)
-        Register().registreer_instantie(instantie)
-        
-        return instantie
 
 class GeregistreerdObject(BasisType, metaclass = GeregistreerdType):
     
