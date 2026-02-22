@@ -1,12 +1,9 @@
 from __future__ import annotations
 from enum import Enum
-from typing import Any, Dict
 
-from grienetsiis.register import Register
 from grienetsiis.opdrachtprompt.invoer import invoeren, kiezen
 from grienetsiis.register.types.geregistreerd_type import GeregistreerdType
 from grienetsiis.types import BasisType
-
 
 
 class GeregistreerdObject(BasisType, metaclass = GeregistreerdType):
@@ -38,4 +35,3 @@ class GeregistreerdObject(BasisType, metaclass = GeregistreerdType):
             dict_nieuw[sleutel] = waarde
         
         return cls(**dict_nieuw)
-
