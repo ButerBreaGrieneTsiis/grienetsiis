@@ -17,6 +17,14 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+def niet_registreren(functie):
+    def wrapper(*args, **kwargs):
+        Register._REGISTREER = False
+        geregistreerd_object = functie(*args, **kwargs)
+        Register._REGISTREER = True
+        return geregistreerd_object
+    return wrapper
+
 class Register(dict, metaclass = RegisterType):
     
     _SUBREGISTERS: ClassVar[Dict[str, Dict[str, Any]]] = {}
@@ -29,9 +37,8 @@ class Register(dict, metaclass = RegisterType):
     # STATIC METHODS
     
     @staticmethod
+    @niet_registreren
     def openen() -> Register:
-        
-        Register._REGISTREER = False
         
         for subregister_naam, subregister_dict in Register._SUBREGISTERS.items():
             
@@ -79,17 +86,14 @@ class Register(dict, metaclass = RegisterType):
                     )
                 Register[subregister_naam].geregistreerde_instanties = geregistreerde_instanties
         
-        Register._REGISTREER = True
-        
         return Register
     
     @staticmethod
+    @niet_registreren
     def openen_instantie(
         subregister_naam: str,
         id: str,
-        ) -> None:
-        
-        Register._REGISTREER = False
+        ) -> GeregistreerdObject:
         
         subregister_dict = Register._SUBREGISTERS[subregister_naam]
         
@@ -110,8 +114,6 @@ class Register(dict, metaclass = RegisterType):
                 )
         
         Register[subregister_naam][id] = geregistreerd_object
-        
-        Register._REGISTREER = True
         
         return geregistreerd_object
     
