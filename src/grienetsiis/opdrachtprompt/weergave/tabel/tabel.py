@@ -33,6 +33,10 @@ class Tabel:
     
     @property
     def kolom_namen(self) -> List[str]:
+        return [kolom_naam.lower() for kolom_naam in self.kolommen]
+    
+    @property
+    def kolom_namen_kast(self) -> List[str]:
         if self.kolommen_letters == "onveranderd":
             return [kolom_naam for kolom_naam in self.kolommen]
         if self.kolommen_letters == "kleine_letters":
@@ -55,7 +59,7 @@ class Tabel:
         else:
             tekst_tussen = f"{" "*self.tussen_breedte}"
         
-        tekst_koppen = self.prefix + tekst_tussen.join(f"{kolom_naam:{f"{kolom.uitlijnings_teken}"}{kolom.kolom_breedte}}" for kolom_naam, kolom in zip(self.kolom_namen, self.kolom_lijst)) + self.suffix
+        tekst_koppen = self.prefix + tekst_tussen.join(f"{kolom_naam:{f"{kolom.uitlijnings_teken}"}{kolom.kolom_breedte}}" for kolom_naam, kolom in zip(self.kolom_namen_kast, self.kolom_lijst)) + self.suffix
         tabel_tekst += tekst_koppen
         
         for index_rij in range(self.aantal_rijen):
