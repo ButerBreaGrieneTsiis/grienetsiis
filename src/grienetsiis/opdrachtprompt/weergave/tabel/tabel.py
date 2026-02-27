@@ -2,6 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Dict, List, Literal
 
+from .cel import Cel
 from .kolom import Kolom
 
 
@@ -77,17 +78,25 @@ class Tabel:
     
     def toevoegen_rij(self, **rij) -> None:
         
-        for kolom_naam, waarde in rij.items():
+        for kolom_naam, celwaarde in rij.items():
             if kolom_naam not in self.kolommen:
                 self.kolommen[kolom_naam] = Kolom(
                     kolom_naam = kolom_naam,
-                    waardes = [],
                     )
-            self.kolommen[kolom_naam].waardes.append(waarde)
+                
+            if isinstance(celwaarde, Cel):
+                cel = celwaarde
+            else:
+                cel = Cel(
+                    tekst = str(celwaarde),
+                    uitlijning = self.kolommen[kolom_naam].uitlijning,
+                    )
+            
+            self.kolommen[kolom_naam].cellen.append(cel)
     
     def toevoegen_leeg(self) -> None:
         for kolom_naam in self.kolom_namen:
-            self.kolommen[kolom_naam].waardes.append("")
+            self.kolommen[kolom_naam].cellen.append(Cel(""))
     
     def weergeven(self) -> None:
         print(self.naar_tekst)

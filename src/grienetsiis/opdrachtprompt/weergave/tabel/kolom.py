@@ -28,8 +28,8 @@ class Kolom:
     def __getitem__(self, sleutel: int) -> Kolom:
         return self.cellen[sleutel]
     
-    def __setitem__(self, sleutel: int, waarde: Cel) -> None:
-        self._cellen[sleutel] = waarde
+    def __setitem__(self, sleutel: int, celwaarde: Cel) -> None:
+        self._cellen[sleutel] = celwaarde
     
     def __iter__(self):
         for cel in self.cellen:
@@ -51,20 +51,23 @@ class Kolom:
         return self._cellen
     
     @cellen.setter
-    def cellen(self, waardes: List[Any] | None) -> None:
-        if waardes is None:
+    def cellen(self, celwaardes: List[Any] | None) -> None:
+        if celwaardes is None:
             self._cellen = []
         else:
             cellen = []
-            for waarde in waardes:
-                if isinstance(waarde, Cel):
-                    cellen.append(waarde)
+            for celwaarde in celwaardes:
+                
+                if isinstance(celwaarde, Cel):
+                    cel = celwaarde
                 else:
                     cel = Cel(
-                        tekst = str(waarde),
+                        tekst = str(celwaarde),
                         uitlijning = self.uitlijning,
                         )
-                    cellen.append(cel)
+                
+                cellen.append(cel)
+            
             self._cellen = cellen
     
     @property
