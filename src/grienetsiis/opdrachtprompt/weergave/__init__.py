@@ -1,10 +1,11 @@
 """
 grienetsiis.opdrachtprompt.weergave
 """
-from .tabel import Kolom, Tabel
+from .tabel import Cel, Kolom, Tabel
 
 
 __all__ = [
+    "Cel",
     "Kolom",
     "Tabel",
     ]
